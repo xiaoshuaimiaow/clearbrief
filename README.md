@@ -6,9 +6,9 @@ ClearBrief 是一个面向产品经理和项目负责人的项目启动与需求
 
 部署到 GitHub Pages 后：
 
-- 作品集案例页：`/`
+- 项目介绍页：`/`
 - 可点击 Demo：`/demo.html`
-- PRD 与作品集说明：`/prd.html`
+- 产品说明文档：`/prd.html`
 
 ## 项目背景
 
@@ -40,8 +40,8 @@ ClearBrief 的目标不是简单生成文档，而是把“需求澄清 -> 启�
 
 ## 项目文件
 
-- `index.html`：作品集案例页
+- `index.html`：项目介绍页
 - `demo.html`：可点击 Demo
-- `prd.html`：PRD 与作品集说明
+- `prd.html`：产品说明文档
 - `PRD.md`：Markdown 版 PRD
 - `new-kickoff.html`、`kickoff-document.html`、`export-center.html`：页面参考稿
