@@ -1,0 +1,322 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClearBrief 清晰启动 - 作品集案例</title>
+  <style>
+    :root {
+      --bg: #f4f7fc;
+      --panel: #ffffff;
+      --ink: #121722;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --soft: #f8fafc;
+      --blue: #2563eb;
+      --blue-soft: #e8f0ff;
+      --green: #0f766e;
+      --green-soft: #ecfdf3;
+      --amber: #b45309;
+      --amber-soft: #fff7ed;
+      --red: #b42318;
+      --red-soft: #fff1f1;
+      --purple: #5f3dc4;
+      --purple-soft: #f2edff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+    a { color: inherit; }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 52px 24px 72px;
+    }
+    .hero {
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      height: 30px;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      padding: 0 14px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 54px;
+      letter-spacing: 0;
+      line-height: 1.08;
+    }
+    .lead {
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.65;
+    }
+    .hero-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 18px 46px rgba(18, 23, 34, .08);
+    }
+    .screen {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--soft);
+    }
+    .screen-top {
+      height: 42px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #cbd5e1; }
+    .screen-body { padding: 18px; }
+    .mock-row {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .mock-row strong { display: block; margin-bottom: 6px; font-size: 14px; }
+    .mock-row span { color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 26px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 42px;
+      border-radius: 8px;
+      padding: 0 18px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .btn.primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+    section {
+      margin-top: 42px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 34px;
+      box-shadow: 0 12px 32px rgba(18, 23, 34, .05);
+    }
+    section h2 {
+      margin: 0 0 18px;
+      font-size: 28px;
+    }
+    .section-sub {
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 860px;
+      margin: -4px 0 24px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 20px;
+      background: var(--soft);
+    }
+    .card h3 { margin: 0 0 10px; font-size: 17px; }
+    .card p, .card li {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.58;
+    }
+    .card p { margin: 0; }
+    .card ul { margin: 0; padding-left: 18px; }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .flow-step {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      background: var(--soft);
+      min-height: 148px;
+    }
+    .num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--blue);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .flow-step h3 {
+      font-size: 15px;
+      margin: 0 0 8px;
+    }
+    .flow-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .metric {
+      background: var(--blue-soft);
+      border-color: #bad0ff;
+    }
+    .metric strong {
+      display: block;
+      color: var(--blue);
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+    .quote {
+      background: var(--ink);
+      color: white;
+      border-radius: 14px;
+      padding: 30px;
+      line-height: 1.7;
+      font-size: 18px;
+    }
+    .quote span {
+      display: block;
+      color: #cbd5e1;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+    @media (max-width: 980px) {
+      .hero, .grid-2, .grid-3, .flow { grid-template-columns: 1fr; }
+      h1 { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">产品经理作品集案例</div>
+        <h1>ClearBrief<br>清晰启动</h1>
+        <p class="lead">一个面向产品经理和项目负责人的项目启动工作台，帮助用户从模糊需求、会议纪要、聊天记录或文档片段中提取关键信息，识别缺口，并生成可评审的项目启动材料。</p>
+        <div class="actions">
+          <a class="btn primary" href="demo.html">打开可点击 Demo</a>
+          <a class="btn" href="ClearBrief清晰启动-PRD与作品集说明.html">查看 PRD 文档</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="screen">
+          <div class="screen-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>ClearBrief Demo</span></div>
+          <div class="screen-body">
+            <div class="mock-row"><strong>输入模糊需求</strong><span>公司内部文档太分散，想做一个知识库助手。</span></div>
+            <div class="mock-row"><strong>追问补齐</strong><span>目标是什么？哪些文档进入首期？低置信度回答如何兜底？</span></div>
+            <div class="mock-row"><strong>评审报告</strong><span>完整度 82/100，发现权限、兜底、指标三类高优先级问题。</span></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <h2>为什么做这个项目</h2>
+      <p class="section-sub">很多项目不是从一份完整 PRD 开始，而是从一句模糊需求开始。真正影响推进效率的，不是“有没有文档”，而是早期信息有没有被问清楚。</p>
+      <div class="grid-3">
+        <div class="card"><h3>需求表达模糊</h3><p>业务方常说“提升效率”“做个工具”，但缺少目标用户、范围和成功指标。</p></div>
+        <div class="card"><h3>补齐信息依赖经验</h3><p>新人产品经理容易漏掉权限、异常流程、验收标准和上线后指标。</p></div>
+        <div class="card"><h3>评审发现太晚</h3><p>很多问题到评审会甚至开发阶段才暴露，导致重复沟通和返工。</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>产品方案</h2>
+      <p class="section-sub">ClearBrief 不把自己定位成文档生成器，而是一个项目启动工作台。它先追问，再生成；先补齐上下文，再进入评审。</p>
+      <div class="flow">
+        <div class="flow-step"><div class="num">1</div><h3>输入想法</h3><p>录入模糊需求、会议纪要、聊天记录或文档片段。</p></div>
+        <div class="flow-step"><div class="num">2</div><h3>识别缺口</h3><p>判断项目类型、目标用户和当前缺失信息。</p></div>
+        <div class="flow-step"><div class="num">3</div><h3>追问补齐</h3><p>按优先级追问目标、范围、权限、指标和兜底流程。</p></div>
+        <div class="flow-step"><div class="num">4</div><h3>生成文档</h3><p>输出项目背景、MVP 范围、风险依赖和验收标准。</p></div>
+        <div class="flow-step"><div class="num">5</div><h3>评审导出</h3><p>检查需求质量，并导出给不同角色的材料。</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>核心设计亮点</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>智能追问，而不是直接生成</h3>
+          <p>系统先判断哪些信息还缺失，再生成高、中、低优先级问题，帮助产品经理补齐上下文。</p>
+        </div>
+        <div class="card">
+          <h3>需求评审闭环</h3>
+          <p>评审报告不只展示问题，还支持状态更新，分数会随着问题处理情况变化。</p>
+        </div>
+        <div class="card">
+          <h3>多角色导出</h3>
+          <p>同一份项目材料可以生成老板摘要、研发任务、设计 brief、运营材料和 kickoff 议程。</p>
+        </div>
+        <div class="card">
+          <h3>真实边界状态</h3>
+          <p>Demo 包含空输入、分析加载、信息不足、未处理高风险导出提示等状态。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>指标与验证</h2>
+      <div class="grid-3">
+        <div class="card metric"><strong>效率</strong><p>Kickoff 初稿生成时间、信息补齐耗时、跨部门确认轮次。</p></div>
+        <div class="card metric"><strong>质量</strong><p>需求完整度评分、评审缺口发现率、验收标准覆盖率。</p></div>
+        <div class="card metric"><strong>可用性</strong><p>追问采纳率、内容修改比例、导出内容可用性评分。</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>面试讲法</h2>
+      <div class="quote">
+        我做的是 ClearBrief，一个面向产品经理的项目启动与需求评审工作台。我没有把它设计成简单的 PRD 生成器，因为真实工作里最难的不是写文档，而是把一句模糊需求问清楚。这个项目展示的是我如何把智能能力放进真实产品工作流里，帮助团队更早发现问题，减少后面的返工。
+        <span>适合投递方向：AI 应用产品、B 端工具产品、SaaS 产品经理、协作效率产品。</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

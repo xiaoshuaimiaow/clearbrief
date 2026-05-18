@@ -1,0 +1,315 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New Kickoff 输入模糊需求 - polished</title>
+  <style>
+    :root {
+      --bg: #f4f7fc;
+      --frame: #ffffff;
+      --ink: #121722;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --soft: #f8fafc;
+      --blue: #2563eb;
+      --blue-soft: #e8f0ff;
+      --green: #0f766e;
+      --green-soft: #ecfdf3;
+      --amber: #b45309;
+      --amber-soft: #fff7ed;
+      --purple: #5f3dc4;
+      --purple-soft: #f2edff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .frame {
+      width: 1440px;
+      min-height: 980px;
+      margin: 0 auto;
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 248px 1fr;
+      grid-template-rows: 72px 1fr;
+    }
+    .top {
+      grid-column: 1 / 3;
+      background: var(--frame);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      padding: 0 32px 0 40px;
+      gap: 24px;
+    }
+    .brand { font-size: 18px; font-weight: 700; width: 344px; }
+    .crumb { color: var(--muted); font-size: 13px; flex: 1; }
+    .btn {
+      border: 1px solid var(--line);
+      background: var(--frame);
+      border-radius: 8px;
+      height: 42px;
+      padding: 0 18px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .btn.primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+    .side {
+      background: var(--frame);
+      border-right: 1px solid var(--line);
+      padding: 30px 24px;
+    }
+    .nav-item {
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .nav-item.active {
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 700;
+    }
+    .side-bottom {
+      margin-top: 420px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .side .pill { margin-top: 12px; }
+    .content { padding: 32px 40px 56px 48px; }
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+    .step { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+    .dot {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--frame);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+    .step.active { color: var(--ink); font-weight: 700; }
+    .step.active .dot { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .connector { width: 34px; height: 2px; background: var(--line); border-radius: 1px; }
+    h1 { margin: 0; font-size: 30px; letter-spacing: 0; }
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      width: 820px;
+      margin: 12px 0 26px;
+    }
+    .header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .chips { display: flex; gap: 10px; margin-top: 6px; }
+    .pill {
+      height: 28px;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+    .blue { background: var(--blue-soft); color: var(--blue); }
+    .green { background: var(--green-soft); color: var(--green); }
+    .amber { background: var(--amber-soft); color: var(--amber); }
+    .purple { background: var(--purple-soft); color: var(--purple); }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 700px 330px;
+      gap: 32px;
+      align-items: start;
+    }
+    .panel {
+      background: var(--frame);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 10px 26px rgba(18, 23, 34, .05);
+    }
+    .panel h2 { margin: 0 0 8px; font-size: 18px; }
+    .hint { color: var(--muted); font-size: 12px; margin-bottom: 22px; }
+    .input-box {
+      min-height: 190px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 26px;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .count {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .actions { display: flex; gap: 16px; margin-top: 26px; }
+    .divider { height: 1px; background: var(--line); margin: 30px 0 18px; }
+    .input-tip { display: flex; gap: 18px; align-items: flex-start; }
+    .input-tip strong { font-size: 13px; }
+    .input-tip span { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .ai-panel .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-top: 16px;
+    }
+    .card h3 { margin: 0 0 8px; font-size: 13px; }
+    .card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .card.blue-card { background: var(--blue-soft); border-color: #bad0ff; }
+    .card.green-card { background: var(--green-soft); border-color: #a5d8cf; }
+    .card.amber-card { background: var(--amber-soft); border-color: #fed7aa; }
+    .card.blue-card h3 { color: var(--blue); }
+    .card.green-card h3 { color: var(--green); }
+    .card.amber-card h3 { color: var(--amber); }
+    .templates {
+      margin-top: 36px;
+      background: var(--frame);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 26px 30px 30px;
+      box-shadow: 0 10px 26px rgba(18, 23, 34, .05);
+    }
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .template {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px 18px;
+      min-height: 78px;
+      background: var(--soft);
+    }
+    .template h3 { margin: 0 0 8px; font-size: 14px; }
+    .template p { margin: 0; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <header class="top">
+      <div class="brand">ClearBrief 清晰启动</div>
+      <div class="crumb">企业内部 AI 知识库改版 / 新建 Kickoff</div>
+      <button class="btn">保存草稿</button>
+      <button class="btn primary">开始分析</button>
+    </header>
+
+    <aside class="side">
+      <div class="nav-item">Dashboard</div>
+      <div class="nav-item active">新建 Kickoff</div>
+      <div class="nav-item">追问补齐</div>
+      <div class="nav-item">启动文档</div>
+      <div class="nav-item">评审报告</div>
+      <div class="nav-item">导出中心</div>
+
+      <div class="side-bottom">示例模板</div>
+      <div class="pill blue">AI 应用</div>
+      <div class="pill">内部工具</div>
+      <div class="pill">运营活动</div>
+    </aside>
+
+    <main class="content">
+      <div class="steps">
+        <div class="step active"><div class="dot">1</div>输入想法</div>
+        <div class="connector"></div>
+        <div class="step"><div class="dot">2</div>智能追问</div>
+        <div class="connector"></div>
+        <div class="step"><div class="dot">3</div>生成文档</div>
+        <div class="connector"></div>
+        <div class="step"><div class="dot">4</div>评审检查</div>
+        <div class="connector"></div>
+        <div class="step"><div class="dot">5</div>导出材料</div>
+      </div>
+
+      <div class="header-row">
+        <div>
+          <h1>把一句模糊需求变成可启动项目</h1>
+          <p class="subtitle">输入现在脑子里的粗略想法即可。系统会先识别项目类型和缺失信息，再进入追问补齐，而不是直接生成一份看起来完整但无法落地的文档。</p>
+        </div>
+        <div class="chips">
+          <span class="pill blue">Step 1 / 5</span>
+          <span class="pill green">建议 2 分钟完成</span>
+        </div>
+      </div>
+
+      <section class="main-grid">
+        <div class="panel">
+          <h2>项目想法</h2>
+          <div class="hint">可以很粗糙。比如“公司文档太散，想做 AI 知识库”。</div>
+          <div class="input-box">公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，想做一个 AI 知识库助手，提高信息查找效率。</div>
+          <div class="count">128 字 / 建议 50-300 字</div>
+          <div class="actions">
+            <button class="btn primary">开始分析</button>
+            <button class="btn">换一个示例</button>
+            <button class="btn">导入会议纪要</button>
+          </div>
+          <div class="divider"></div>
+          <div class="input-tip">
+            <strong>输入提示</strong>
+            <span>尽量包含：谁遇到问题、现在怎么做、想改善什么、有没有时间或资源限制。</span>
+          </div>
+        </div>
+
+        <div class="panel ai-panel">
+          <h2>初步识别</h2>
+          <div class="hint">根据当前输入，系统会先生成这几类判断。</div>
+          <div class="card blue-card">
+            <h3>项目类型</h3>
+            <p>企业知识管理 / AI 问答 / 内部协作工具</p>
+          </div>
+          <div class="card green-card">
+            <h3>主要用户</h3>
+            <p>新员工、运营、客服、产品团队</p>
+          </div>
+          <div class="card amber-card">
+            <h3>当前缺失</h3>
+            <p>成功指标、文档范围、权限规则、AI 低置信度回答兜底流程</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="templates">
+        <h2>也可以从模板开始</h2>
+        <div class="template-grid">
+          <div class="template">
+            <h3>AI 知识库改版</h3>
+            <p>适合 B 端 AI / 企业协作场景</p>
+          </div>
+          <div class="template">
+            <h3>会员积分活动</h3>
+            <p>适合运营增长 / CRM 场景</p>
+          </div>
+          <div class="template">
+            <h3>内部流程优化</h3>
+            <p>适合 SaaS / 工具产品场景</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
