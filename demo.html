@@ -738,7 +738,7 @@
           <div class="panel export-card"><div><span class="pill purple">给设计</span><h2>设计 Brief</h2><p class="hint">用户路径、页面需求、关键状态、提示语规则。</p></div><button class="btn primary" data-export="设计 Brief">生成 Brief</button></div>
           <div class="panel export-card"><div><span class="pill amber">给运营</span><h2>上线材料</h2><p class="hint">培训资料、FAQ、反馈收集方式和试运行计划。</p></div><button class="btn primary" data-export="运营材料">生成材料</button></div>
           <div class="panel export-card"><div><span class="pill blue">给团队</span><h2>Kickoff 议程</h2><p class="hint">会议目标、讨论问题、行动项、负责人和时间节点。</p></div><button class="btn primary" data-export="Kickoff 议程">生成议程</button></div>
-          <div class="panel export-card"><div><span class="pill green">给自己</span><h2>面试讲稿</h2><p class="hint">项目背景、产品判断、智能能力设计和指标体系。</p></div><button class="btn" data-export="面试讲稿">生成讲稿</button></div>
+          <div class="panel export-card"><div><span class="pill green">给管理员</span><h2>配置清单</h2><p class="hint">文档来源、权限范围、反馈入口、内容更新负责人。</p></div><button class="btn" data-export="管理员配置清单">生成清单</button></div>
         </div>
       </section>
     </main>
@@ -864,15 +864,23 @@ A：用户可以查看来源原文，也可以提交反馈给管理员。
 - 运营：整理首期文档清单。
 - 研发：评估问答和来源引用实现方案。
 - 设计：输出提问和答案页关键状态。`,
-      "面试讲稿": `面试讲稿
+      "管理员配置清单": `管理员配置清单
 
-我做的是 ClearBrief 清晰启动，一个面向产品经理的项目启动与需求评审工作台。
+文档来源：
+- 制度文档：由行政负责人维护，每月检查一次。
+- 会员政策：由运营负责人维护，政策变更后 1 个工作日内更新。
+- 产品资料：由产品团队维护，版本发布后同步更新。
+- 项目 SOP：由项目负责人维护，项目结束后归档。
 
-我没有把它设计成简单的 PRD 生成器，因为真实工作里最难的不是写文档，而是把一句模糊需求问清楚。比如“公司想做 AI 知识库”，这句话背后其实缺少目标用户、文档范围、权限规则、成功指标和异常处理。
+权限范围：
+- 首期不接入财务、人事敏感资料。
+- 管理员可配置文档是否参与问答。
+- 答案页必须展示来源文档和更新时间。
 
-所以这个 Demo 的主流程是：先输入模糊需求，系统识别信息缺口，再通过追问补齐上下文，最后生成启动文档和评审报告。
-
-这个项目想展示的是我对产品经理工作流的理解，以及我如何把智能能力放进真实协作流程里。`
+反馈机制：
+- 用户可标记“有帮助 / 没帮助”。
+- 低置信度答案必须提供查看原文入口。
+- 每周汇总未命中问题和错误答案，进入内容治理清单。`
     };
 
     function renderStepbar() {
