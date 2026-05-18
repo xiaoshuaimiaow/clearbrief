@@ -154,6 +154,66 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 18px;
     }
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+    .preview-panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--soft);
+      overflow: hidden;
+    }
+    .preview-head {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .preview-body {
+      padding: 18px;
+    }
+    .preview-line {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .preview-line:last-child { border-bottom: 0; }
+    .preview-line strong { color: var(--ink); }
+    .preview-line span { color: var(--muted); line-height: 1.45; }
+    .demo-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .demo-step {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+      background: var(--panel);
+      min-height: 120px;
+    }
+    .demo-step strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .demo-step span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
     .card {
       border: 1px solid var(--line);
       border-radius: 10px;
@@ -228,7 +288,7 @@
       margin-top: 16px;
     }
     @media (max-width: 980px) {
-      .hero, .grid-2, .grid-3, .flow { grid-template-columns: 1fr; }
+      .hero, .grid-2, .grid-3, .flow, .preview-grid, .demo-steps { grid-template-columns: 1fr; }
       h1 { font-size: 40px; }
     }
   </style>
@@ -276,6 +336,33 @@
         <div class="flow-step"><div class="num">3</div><h3>追问补齐</h3><p>按优先级追问目标、范围、权限、指标和兜底流程。</p></div>
         <div class="flow-step"><div class="num">4</div><h3>生成文档</h3><p>输出项目背景、MVP 范围、风险依赖和验收标准。</p></div>
         <div class="flow-step"><div class="num">5</div><h3>评审导出</h3><p>检查需求质量，并导出给不同角色的材料。</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Demo 怎么看</h2>
+      <p class="section-sub">可点击 Demo 不是静态截图，而是一条完整的项目启动流程。建议按下面顺序走一遍，能看到输入、追问、生成、评审和导出的状态变化。</p>
+      <div class="preview-grid">
+        <div class="preview-panel">
+          <div class="preview-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>流程预览</span></div>
+          <div class="preview-body">
+            <div class="preview-line"><strong>输入</strong><span>录入一句粗糙需求，或导入模拟会议纪要。</span></div>
+            <div class="preview-line"><strong>追问</strong><span>系统识别目标、范围、权限、兜底流程等缺口。</span></div>
+            <div class="preview-line"><strong>文档</strong><span>生成项目背景、MVP 范围、风险和验收标准。</span></div>
+            <div class="preview-line"><strong>评审</strong><span>查看完整度评分，处理高优先级问题。</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="demo-steps">
+            <div class="demo-step"><strong>1. 开始分析</strong><span>点击输入页的主按钮，进入追问补齐。</span></div>
+            <div class="demo-step"><strong>2. 回答追问</strong><span>至少确认一个回答，生成启动文档。</span></div>
+            <div class="demo-step"><strong>3. 进入评审</strong><span>应用建议后查看需求完整度和问题清单。</span></div>
+            <div class="demo-step"><strong>4. 导出材料</strong><span>选择老板、研发、设计、运营或团队版本。</span></div>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="demo.html">直接体验 Demo</a>
+          </div>
+        </div>
       </div>
     </section>
 
