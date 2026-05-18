@@ -4,17 +4,9 @@ ClearBrief 是一个项目启动与需求评审工作台，面向产品经理、
 
 ## 在线体验
 
-👉 **项目主页：** https://xiaoshuaimiaow.github.io/clearbrief/
+**项目主页：** https://xiaoshuaimiaow.github.io/clearbrief/
 
-👉 **可点击 Demo：** https://xiaoshuaimiaow.github.io/clearbrief/demo.html
-
-👉 **产品说明文档：** https://xiaoshuaimiaow.github.io/clearbrief/prd.html
-
-## 页面入口
-
-- 项目介绍页：https://xiaoshuaimiaow.github.io/clearbrief/
-- 可点击 Demo：https://xiaoshuaimiaow.github.io/clearbrief/demo.html
-- 产品说明文档：https://xiaoshuaimiaow.github.io/clearbrief/prd.html
+Demo 和产品说明文档都可以从项目主页进入。
 
 ## 项目定位
 
@@ -38,12 +30,11 @@ ClearBrief 的重点不是自动写一篇 PRD，而是把“需求澄清 -> 启�
 
 ## 推荐体验路径
 
-1. 打开 `demo.html`。
-2. 在输入页点击“开始分析”。
-3. 在追问页选择任意一个问题并点击“确认回答”。
-4. 生成启动文档，应用右侧建议。
-5. 进入评审报告，模拟处理高优先级问题。
-6. 在导出中心生成不同角色的材料。
+1. 打开项目主页。
+2. 点击“打开可点击 Demo”。
+3. 在输入页点击“开始分析”。
+4. 在追问页选择任意一个问题并点击“确认回答”。
+5. 生成启动文档，进入评审报告，再到导出中心查看不同角色的材料。
 
 ## 项目文件
 
@@ -55,4 +46,4 @@ ClearBrief 的重点不是自动写一篇 PRD，而是把“需求澄清 -> 启�
 
 ## 当前版本
 
-当前版本是用于展示产品思路和交互流程的静态 Demo。后续可以继续接入真实文档解析、协作批注、版本对比和上线后的效果追踪。
+当前版本是用于展示产品思路和交互流程的静态 Demo，已覆盖从模糊需求输入到跨部门导出的完整路径。后续可以继续接入真实文档解析、协作批注、版本对比和上线后的效果追踪。
