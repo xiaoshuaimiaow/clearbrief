@@ -427,6 +427,58 @@
       flex-direction: column;
       justify-content: space-between;
     }
+    .tool-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 22px; }
+    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .insight-list {
+      display: grid;
+      gap: 10px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .insight-list li {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--soft);
+      padding: 12px 14px;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .prd-preview {
+      min-height: 260px;
+      max-height: 420px;
+      overflow: auto;
+      background: #0f172a;
+      color: #e5e7eb;
+      border-radius: 12px;
+      padding: 18px;
+      white-space: pre-wrap;
+      font-size: 13px;
+      line-height: 1.62;
+      border: 1px solid #1e293b;
+    }
+    .sql-box {
+      background: #111827;
+      color: #d1fae5;
+      border-radius: 10px;
+      border: 1px solid #243044;
+      padding: 16px;
+      font-size: 12px;
+      line-height: 1.55;
+      overflow: auto;
+      white-space: pre;
+      margin-top: 12px;
+    }
+    .department-list { display: grid; gap: 12px; margin-top: 16px; }
+    .department-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      padding: 14px;
+    }
+    .department-item strong { display: block; margin-bottom: 6px; }
+    .department-item span { color: var(--muted); font-size: 12px; line-height: 1.45; display: block; }
     .toast {
       position: fixed;
       right: 28px;
@@ -527,7 +579,7 @@
       .sidebar { display: flex; gap: 8px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 12px; }
       .nav { width: max-content; margin-bottom: 0; }
       .sidebar-note { display: none; }
-      .grid-2, .doc-layout, .review-grid, .score-grid, .export-grid, .guide { grid-template-columns: 1fr; }
+      .grid-2, .doc-layout, .review-grid, .score-grid, .export-grid, .guide, .tool-grid, .analysis-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -545,7 +597,7 @@
     <aside class="sidebar">
       <button class="nav active" data-page="intake"><span class="nav-num">1</span>输入想法</button>
       <button class="nav" data-page="clarify" disabled><span class="nav-num">2</span>追问补齐</button>
-      <button class="nav" data-page="document" disabled><span class="nav-num">3</span>启动文档</button>
+      <button class="nav" data-page="document" disabled><span class="nav-num">3</span>生成 PRD</button>
       <button class="nav" data-page="review" disabled><span class="nav-num">4</span>评审报告</button>
       <button class="nav" data-page="export" disabled><span class="nav-num">5</span>导出材料</button>
       <div class="sidebar-note">
@@ -564,9 +616,9 @@
       <div class="guide" aria-label="Demo 操作引导">
         <div class="guide-card primary"><strong>建议体验路径</strong><span>按顺序点下去，大约 3 分钟可以走完一条项目启动流程。</span></div>
         <div class="guide-card"><strong>1. 开始分析</strong><span>在输入页点击主按钮，系统会识别信息缺口。</span></div>
-        <div class="guide-card"><strong>2. 回答追问</strong><span>确认至少一个回答，生成启动文档。</span></div>
+        <div class="guide-card"><strong>2. 回答追问</strong><span>确认至少一个回答，生成 PRD 草稿。</span></div>
         <div class="guide-card"><strong>3. 查看评审</strong><span>处理问题后，完整度评分会变化。</span></div>
-        <div class="guide-card"><strong>4. 导出材料</strong><span>按角色生成老板、研发、设计等版本。</span></div>
+        <div class="guide-card"><strong>4. 扩展分析</strong><span>查看部门对齐、竞品分析、数据指标和 SQL。</span></div>
       </div>
 
       <section class="page active" id="page-intake">
@@ -676,12 +728,12 @@
       </section>
 
       <section class="page" id="page-document">
-        <h1>项目启动文档</h1>
-        <p class="subtitle">系统将补齐后的信息整理成可评审材料。产品经理可以继续编辑正文，也可以直接进入需求评审。</p>
+        <h1>生成 PRD 草稿</h1>
+        <p class="subtitle">系统将补齐后的信息整理成完整 PRD。产品经理可以先看结构化草稿，再一键生成可复制的 PRD 文本。</p>
         <div class="doc-layout">
           <div class="panel toc">
-            <h2>文档目录</h2>
-            <a>项目背景</a><a>问题定义</a><a>目标用户</a><a>产品目标</a><a class="active">MVP 范围</a><a>非本期范围</a><a>风险与依赖</a><a>验收标准</a>
+            <h2>PRD 目录</h2>
+            <a>项目背景</a><a>问题定义</a><a>目标用户</a><a>产品目标</a><a class="active">MVP 范围</a><a>跨部门对齐</a><a>竞品分析</a><a>数据指标</a><a>验收标准</a>
           </div>
           <article class="panel doc">
           <span class="pill blue">生成草稿 v0.3</span>
@@ -704,6 +756,12 @@
               <li>支持按部门和文档类型配置基础访问权限。</li>
             </ul>
             <div id="extraDocSection"></div>
+            <h3>跨部门待确认</h3>
+            <ul class="doc-editable">
+              <li>研发：来源引用、权限过滤和低置信度兜底的实现方案。</li>
+              <li>设计：答案页、未命中页、反馈入口和来源展示的关键状态。</li>
+              <li>数据：查找时间、重复咨询量、答案采纳率和未命中率的埋点口径。</li>
+            </ul>
           </article>
           <aside class="panel">
             <h2>智能建议</h2>
@@ -715,8 +773,19 @@
               <button class="btn primary" id="applySuggestionBtn">应用建议</button>
             </div>
             <div class="applied-note" id="appliedNote">已补充风险与验收标准。需求完整度预计从 78 提升到 82。</div>
-            <div class="actions"><button class="btn primary" id="reviewBtn">进入评审</button></div>
+            <div class="actions">
+              <button class="btn primary" id="fullPrdBtn">生成完整 PRD</button>
+              <button class="btn primary" id="reviewBtn">进入评审</button>
+            </div>
           </aside>
+        </div>
+        <div class="panel" style="margin-top:22px">
+          <h2>完整 PRD 输出</h2>
+          <p class="hint">这里先用前端规则模拟 AI 输出。后续接入后端后，可以把同一块替换成真实大模型返回结果。</p>
+          <div class="prd-preview" id="prdPreview">点击“生成完整 PRD”后，会在这里输出一份可复制的 PRD 草稿。</div>
+          <div class="actions">
+            <button class="btn primary" id="copyPrdBtn">复制 PRD</button>
+          </div>
         </div>
       </section>
 
@@ -768,8 +837,87 @@
       </section>
 
       <section class="page" id="page-export">
-        <h1>跨部门导出中心</h1>
-        <p class="subtitle">同一份项目启动材料，根据不同角色生成不同表达方式。这里展示的是产品闭环：系统不只生成 PRD，还能帮助团队更快对齐。</p>
+        <h1>产品经理工作台</h1>
+        <p class="subtitle">同一份项目启动材料，可以继续生成跨部门对齐、竞品分析、数据分析和 SQL 口径。这里展示的是产品闭环：系统不只生成 PRD，还能帮助产品经理把项目往落地推进。</p>
+        <div class="analysis-grid">
+          <div class="panel">
+            <span class="pill blue">跨部门对齐</span>
+            <h2>各部门关注点</h2>
+            <div class="department-list">
+              <div class="department-item"><strong>业务方</strong><span>确认核心目标、目标用户、优先级、上线时间和业务收益口径。</span></div>
+              <div class="department-item"><strong>研发</strong><span>确认数据来源、权限过滤、接口边界、异常流程、低置信度兜底和验收标准。</span></div>
+              <div class="department-item"><strong>设计</strong><span>确认提问页、答案页、未命中页、反馈入口、来源引用和错误提示状态。</span></div>
+              <div class="department-item"><strong>数据</strong><span>确认埋点、指标口径、看板维度、实验分组和上线后复盘周期。</span></div>
+              <div class="department-item"><strong>运营</strong><span>确认首期文档清单、内容负责人、培训材料、FAQ 和反馈收集方式。</span></div>
+              <div class="department-item"><strong>合规 / 管理员</strong><span>确认敏感文档边界、访问权限、过期内容治理和人工审核机制。</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <span class="pill purple">竞品分析</span>
+            <h2>可借鉴方向</h2>
+            <table>
+              <thead><tr><th>竞品</th><th>借鉴点</th><th>ClearBrief 机会</th></tr></thead>
+              <tbody>
+                <tr><td>Notion AI</td><td>文档总结、问答、改写</td><td>更聚焦项目启动和 PRD 评审</td></tr>
+                <tr><td>飞书妙记 / 文档</td><td>会议纪要和协作沉淀</td><td>把会议内容转成需求缺口和行动项</td></tr>
+                <tr><td>腾讯文档智能助手</td><td>文档协作与模板生成</td><td>补强跨部门对齐和评审风险检查</td></tr>
+                <tr><td>Confluence + Atlassian Intelligence</td><td>知识库与团队协作</td><td>面向产品经理提供更轻的启动流程</td></tr>
+              </tbody>
+            </table>
+            <ul class="insight-list">
+              <li><strong>差异化：</strong>不只生成文档，而是围绕需求澄清、部门协作、风险评审和 PRD 交付形成闭环。</li>
+              <li><strong>产品机会：</strong>把“竞品分析”输出成可直接放进 PRD 的模块，而不是停留在资料罗列。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tool-grid">
+          <div class="panel">
+            <span class="pill green">数据分析</span>
+            <h2>上线后指标看板</h2>
+            <table>
+              <thead><tr><th>指标</th><th>定义</th><th>用途</th></tr></thead>
+              <tbody>
+                <tr><td>平均查找时间</td><td>从进入搜索到点击答案来源的平均时长</td><td>衡量效率提升</td></tr>
+                <tr><td>答案采纳率</td><td>用户点击“有帮助”的问答占比</td><td>衡量答案质量</td></tr>
+                <tr><td>未命中率</td><td>未返回有效答案的问题占比</td><td>发现文档缺口</td></tr>
+                <tr><td>重复咨询量</td><td>运营群内重复提问次数</td><td>衡量协作成本下降</td></tr>
+              </tbody>
+            </table>
+            <div class="sql-box" id="sqlPreview">SELECT
+  DATE(created_at) AS dt,
+  COUNT(*) AS question_cnt,
+  AVG(answer_time_seconds) AS avg_find_time,
+  SUM(CASE WHEN feedback = 'helpful' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS helpful_rate,
+  SUM(CASE WHEN answer_status = 'no_match' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS no_match_rate
+FROM knowledge_question_log
+WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
+GROUP BY DATE(created_at)
+ORDER BY dt;</div>
+            <div class="actions"><button class="btn primary" data-export="数据分析与 SQL">生成数据方案</button></div>
+          </div>
+          <div class="panel">
+            <span class="pill amber">PRD 增强</span>
+            <h2>可继续生成的模块</h2>
+            <ul class="insight-list">
+              <li>竞品分析表：竞品能力、适用场景、优缺点、可借鉴点。</li>
+              <li>埋点方案：事件名、触发时机、属性字段、看板指标。</li>
+              <li>研发拆解：用户故事、接口需求、权限规则、异常流程。</li>
+              <li>评审 Checklist：上线前必须确认的问题和负责人。</li>
+            </ul>
+            <div class="actions"><button class="btn primary" data-export="PRD 增强模块">生成增强模块</button></div>
+          </div>
+          <div class="panel">
+            <span class="pill blue">AI 接入</span>
+            <h2>真实版实现路径</h2>
+            <ul class="insight-list">
+              <li>前端只负责收集项目想法和展示结果，不在网页里暴露 API Key。</li>
+              <li>后端接口负责调用大模型、限制调用次数、处理失败重试和返回结构化 JSON。</li>
+              <li>第一版先一次性返回分析结果；第二版升级为流式输出，让“识别项目类型、生成追问、整理 PRD”逐步出现。</li>
+            </ul>
+            <div class="actions"><button class="btn" data-export="AI 接入方案">生成接入方案</button></div>
+          </div>
+        </div>
+        <h2 style="margin-top:28px">角色化导出</h2>
         <div class="export-grid">
           <div class="panel export-card"><div><span class="pill blue">给老板</span><h2>项目摘要</h2><p class="hint">业务价值、投入产出、核心风险、是否建议启动。</p></div><button class="btn primary" data-export="老板摘要">生成摘要</button></div>
           <div class="panel export-card"><div><span class="pill green">给研发</span><h2>任务拆解</h2><p class="hint">用户故事、功能清单、验收标准、边界条件。</p></div><button class="btn primary" data-export="研发任务清单">生成任务</button></div>
@@ -804,7 +952,7 @@
 
   <script>
     const pages = ["intake", "clarify", "document", "review", "export"];
-    const labels = ["输入想法", "追问补齐", "启动文档", "评审报告", "导出材料"];
+    const labels = ["输入想法", "追问补齐", "生成 PRD", "评审报告", "工作台"];
     let current = 0;
     let maxUnlocked = 0;
     let confirmedAnswers = 0;
@@ -817,6 +965,7 @@
     const modalContent = document.getElementById("modalContent");
     let currentExportText = "";
     let reviewReady = false;
+    let currentPrdText = "";
 
     const exportSamples = {
       "老板摘要": `项目：企业内部知识库改版
@@ -918,8 +1067,155 @@ A：用户可以查看来源原文，也可以提交反馈给管理员。
 反馈机制：
 - 用户可标记“有帮助 / 没帮助”。
 - 低置信度答案必须提供查看原文入口。
-- 每周汇总未命中问题和错误答案，进入内容治理清单。`
+- 每周汇总未命中问题和错误答案，进入内容治理清单。`,
+      "数据分析与 SQL": `数据分析方案
+
+核心指标：
+1. 平均查找时间：从进入搜索到查看答案来源的平均耗时。
+2. 答案采纳率：用户标记“有帮助”的问答占比。
+3. 未命中率：没有返回有效答案的问题占比。
+4. 重复咨询量：运营群、客服群中同类问题重复出现次数。
+
+埋点事件：
+- question_submit：用户提交问题。
+- answer_show：系统展示答案。
+- source_click：用户点击来源文档。
+- feedback_submit：用户提交有帮助 / 没帮助。
+- no_match_show：系统展示未命中状态。
+
+SQL 示例：
+SELECT
+  DATE(created_at) AS dt,
+  COUNT(*) AS question_cnt,
+  AVG(answer_time_seconds) AS avg_find_time,
+  SUM(CASE WHEN feedback = 'helpful' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS helpful_rate,
+  SUM(CASE WHEN answer_status = 'no_match' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS no_match_rate
+FROM knowledge_question_log
+WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
+GROUP BY DATE(created_at)
+ORDER BY dt;`,
+      "PRD 增强模块": `PRD 增强模块
+
+一、竞品分析
+- Notion AI：适合文档总结和问答，但缺少项目启动流程。
+- 飞书妙记 / 文档：适合会议沉淀，但对需求缺口和评审风险提示不足。
+- 腾讯文档智能助手：协作基础好，但需要更强的 PRD 结构化输出。
+- Confluence + Atlassian Intelligence：知识库能力强，但对轻量产品团队门槛偏高。
+
+二、差异化机会
+ClearBrief 不只生成文档，而是把“需求澄清 -> 部门对齐 -> 竞品分析 -> 数据指标 -> PRD -> 评审”串成一个产品经理工作流。
+
+三、评审 Checklist
+- 是否明确目标用户和核心场景？
+- 是否定义本期范围和非本期范围？
+- 是否有权限、异常、低置信度兜底？
+- 是否有上线后数据指标和 SQL 口径？
+- 是否给研发、设计、运营、数据分别输出了材料？`
+,
+      "AI 接入方案": `AI 接入方案
+
+一、为什么需要后端
+GitHub Pages 是静态网站，不能安全保存 API Key。如果把 Key 写在前端，别人可以从浏览器里看到并消耗额度。因此真实 AI 版需要一个后端接口作为中转。
+
+二、基础链路
+用户输入项目想法
+-> 前端发送到 /api/analyze
+-> 后端调用大模型
+-> 模型返回结构化 JSON
+-> 前端展示项目理解、追问问题、部门对齐、竞品分析、数据指标和 PRD 草稿
+
+三、第一版能力
+- 输入项目想法后，一次性返回分析结果。
+- 生成需求缺口、追问问题、跨部门关注点和 PRD 草稿。
+- 支持复制 PRD 和导出角色化材料。
+
+四、第二版能力
+- 使用流式输出，让页面逐步显示“正在识别项目类型、正在生成追问、正在整理 PRD”。
+- 增加调用次数限制，避免公开链接被滥用。
+- 增加失败兜底：模型超时或返回格式错误时，展示可编辑模板。`
     };
+
+    function buildPrdText() {
+      const idea = document.getElementById("ideaInput").value.trim();
+      return `# ClearBrief 生成 PRD 草稿
+
+## 1. 项目背景
+${idea || "公司内部文档分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，团队希望提升信息查找效率。"}
+
+## 2. 问题定义
+- 内部资料分散在不同系统，用户需要反复询问他人。
+- 文档来源和更新时间不清楚，容易使用过期信息。
+- 不同部门对首期范围、权限规则和上线指标理解不一致。
+
+## 3. 目标用户
+- 新员工：需要快速了解制度、流程和常见问题。
+- 运营 / 客服：需要快速查找会员政策、活动规则和项目资料。
+- 产品团队：需要减少重复答疑，并沉淀高频问题。
+- 管理员：需要维护文档来源、权限范围和内容更新。
+
+## 4. 产品目标
+- 平均信息查找时间下降 40%。
+- 重复咨询量下降 30%。
+- 答案采纳率达到 70% 以上。
+- 未命中问题可以进入内容治理清单。
+
+## 5. MVP 范围
+- 支持自然语言提问，并返回带来源引用的答案。
+- 首期接入制度文档、会员政策、产品资料和项目 SOP。
+- 低置信度回答展示“查看原文 / 提交反馈”入口。
+- 支持按部门和文档类型配置基础访问权限。
+
+## 6. 非本期范围
+- 不接入财务、人事等敏感资料。
+- 不做完整企业搜索平台。
+- 不做跨系统自动权限同步。
+- 不做多人实时协作编辑。
+
+## 7. 跨部门对齐
+- 业务方：确认目标用户、业务收益、上线时间和优先级。
+- 研发：确认数据来源、接口边界、权限过滤和异常流程。
+- 设计：确认提问页、答案页、未命中页、反馈入口和来源展示。
+- 数据：确认埋点事件、指标口径、看板维度和复盘周期。
+- 运营：确认文档清单、内容负责人、培训材料和 FAQ。
+- 合规 / 管理员：确认敏感文档边界、访问权限和人工审核机制。
+
+## 8. 竞品分析
+| 竞品 | 可借鉴点 | ClearBrief 机会 |
+| --- | --- | --- |
+| Notion AI | 文档总结、问答、改写 | 更聚焦项目启动和 PRD 评审 |
+| 飞书妙记 / 文档 | 会议纪要和协作沉淀 | 把会议内容转成需求缺口和行动项 |
+| 腾讯文档智能助手 | 文档协作与模板生成 | 补强跨部门对齐和评审风险检查 |
+| Confluence + Atlassian Intelligence | 知识库与团队协作 | 面向产品经理提供更轻的启动流程 |
+
+## 9. 数据指标与 SQL 口径
+核心指标包括平均查找时间、答案采纳率、未命中率、重复咨询量和反馈处理时长。
+
+\`\`\`sql
+SELECT
+  DATE(created_at) AS dt,
+  COUNT(*) AS question_cnt,
+  AVG(answer_time_seconds) AS avg_find_time,
+  SUM(CASE WHEN feedback = 'helpful' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS helpful_rate,
+  SUM(CASE WHEN answer_status = 'no_match' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS no_match_rate
+FROM knowledge_question_log
+WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
+GROUP BY DATE(created_at)
+ORDER BY dt;
+\`\`\`
+
+## 10. 风险与兜底
+- AI 回答不确定时必须展示低置信度提示。
+- 答案必须展示来源文档和更新时间。
+- 敏感资料不进入首期问答范围。
+- 用户反馈需要进入每周内容治理清单。
+
+## 11. 验收标准
+- 用户可以在 3 步内完成提问并查看答案来源。
+- 低置信度回答必须提供查看原文和提交反馈入口。
+- 管理员可以配置首期文档范围。
+- 指标看板能展示查找时间、采纳率和未命中率。
+- PRD 中的跨部门问题均有负责人和下一步动作。`;
+    }
 
     function renderStepbar() {
       stepbar.innerHTML = "";
@@ -977,6 +1273,8 @@ A：用户可以查看来源原文，也可以提交反馈给管理员。
       document.getElementById("analysisCards").style.display = "none";
       document.getElementById("answerBox").classList.remove("active");
       document.getElementById("generateDocBtn").disabled = true;
+      document.getElementById("prdPreview").textContent = "点击“生成完整 PRD”后，会在这里输出一份可复制的 PRD 草稿。";
+      currentPrdText = "";
       document.getElementById("intakeAlert").classList.remove("show");
       document.getElementById("reviewAlert").classList.remove("show");
       document.getElementById("analyzeBtn").innerHTML = "开始分析";
@@ -1066,7 +1364,9 @@ A：用户可以查看来源原文，也可以提交反馈给管理员。
       unlock(2);
       goTo(2);
       logActivity("activity2", "已生成启动文档草稿 v0.3");
-      showToast("已生成启动文档草稿");
+      currentPrdText = buildPrdText();
+      document.getElementById("prdPreview").textContent = currentPrdText;
+      showToast("已生成 PRD 草稿");
     });
 
     document.getElementById("editDocBtn").addEventListener("click", () => {
@@ -1098,6 +1398,26 @@ A：用户可以查看来源原文，也可以提交反馈给管理员。
       goTo(3);
       logActivity("activity3", "已生成评审报告：完整度 82/100");
       showToast("已生成需求评审报告");
+    });
+
+    document.getElementById("fullPrdBtn").addEventListener("click", () => {
+      currentPrdText = buildPrdText();
+      document.getElementById("prdPreview").textContent = currentPrdText;
+      logActivity("activity2", "已生成完整 PRD：含竞品分析、部门对齐、数据指标");
+      showToast("已生成完整 PRD");
+    });
+
+    document.getElementById("copyPrdBtn").addEventListener("click", async () => {
+      if (!currentPrdText) {
+        currentPrdText = buildPrdText();
+        document.getElementById("prdPreview").textContent = currentPrdText;
+      }
+      try {
+        await navigator.clipboard.writeText(currentPrdText);
+        showToast("已复制 PRD");
+      } catch {
+        showToast("当前浏览器不支持自动复制");
+      }
     });
 
     function updateReviewScore() {
