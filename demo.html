@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ClearBrief 清晰启动 - 可点击 Demo</title>
+  <title>ClearBrief 清晰启动 - 在线体验</title>
   <style>
     :root {
       --bg: #f4f7fc;
@@ -291,6 +291,64 @@
       color: var(--muted);
       font-size: 12px;
     }
+    .case-picker {
+      margin-top: 24px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+    .case-picker-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-end;
+      margin-bottom: 14px;
+    }
+    .case-picker-head strong {
+      display: block;
+      font-size: 15px;
+    }
+    .case-picker-head span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .case-card {
+      min-height: 88px;
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      padding: 13px 14px;
+      cursor: pointer;
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+    .case-card:hover {
+      border-color: #9bb9ff;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, .10);
+      transform: translateY(-1px);
+    }
+    .case-card.active {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
+    }
+    .case-card strong {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+    .case-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
     .question {
       display: grid;
       grid-template-columns: 58px 1fr 92px;
@@ -303,6 +361,7 @@
       background: var(--panel);
     }
     .question.active { background: var(--red-soft); border-color: #ffc9c9; }
+    .question.done { background: var(--green-soft); border-color: #a5d8cf; }
     .q-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
     .q-sub { color: var(--muted); font-size: 12px; line-height: 1.35; }
     .answer-box {
@@ -512,6 +571,48 @@
     }
     .department-item strong { display: block; margin-bottom: 6px; }
     .department-item span { color: var(--muted); font-size: 12px; line-height: 1.45; display: block; }
+    .feedback-form {
+      display: grid;
+      grid-template-columns: 160px 1fr 130px;
+      gap: 12px;
+      align-items: start;
+      margin-top: 16px;
+    }
+    .feedback-form select,
+    .feedback-form textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+    }
+    .feedback-form select { height: 42px; padding: 0 12px; }
+    .feedback-form textarea { min-height: 92px; padding: 12px; resize: vertical; line-height: 1.5; }
+    .feedback-list { display: grid; gap: 12px; margin-top: 16px; }
+    .feedback-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      background: var(--panel);
+    }
+    .feedback-item-head {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .feedback-item p { margin: 0; color: #344054; font-size: 13px; line-height: 1.55; }
+    .feedback-item .actions { margin-top: 12px; }
+    .download-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
     .toast {
       position: fixed;
       right: 28px;
@@ -596,6 +697,23 @@
       font-size: 14px;
       color: #344054;
       white-space: pre-wrap;
+      width: 100%;
+      min-height: 360px;
+      resize: vertical;
+      font-family: inherit;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .export-preview:focus {
+      border-color: #9bb9ff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+      background: #fff;
+    }
+    .modal-hint {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
     }
     .close {
       width: 36px;
@@ -613,11 +731,17 @@
       .nav { width: max-content; margin-bottom: 0; }
       .sidebar-note { display: none; }
       .grid-2, .doc-layout, .review-grid, .score-grid, .export-grid, .guide, .tool-grid, .analysis-grid { grid-template-columns: 1fr; }
+      .feedback-form { grid-template-columns: 1fr; }
+      .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .case-picker-head { display: block; }
       .doc-layout.document-workspace { height: auto; min-height: 0; }
       .document-workspace > .panel,
       .document-workspace .doc,
       .document-workspace .toc,
       .document-workspace aside { height: auto; max-height: none; overflow: visible; position: static; }
+    }
+    @media (max-width: 620px) {
+      .case-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -627,7 +751,7 @@
       <div class="brand">ClearBrief 清晰启动</div>
       <div class="tagline">项目启动与需求评审工作台</div>
       <div class="top-actions">
-        <button class="btn" id="resetBtn">重置 Demo</button>
+        <button class="btn" id="resetBtn">重置体验</button>
         <button class="btn primary" id="nextTopBtn">下一步</button>
       </div>
     </header>
@@ -639,7 +763,7 @@
       <button class="nav" data-page="review" disabled><span class="nav-num">4</span>评审报告</button>
       <button class="nav" data-page="export" disabled><span class="nav-num">5</span>导出材料</button>
       <div class="sidebar-note">
-        Demo 案例：企业内部文档分散，新员工和运营同事找不到会员政策、项目资料和流程制度。
+        体验案例：从模糊项目想法到 PRD、评审清单和跨部门材料。
       </div>
       <div class="activity-log">
         <strong>活动记录</strong>
@@ -651,7 +775,7 @@
 
     <main>
       <div class="stepbar" id="stepbar"></div>
-      <div class="guide" aria-label="Demo 操作引导">
+      <div class="guide" aria-label="体验操作引导">
         <div class="guide-card primary"><strong>建议体验路径</strong><span>按顺序点下去，大约 3 分钟可以走完一条项目启动流程。</span></div>
         <div class="guide-card"><strong>1. 开始分析</strong><span>在输入页点击主按钮，系统会识别信息缺口。</span></div>
         <div class="guide-card"><strong>2. 回答追问</strong><span>确认至少一个回答，生成 PRD 草稿。</span></div>
@@ -663,7 +787,7 @@
         <h1>把一句模糊需求变成可启动项目</h1>
         <p class="subtitle">输入现在脑子里的粗略想法即可。系统会先识别项目类型和缺失信息，再进入追问补齐，而不是直接生成一份看起来完整但无法落地的文档。</p>
         <div class="source-row">
-          <span class="source-chip" id="scenarioChip">当前模式：示例案例</span>
+          <span class="source-chip" id="scenarioChip">当前案例：内部知识库</span>
           <span class="source-chip">也支持：会议纪要</span>
           <span class="source-chip">也支持：聊天记录</span>
           <span class="source-chip">也支持：文档片段</span>
@@ -673,13 +797,23 @@
             <h2>项目想法</h2>
             <p class="hint">可以很粗糙。比如“公司文档太散，想做知识库”。</p>
             <textarea id="ideaInput">公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，想做一个 AI 知识库助手，提高信息查找效率。</textarea>
-            <p class="hint" id="countHint">128 字 / 建议 50-300 字</p>
+            <p class="hint" id="countHint">61 字 / 建议 50-300 字</p>
             <div class="inline-alert" id="intakeAlert">输入信息太少。请至少说明“谁遇到问题”和“想改善什么”，再开始分析。</div>
             <div class="actions">
               <button class="btn primary" id="analyzeBtn">开始分析</button>
               <button class="btn" id="sampleBtn">使用示例案例</button>
               <button class="btn" id="customBtn">输入我的项目</button>
               <button class="btn" id="meetingBtn">导入会议纪要</button>
+            </div>
+            <div class="case-picker">
+              <div class="case-picker-head">
+                <div>
+                  <strong>快速切换案例</strong>
+                  <span>每个案例都可直接分析，也可以改成你的真实项目。</span>
+                </div>
+                <span>覆盖活动、数据、客服、教育、社区、流程等场景</span>
+              </div>
+              <div class="case-grid" id="caseGrid"></div>
             </div>
           </div>
           <div class="panel">
@@ -733,9 +867,12 @@
             <a href="#doc-users">目标用户</a>
             <a href="#doc-goal">产品目标</a>
             <a href="#doc-scope">MVP 范围</a>
+            <a href="#doc-flow">核心流程</a>
             <a href="#doc-departments">跨部门对齐</a>
             <a href="#doc-competition">竞品分析</a>
             <a href="#doc-metrics">数据指标</a>
+            <a href="#doc-sql">数据口径</a>
+            <a href="#doc-risks">风险兜底</a>
             <a href="#doc-acceptance">验收标准</a>
           </div>
           <article class="panel doc doc-scroll">
@@ -763,6 +900,12 @@
               <li>支持按部门和文档类型配置基础访问权限。</li>
             </ul>
             <div id="extraDocSection"></div>
+            <h3 id="doc-flow">核心流程</h3>
+            <ol class="doc-editable" id="flowList">
+              <li>用户提交项目想法或会议纪要。</li>
+              <li>系统识别项目类型、目标用户和信息缺口。</li>
+              <li>产品经理确认关键追问，生成 PRD 和评审材料。</li>
+            </ol>
             <h3 id="doc-departments">跨部门待确认</h3>
             <ul class="doc-editable" id="departmentDocList">
               <li>研发：来源引用、权限过滤和低置信度兜底的实现方案。</li>
@@ -773,6 +916,18 @@
             <p class="doc-editable" id="competitionText">对比 Notion AI、飞书文档、腾讯文档智能助手和 Confluence，明确 ClearBrief 的差异化是“项目启动与需求评审工作流”，而不是单纯文档生成。</p>
             <h3 id="doc-metrics">数据指标</h3>
             <p class="doc-editable" id="metricsText">核心指标包括平均查找时间、答案采纳率、未命中率、重复咨询量和反馈处理时长。</p>
+            <h3 id="doc-sql">数据口径</h3>
+            <ul class="doc-editable" id="sqlDocList">
+              <li>事件表：knowledge_question_log</li>
+              <li>核心字段：answer_status、feedback、answer_time_seconds、source_click、no_match_rate</li>
+              <li>复盘维度：日期、用户角色、来源渠道和处理状态。</li>
+            </ul>
+            <h3 id="doc-risks">风险兜底</h3>
+            <ul class="doc-editable" id="riskList">
+              <li>信息不完整时不直接进入开发排期。</li>
+              <li>异常状态需要明确提示和人工处理入口。</li>
+              <li>上线前确认权限、数据口径和验收负责人。</li>
+            </ul>
             <h3 id="doc-acceptance">验收标准</h3>
             <p class="doc-editable" id="acceptanceText">用户可以在 3 步内完成提问并查看答案来源；低置信度回答必须提供查看原文和提交反馈入口。</p>
           </article>
@@ -794,10 +949,12 @@
         </div>
         <div class="panel" style="margin-top:22px">
           <h2>完整 PRD 输出</h2>
-          <p class="hint">这里先用前端规则模拟 AI 输出。后续接入后端后，可以把同一块替换成真实大模型返回结果。</p>
+          <p class="hint">系统会根据已输入内容和已确认追问，整理一份可复制、可继续编辑的 PRD 文本。</p>
           <div class="prd-preview" id="prdPreview">点击“生成完整 PRD”后，会在这里输出一份可复制的 PRD 草稿。</div>
           <div class="actions">
             <button class="btn primary" id="copyPrdBtn">复制 PRD</button>
+            <button class="btn" id="copyWordPrdBtn">复制 Word 版</button>
+            <button class="btn" id="downloadMarkdownBtn">下载 Markdown</button>
           </div>
         </div>
       </section>
@@ -843,9 +1000,26 @@
           </div>
           <div class="inline-alert" id="reviewAlert">还有高优先级问题未处理。你仍然可以导出材料，但建议先处理关键风险。</div>
           <div class="actions">
-            <button class="btn" id="autoFixBtn">模拟处理高优先级</button>
+            <button class="btn" id="autoFixBtn">一键处理高风险项</button>
             <button class="btn primary" id="exportBtn">导出材料</button>
           </div>
+        </div>
+        <div class="panel" style="margin-top:22px">
+          <h2>研发反馈</h2>
+          <p class="hint">PRD 生成后，研发可以继续补充技术风险、接口依赖、边界条件或排期疑问。采纳后的反馈会同步进入 PRD 的风险兜底和完整 PRD 文本。</p>
+          <div class="feedback-form">
+            <select id="devFeedbackType">
+              <option>技术风险</option>
+              <option>范围疑问</option>
+              <option>接口依赖</option>
+              <option>数据口径</option>
+              <option>异常流程</option>
+              <option>排期风险</option>
+            </select>
+            <textarea id="devFeedbackInput">权限规则需要明确到角色和文档类型，否则接口设计会变复杂，联调时也容易出现敏感内容误展示。</textarea>
+            <button class="btn primary" id="addDevFeedbackBtn">添加反馈</button>
+          </div>
+          <div class="feedback-list" id="devFeedbackList"></div>
         </div>
       </section>
 
@@ -920,14 +1094,14 @@ ORDER BY dt;</div>
             <div class="actions"><button class="btn primary" data-export="PRD 增强模块">生成增强模块</button></div>
           </div>
           <div class="panel">
-            <span class="pill blue">AI 接入</span>
-            <h2>真实版实现路径</h2>
+            <span class="pill blue">产品边界</span>
+            <h2>能力边界说明</h2>
             <ul class="insight-list">
-              <li>前端只负责收集项目想法和展示结果，不在网页里暴露 API Key。</li>
-              <li>后端接口负责调用大模型、限制调用次数、处理失败重试和返回结构化 JSON。</li>
-              <li>第一版先一次性返回分析结果；第二版升级为流式输出，让“识别项目类型、生成追问、整理 PRD”逐步出现。</li>
+              <li>适合做评审前预检，帮助团队提前发现目标、范围、指标和风险缺口。</li>
+              <li>不替代业务、研发、法务、财务等角色的最终决策。</li>
+              <li>正式接入企业系统时，需要结合权限、数据安全、调用成本和审计要求。</li>
             </ul>
-            <div class="actions"><button class="btn" data-export="AI 接入方案">生成接入方案</button></div>
+            <div class="actions"><button class="btn" data-export="能力边界说明">生成说明</button></div>
           </div>
         </div>
         <h2 style="margin-top:28px">角色化导出</h2>
@@ -948,14 +1122,16 @@ ORDER BY dt;</div>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modal-head">
         <div>
-          <span class="pill blue">导出预览</span>
+          <span class="pill blue">可编辑导出</span>
           <h2 id="modalTitle">导出内容</h2>
         </div>
         <button class="close" id="closeModal" aria-label="关闭">×</button>
       </div>
       <div class="modal-body">
-        <div class="export-preview" id="modalContent"></div>
+        <p class="modal-hint">这是系统生成的初稿。你可以在这里调整措辞、删减内容或补充业务细节，再复制给对应角色。</p>
+        <textarea class="export-preview" id="modalContent"></textarea>
         <div class="actions">
+          <button class="btn" id="restoreExportBtn">恢复初稿</button>
           <button class="btn primary" id="copyExportBtn">复制内容</button>
           <button class="btn" id="closeModalBottom">关闭</button>
         </div>
@@ -977,10 +1153,71 @@ ORDER BY dt;</div>
     const modalTitle = document.getElementById("modalTitle");
     const modalContent = document.getElementById("modalContent");
     let currentExportText = "";
+    let originalExportText = "";
     let reviewReady = false;
     let currentPrdText = "";
     let currentScenario = null;
     let currentAnswerKey = "goal";
+    let activeExampleKey = "knowledge";
+    let confirmedAnswersByKey = {};
+    let devFeedbackItems = [];
+
+    const caseExamples = [
+      {
+        key: "knowledge",
+        label: "内部知识库",
+        tag: "文档检索 / 新人上手",
+        text: "公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，想做一个 AI 知识库助手，提高信息查找效率。"
+      },
+      {
+        key: "travel",
+        label: "感恩节旅行活动",
+        tag: "节日营销 / 用户互动",
+        text: "我们同程旅行想做一个感恩节活动，希望借助“感恩陪伴”“一起出发”等情绪主题，提升用户参与感和品牌温度。现在很多用户旅行后缺少分享和互动场景，我们想通过年度旅行回忆、感谢同行人、好友互动、旅行盲盒等玩法，让用户愿意主动参与和传播。活动会结合机票、酒店、高铁等业务场景，打造一个既有节日氛围，又能带动拉新转化的营销活动。"
+      },
+      {
+        key: "data",
+        label: "经营数据看板",
+        tag: "数据产品 / 指标体系",
+        text: "运营和管理层想做一个经营数据看板，集中查看 GMV、转化率、留存、渠道 ROI 和活动效果。但现在指标口径不统一，数据更新不稳定，业务同事经常临时找数据同学取数，希望先做一个可复用的数据分析工作台。"
+      },
+      {
+        key: "growth",
+        label: "会员积分活动",
+        tag: "增长活动 / 权益核销",
+        text: "市场团队想优化会员积分活动，希望通过积分任务、优惠券兑换和会员权益提升老用户复购。现在活动规则、用户分层、积分发放、核销失败处理和补贴成本都还没说清楚，需要先把首期范围和效果指标定下来。"
+      },
+      {
+        key: "support",
+        label: "客服工单分流",
+        tag: "客服效率 / 服务质检",
+        text: "客服团队每天收到大量咨询、退款和投诉工单，人工分流慢，主管也很难及时发现高风险问题。团队希望做一个工单自动分流和质检工具，提高首次响应速度，减少重复处理，并沉淀服务质量数据。"
+      },
+      {
+        key: "education",
+        label: "课程学习体验",
+        tag: "教育产品 / 完课提升",
+        text: "在线课程团队想提升学生完课率和作业反馈效率。现在课程路径、课后任务、老师点评和家长反馈比较分散，学生不知道下一步该学什么，老师也很难快速发现掉队用户，希望做一个学习路径和反馈工作台。"
+      },
+      {
+        key: "community",
+        label: "内容社区互动",
+        tag: "社区增长 / 创作者激励",
+        text: "内容社区最近互动下降，创作者发帖动力不足，运营也很难判断哪些话题值得继续推。团队希望优化发布、评论、收藏、分享和话题运营流程，同时建立内容审核和创作者激励机制。"
+      },
+      {
+        key: "booking",
+        label: "门店预约流程",
+        tag: "本地服务 / 履约效率",
+        text: "本地服务团队想优化门店预约流程，用户经常遇到可约时间不清楚、临时改约、到店等待和爽约问题。门店也希望更好地管理服务人员排班、预约确认和异常处理，提高到店率和资源利用率。"
+      },
+      {
+        key: "workflow",
+        label: "审批流程优化",
+        tag: "企业协同 / 流程追踪",
+        text: "公司内部报销、采购和合同审批流程比较慢，员工不知道应该提交哪些材料，也不清楚卡在哪个审批节点。团队希望做一个统一的审批工作台，支持流程配置、状态追踪、超时提醒和数据复盘。"
+      }
+    ];
 
     const escapeHtml = text => String(text || "").replace(/[&<>"']/g, ch => ({
       "&": "&amp;",
@@ -1250,36 +1487,80 @@ ORDER BY dt;</div>
 
     function renderQuestions(scenario) {
       document.getElementById("questionsList").innerHTML = scenario.questions.map((q, index) => `
-        <div class="question ${index === 0 ? "active" : ""}">
-          <span class="pill ${index < 3 ? "red" : "amber"}">${index < 3 ? "高" : "中"}</span>
+        <div class="question ${index === 0 ? "active" : ""} ${confirmedAnswersByKey[q[0]] ? "done" : ""}">
+          <span class="pill ${confirmedAnswersByKey[q[0]] ? "green" : index < 3 ? "red" : "amber"}">${confirmedAnswersByKey[q[0]] ? "已确认" : index < 3 ? "高" : "中"}</span>
           <div>
             <div class="q-title">${escapeHtml(q[1])}</div>
-            <div class="q-sub">${escapeHtml(q[2])}</div>
+            <div class="q-sub">${escapeHtml(confirmedAnswersByKey[q[0]] || q[2])}</div>
           </div>
-          <button class="btn ${index === 0 ? "primary" : ""}" data-answer="${escapeHtml(q[0])}">回答</button>
+          <button class="btn ${index === 0 ? "primary" : ""}" data-answer="${escapeHtml(q[0])}">${confirmedAnswersByKey[q[0]] ? "查看" : "回答"}</button>
         </div>`).join("");
     }
 
     function renderInfoCards(scenario, confirmed = false) {
-      document.getElementById("infoCards").innerHTML = confirmed ? `
+      const confirmedEntries = Object.entries(confirmedAnswersByKey)
+        .map(([key, answer]) => {
+          const question = scenario.questions.find(q => q[0] === key);
+          return question ? [question[1], answer] : [key, answer];
+        });
+      const remaining = scenario.questions
+        .filter(q => !confirmedAnswersByKey[q[0]])
+        .map(q => q[1])
+        .join("；") || "核心追问已确认，可以进入 PRD 评审。";
+      const confirmedHtml = confirmedEntries.map(([title, answer]) => `
+        <div class="card green"><h3>${escapeHtml(title)}</h3><p>${escapeHtml(answer)}</p></div>
+      `).join("");
+      document.getElementById("infoCards").innerHTML = confirmed || confirmedEntries.length ? `
         <div class="card green"><h3>目标用户</h3><p>${escapeHtml(scenario.users)}</p></div>
         <div class="card blue"><h3>首期范围</h3><p>${escapeHtml(scenario.scope.slice(0, 2).join("；"))}</p></div>
         <div class="card green"><h3>成功指标</h3><p>${escapeHtml(scenario.metrics)}</p></div>
-        <div class="card amber"><h3>待确认</h3><p>${escapeHtml(scenario.gaps)}</p></div>` : `
+        ${confirmedHtml}
+        <div class="card amber"><h3>仍待确认</h3><p>${escapeHtml(remaining)}</p></div>` : `
         <div class="card green"><h3>目标用户</h3><p>${escapeHtml(scenario.users)}</p></div>
         <div class="card amber"><h3>待补齐</h3><p>${escapeHtml(scenario.gaps)}</p></div>`;
     }
 
     function renderDocument(scenario) {
+      const confirmedEntries = Object.entries(confirmedAnswersByKey)
+        .map(([key, answer]) => {
+          const question = scenario.questions.find(q => q[0] === key);
+          return question ? [question[1], answer] : [key, answer];
+        });
+      const acceptedFeedback = devFeedbackItems.filter(item => item.status === "已采纳");
       document.getElementById("docTitle").textContent = scenario.title;
       document.getElementById("backgroundText").textContent = scenario.background;
       document.getElementById("problemText").textContent = scenario.problem;
       document.getElementById("usersText").textContent = scenario.users;
       document.getElementById("goalText").textContent = scenario.goal;
       document.getElementById("scopeList").innerHTML = scenario.scope.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+      document.getElementById("extraDocSection").innerHTML = confirmedEntries.length ? `
+        <h3 id="doc-confirmed">已确认结论</h3>
+        <ul class="doc-editable">
+          ${confirmedEntries.map(([title, answer]) => `<li><strong>${escapeHtml(title)}：</strong>${escapeHtml(answer)}</li>`).join("")}
+        </ul>
+      ` : "";
+      document.getElementById("flowList").innerHTML = [
+        `用户提交${escapeHtml(scenario.title)}相关想法、会议纪要或文档片段。`,
+        "系统识别项目类型、目标用户、缺失信息和跨部门待确认事项。",
+        "产品经理确认追问结论后，沉淀 PRD、评审清单、数据指标和角色化材料。",
+        "评审通过后进入研发拆解、设计出图、数据埋点和上线复盘。"
+      ].map(item => `<li>${item}</li>`).join("");
       document.getElementById("departmentDocList").innerHTML = scenario.departments.slice(0, 3).map(item => `<li>${escapeHtml(item)}</li>`).join("");
       document.getElementById("competitionText").textContent = scenario.competition;
       document.getElementById("metricsText").textContent = scenario.metrics;
+      document.getElementById("sqlDocList").innerHTML = [
+        `事件表：${scenario.sqlTable}`,
+        `核心字段：${scenario.sqlFields.join("、")}`,
+        "复盘维度：日期、用户角色、渠道来源、业务状态和异常原因。",
+        "看板建议：趋势图、分层对比、异常明细和评审前后指标变化。"
+      ].map(item => `<li>${escapeHtml(item)}</li>`).join("");
+      document.getElementById("riskList").innerHTML = [
+        `待确认风险：${scenario.gaps}`,
+        "关键业务规则必须有明确负责人，不能只写成“上线前补齐”。",
+        "异常状态需要给用户明确提示、处理入口和内部追踪字段。",
+        "上线前需要完成权限、数据口径、验收负责人和回滚方案确认。",
+        ...acceptedFeedback.map(item => `研发反馈：${item.type} - ${item.text}`)
+      ].map(item => `<li>${escapeHtml(item)}</li>`).join("");
       document.getElementById("acceptanceText").textContent = scenario.acceptance;
     }
 
@@ -1474,33 +1755,45 @@ ClearBrief 不只生成文档，而是把“需求澄清 -> 部门对齐 -> 竞�
 - 是否有上线后数据指标和 SQL 口径？
 - 是否给研发、设计、运营、数据分别输出了材料？`
 ,
-      "AI 接入方案": `AI 接入方案
+      "能力边界说明": `能力边界说明
 
-一、为什么需要后端
-GitHub Pages 是静态网站，不能安全保存 API Key。如果把 Key 写在前端，别人可以从浏览器里看到并消耗额度。因此真实 AI 版需要一个后端接口作为中转。
+一、适合使用的场景
+- 需求评审前的材料预检。
+- 项目启动前的信息缺口梳理。
+- 将会议纪要、聊天记录或粗略想法整理成 PRD 初稿。
+- 为老板、研发、设计、数据和运营生成不同视角的沟通材料。
 
-二、基础链路
-用户输入项目想法
--> 前端发送到 /api/analyze
--> 后端调用大模型
--> 模型返回结构化 JSON
--> 前端展示项目理解、追问问题、部门对齐、竞品分析、数据指标和 PRD 草稿
+二、不适合替代的工作
+- 不替代业务负责人判断项目优先级。
+- 不替代研发评估技术方案和排期。
+- 不替代法务、财务、数据安全等专业审批。
+- 不承诺自动生成的内容可以直接进入开发，关键规则仍需要人工确认。
 
-三、第一版能力
-- 输入项目想法后，一次性返回分析结果。
-- 生成需求缺口、追问问题、跨部门关注点和 PRD 草稿。
-- 支持复制 PRD 和导出角色化材料。
-
-四、第二版能力
-- 使用流式输出，让页面逐步显示“正在识别项目类型、正在生成追问、正在整理 PRD”。
-- 增加调用次数限制，避免公开链接被滥用。
-- 增加失败兜底：模型超时或返回格式错误时，展示可编辑模板。`
+三、上线前需要确认
+- 企业数据权限和敏感信息范围。
+- 生成内容的人工复核机制。
+- 大模型调用成本、失败兜底和日志审计。
+- 与现有文档、协同工具、项目管理工具的连接方式。`
     };
 
     function buildPrdText() {
       const scenario = currentScenario || getScenario();
       const scope = scenario.scope.map(item => `- ${item}`).join("\n");
       const departments = scenario.departments.map(item => `- ${item}`).join("\n");
+      const acceptedFeedback = devFeedbackItems
+        .filter(item => item.status === "已采纳")
+        .map(item => `- ${item.type}：${item.text}`)
+        .join("\n") || "- 暂无已采纳研发反馈。";
+      const confirmed = Object.entries(confirmedAnswersByKey)
+        .map(([key, answer]) => {
+          const question = scenario.questions.find(q => q[0] === key);
+          return question ? `- ${question[1]}：${answer}` : `- ${key}：${answer}`;
+        })
+        .join("\n") || "- 暂无人工确认回答，当前文档基于项目描述和默认场景推断生成。";
+      const competitors = (scenario.competitors || [])
+        .map(item => `| ${item[0]} | ${item[1]} | ${item[2]} |`)
+        .join("\n") || "| 竞品待补充 | 待分析 | 进入正式调研后补齐 |";
+      const sqlFields = scenario.sqlFields.map(field => `- ${field}`).join("\n");
       return `# ${scenario.title} PRD 草稿
 
 ## 1. 项目背景
@@ -1515,22 +1808,54 @@ ${scenario.users}
 ## 4. 产品目标
 ${scenario.goal}
 
-## 5. MVP 范围
+## 5. 已确认结论
+${confirmed}
+
+## 6. 典型用户场景
+- 用户在真实工作场景中遇到问题，需要快速找到规则、状态或下一步动作。
+- 业务负责人需要在评审前确认目标、范围、指标和风险，避免需求进入开发后反复变更。
+- 产品经理需要把模糊输入整理成可评审、可拆解、可验收的项目材料。
+
+## 7. MVP 范围
 ${scope}
 
-## 6. 非本期范围
+## 8. 非本期范围
 - 不做完整项目管理系统。
 - 不做复杂审批流。
 - 不做多人实时协作编辑。
+- 不在首期承诺完全自动决策，关键业务规则仍需人工确认。
 
-## 7. 跨部门对齐
+## 9. 功能拆解
+| 模块 | 核心能力 | 产出 |
+| --- | --- | --- |
+| 输入识别 | 识别项目类型、目标用户、缺失信息 | 初步分析卡片 |
+| 追问补齐 | 按优先级提出关键问题并归档回答 | 结构化信息卡 |
+| PRD 生成 | 生成背景、范围、指标、风险、验收标准 | 可复制 PRD |
+| 评审工作台 | 从目标、范围、风险、验收维度评分 | 评审结论 |
+| 角色化导出 | 给老板、研发、设计、数据分别生成材料 | 沟通文档 |
+
+## 10. 核心流程
+1. 用户输入项目想法、会议纪要或文档片段。
+2. 系统识别项目类型、目标用户、主要问题和缺失信息。
+3. 系统生成高优先级追问，产品经理逐条确认。
+4. 已确认回答进入结构化信息卡，并同步影响 PRD。
+5. 产品经理生成完整 PRD，进入评审和角色化导出。
+
+## 11. 跨部门对齐
 ${departments}
 
-## 8. 竞品分析
+## 12. 竞品分析
 ${scenario.competition}
 
-## 9. 数据指标与 SQL 口径
+| 竞品/参考对象 | 主要特点 | 对本项目的启发 |
+| --- | --- | --- |
+${competitors}
+
+## 13. 数据指标与 SQL 口径
 ${scenario.metrics}
+
+建议埋点字段：
+${sqlFields}
 
 \`\`\`sql
 SELECT
@@ -1543,14 +1868,60 @@ GROUP BY DATE(created_at)
 ORDER BY dt;
 \`\`\`
 
-## 10. 风险与兜底
+## 14. 风险与兜底
 - 输出内容需要区分“已确认”和“待确认”。
 - 关键规则必须有人工确认。
 - 异常和低置信度场景需要兜底入口。
+- 数据异常时必须展示更新时间、影响范围和处理状态。
+- 权限或预算相关规则需要在上线前由对应负责人确认。
 
-## 11. 验收标准
+## 15. 研发反馈处理
+${acceptedFeedback}
+
+## 16. 里程碑
+| 阶段 | 时间 | 产出 |
+| --- | --- | --- |
+| 需求澄清 | 第 1 周 | PRD、竞品分析、数据指标口径 |
+| 原型与评审 | 第 2 周 | 核心页面原型、评审 Checklist |
+| 开发联调 | 第 3-4 周 | MVP 功能、埋点、异常状态 |
+| 灰度上线 | 第 5 周 | 灰度数据、问题清单、优化建议 |
+
+## 17. 验收标准
 - ${scenario.acceptance}
-- PRD 中的跨部门问题均有负责人和下一步动作。`;
+- PRD 中的跨部门问题均有负责人和下一步动作。
+- 核心流程可以被完整演示，异常状态和兜底入口可见。
+- 数据看板至少能支持一次上线后复盘。
+
+## 18. 评审 Checklist
+- 目标用户是否明确？
+- MVP 范围是否可以在首期落地？
+- 权限、预算、异常和人工兜底是否都有负责人？
+- 核心指标是否有埋点字段和 SQL 口径？
+- 是否明确哪些内容不在本期范围？`;
+    }
+
+    function buildWordFriendlyPrd() {
+      const text = currentPrdText || buildPrdText();
+      return text
+        .replace(/^# (.*)$/gm, "$1\n")
+        .replace(/^## \d+\. (.*)$/gm, "\n【$1】")
+        .replace(/^### (.*)$/gm, "\n$1")
+        .replace(/^\|.*\|$/gm, line => line.replace(/^\|\s?|\s?\|$/g, "").replace(/\s?\|\s?/g, "\t"))
+        .replace(/```sql|```/g, "")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
+    function downloadTextFile(filename, content, mimeType = "text/plain;charset=utf-8") {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
     }
 
     function renderStepbar() {
@@ -1600,10 +1971,59 @@ ORDER BY dt;
     document.getElementById("nextTopBtn").addEventListener("click", next);
     navButtons.forEach((btn, i) => btn.addEventListener("click", () => goTo(i)));
 
+    function updateCaseCards() {
+      document.querySelectorAll(".case-card").forEach(card => {
+        card.classList.toggle("active", card.dataset.case === activeExampleKey);
+      });
+    }
+
+    function updateInputCount() {
+      const input = document.getElementById("ideaInput");
+      document.getElementById("countHint").textContent = `${input.value.length} 字 / 建议 50-300 字`;
+    }
+
+    function fillCaseExample(exampleKey) {
+      const example = caseExamples.find(item => item.key === exampleKey) || caseExamples[0];
+      activeExampleKey = example.key;
+      confirmedAnswersByKey = {};
+      confirmedAnswers = 0;
+      devFeedbackItems = [];
+      const input = document.getElementById("ideaInput");
+      input.value = example.text;
+      updateInputCount();
+      document.getElementById("scenarioChip").textContent = `当前案例：${example.label}`;
+      document.getElementById("intakeAlert").classList.remove("show");
+      currentScenario = getScenario();
+      renderQuestions(currentScenario);
+      renderInfoCards(currentScenario, false);
+      renderDocument(currentScenario);
+      renderWorkbench(currentScenario);
+      renderDevFeedbackList();
+      updateCaseCards();
+      showToast(`已切换到${example.label}`);
+    }
+
+    function renderCaseExamples() {
+      const grid = document.getElementById("caseGrid");
+      grid.innerHTML = caseExamples.map(example => `
+        <button class="case-card ${example.key === activeExampleKey ? "active" : ""}" data-case="${example.key}" type="button">
+          <strong>${escapeHtml(example.label)}</strong>
+          <span>${escapeHtml(example.tag)}</span>
+        </button>
+      `).join("");
+      grid.addEventListener("click", event => {
+        const card = event.target.closest("[data-case]");
+        if (!card) return;
+        fillCaseExample(card.dataset.case);
+      });
+    }
+
     document.getElementById("resetBtn").addEventListener("click", () => {
       current = 0;
       maxUnlocked = 0;
       confirmedAnswers = 0;
+      activeExampleKey = "knowledge";
+      fillCaseExample(activeExampleKey);
       currentScenario = getScenario();
       unlock(0);
       document.getElementById("analysisEmpty").style.display = "block";
@@ -1626,44 +2046,59 @@ ORDER BY dt;
       logActivity("activity1", "等待输入项目想法");
       logActivity("activity2", "尚未生成追问");
       logActivity("activity3", "尚未进入评审");
-      showToast("Demo 已重置");
+      showToast("体验已重置");
     });
 
     document.getElementById("ideaInput").addEventListener("input", e => {
-      document.getElementById("countHint").textContent = `${e.target.value.length} 字 / 建议 50-300 字`;
+      activeExampleKey = "";
+      confirmedAnswersByKey = {};
+      confirmedAnswers = 0;
+      devFeedbackItems = [];
+      updateCaseCards();
+      updateInputCount();
       document.getElementById("scenarioChip").textContent = "当前模式：自定义项目";
     });
 
     document.getElementById("sampleBtn").addEventListener("click", () => {
-      document.getElementById("ideaInput").value = "公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，想做一个 AI 知识库助手，提高信息查找效率。";
-      document.getElementById("countHint").textContent = `${document.getElementById("ideaInput").value.length} 字 / 建议 50-300 字`;
-      document.getElementById("scenarioChip").textContent = "当前模式：示例案例";
-      showToast("已切换到示例案例");
+      fillCaseExample("knowledge");
     });
 
     document.getElementById("customBtn").addEventListener("click", () => {
+      activeExampleKey = "";
+      confirmedAnswersByKey = {};
+      confirmedAnswers = 0;
+      devFeedbackItems = [];
       document.getElementById("ideaInput").value = "";
       document.getElementById("ideaInput").focus();
       document.getElementById("countHint").textContent = "0 字 / 建议 50-300 字";
       document.getElementById("scenarioChip").textContent = "当前模式：自定义项目";
+      updateCaseCards();
       showToast("可以输入你的项目了");
     });
 
     document.getElementById("meetingBtn").addEventListener("click", () => {
+      activeExampleKey = "";
+      confirmedAnswersByKey = {};
+      confirmedAnswers = 0;
+      devFeedbackItems = [];
       document.getElementById("ideaInput").value = "会议纪要：新人经常问运营同事会员政策在哪，客服也会反复找产品资料。大家觉得可以做一个内部知识库，但还没确定首期接入哪些文档，也没讨论权限和答案错误怎么办。";
-      document.getElementById("countHint").textContent = `${document.getElementById("ideaInput").value.length} 字 / 建议 50-300 字`;
+      updateInputCount();
       document.getElementById("scenarioChip").textContent = "当前模式：会议纪要";
-      showToast("已导入模拟会议纪要");
+      updateCaseCards();
+      showToast("已导入会议纪要样例");
     });
 
     document.getElementById("analyzeBtn").addEventListener("click", () => {
       const idea = document.getElementById("ideaInput").value.trim();
-      if (idea.length < 20) {
+      if (idea.length < 50) {
         document.getElementById("intakeAlert").classList.add("show");
         showToast("输入信息不足");
         return;
       }
       document.getElementById("intakeAlert").classList.remove("show");
+      confirmedAnswersByKey = {};
+      confirmedAnswers = 0;
+      devFeedbackItems = [];
       const btn = document.getElementById("analyzeBtn");
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span>分析中';
@@ -1674,6 +2109,7 @@ ORDER BY dt;
       renderInfoCards(scenario, false);
       renderDocument(scenario);
       renderWorkbench(scenario);
+      renderDevFeedbackList();
       setTimeout(() => {
         document.getElementById("analysisEmpty").style.display = "none";
         document.getElementById("analysisCards").style.display = "block";
@@ -1692,7 +2128,7 @@ ORDER BY dt;
       if (!btn) return;
       currentAnswerKey = btn.dataset.answer;
       const scenario = currentScenario || getScenario();
-      const answer = scenario.questions.find(q => q[0] === currentAnswerKey)?.[3] || "建议先补齐这个问题，再生成 PRD 草稿。";
+      const answer = confirmedAnswersByKey[currentAnswerKey] || scenario.questions.find(q => q[0] === currentAnswerKey)?.[3] || "建议先补齐这个问题，再生成 PRD 草稿。";
       document.querySelectorAll(".question").forEach(item => item.classList.remove("active"));
       btn.closest(".question").classList.add("active");
       document.querySelectorAll("[data-answer]").forEach(item => item.classList.remove("primary"));
@@ -1702,14 +2138,22 @@ ORDER BY dt;
     });
 
     document.getElementById("confirmAnswerBtn").addEventListener("click", () => {
-      confirmedAnswers += 1;
       const scenario = currentScenario || getScenario();
+      const answer = document.getElementById("answerText").textContent;
+      confirmedAnswersByKey[currentAnswerKey] = answer;
+      confirmedAnswers = Object.keys(confirmedAnswersByKey).length;
+      renderQuestions(scenario);
       renderInfoCards(scenario, true);
+      renderDocument(scenario);
+      if (currentPrdText) {
+        currentPrdText = buildPrdText();
+        document.getElementById("prdPreview").textContent = currentPrdText;
+      }
       if (confirmedAnswers >= 1) {
         document.getElementById("generateDocBtn").disabled = false;
         unlock(2);
       }
-      logActivity("activity2", "已归档追问回答，可生成启动文档");
+      logActivity("activity2", `已归档 ${confirmedAnswers} 条追问回答，可生成启动文档`);
       showToast("已归档到结构化信息卡");
     });
 
@@ -1777,6 +2221,30 @@ ORDER BY dt;
       }
     });
 
+    document.getElementById("copyWordPrdBtn").addEventListener("click", async () => {
+      if (!currentPrdText) {
+        currentPrdText = buildPrdText();
+        document.getElementById("prdPreview").textContent = currentPrdText;
+      }
+      try {
+        await navigator.clipboard.writeText(buildWordFriendlyPrd());
+        showToast("已复制 Word 友好版");
+      } catch {
+        showToast("当前浏览器不支持自动复制");
+      }
+    });
+
+    document.getElementById("downloadMarkdownBtn").addEventListener("click", () => {
+      if (!currentPrdText) {
+        currentPrdText = buildPrdText();
+        document.getElementById("prdPreview").textContent = currentPrdText;
+      }
+      const scenario = currentScenario || getScenario();
+      const filename = `${scenario.title.replace(/[\\/:*?"<>|]/g, "")}-PRD.md`;
+      downloadTextFile(filename, currentPrdText, "text/markdown;charset=utf-8");
+      showToast("已下载 Markdown");
+    });
+
     let manualTocLock = false;
     document.querySelectorAll(".toc a").forEach(link => {
       link.addEventListener("click", event => {
@@ -1818,17 +2286,34 @@ ORDER BY dt;
     if (docScroller) {
       const docHeadings = [...docScroller.querySelectorAll("h3[id]")];
       const tocLinks = [...document.querySelectorAll(".toc a")];
-      docScroller.addEventListener("scroll", () => {
+      function setActiveToc(headingId) {
+        tocLinks.forEach(link => {
+          const active = link.getAttribute("href") === `#${headingId}`;
+          link.classList.toggle("active", active);
+          if (active) {
+            link.scrollIntoView({ block: "nearest" });
+          }
+        });
+      }
+      function updateActiveToc() {
         if (manualTocLock) return;
-        const current = docHeadings.reduce((best, heading) => {
-          if (!best) return heading;
-          const bestDistance = Math.abs(best.getBoundingClientRect().top - docScroller.getBoundingClientRect().top - 18);
-          const currentDistance = Math.abs(heading.getBoundingClientRect().top - docScroller.getBoundingClientRect().top - 18);
-          return currentDistance < bestDistance ? heading : best;
-        }, null);
-        if (!current) return;
-        tocLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${current.id}`));
+        if (!docHeadings.length) return;
+        const bottomReached = docScroller.scrollTop + docScroller.clientHeight >= docScroller.scrollHeight - 8;
+        if (bottomReached) {
+          setActiveToc(docHeadings[docHeadings.length - 1].id);
+          return;
+        }
+        const scrollerTop = docScroller.getBoundingClientRect().top;
+        const readingLine = scrollerTop + 120;
+        const current = docHeadings.reduce((active, heading) => {
+          return heading.getBoundingClientRect().top <= readingLine ? heading : active;
+        }, docHeadings[0]);
+        setActiveToc(current.id);
+      }
+      docScroller.addEventListener("scroll", () => {
+        updateActiveToc();
       }, { passive: true });
+      updateActiveToc();
     }
 
     function updateReviewScore() {
@@ -1858,14 +2343,84 @@ ORDER BY dt;
       }
     }
 
+    function renderDevFeedbackList() {
+      const list = document.getElementById("devFeedbackList");
+      if (!list) return;
+      if (!devFeedbackItems.length) {
+        list.innerHTML = `
+          <div class="feedback-item">
+            <div class="feedback-item-head"><strong>暂无研发反馈</strong><span class="pill">待输入</span></div>
+            <p>可以添加技术风险、接口依赖、数据口径或排期疑问，再决定是否采纳进 PRD。</p>
+          </div>
+        `;
+        return;
+      }
+      list.innerHTML = devFeedbackItems.map(item => `
+        <div class="feedback-item">
+          <div class="feedback-item-head">
+            <strong>${escapeHtml(item.type)}</strong>
+            <span class="pill ${item.status === "已采纳" ? "green" : item.status === "暂不处理" ? "amber" : "blue"}">${escapeHtml(item.status)}</span>
+          </div>
+          <p>${escapeHtml(item.text)}</p>
+          <div class="actions">
+            <button class="btn primary" data-dev-action="accept" data-dev-id="${item.id}">采纳进 PRD</button>
+            <button class="btn" data-dev-action="hold" data-dev-id="${item.id}">暂不处理</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function syncFeedbackToPrd() {
+      const scenario = currentScenario || getScenario();
+      renderDocument(scenario);
+      if (currentPrdText) {
+        currentPrdText = buildPrdText();
+        document.getElementById("prdPreview").textContent = currentPrdText;
+      }
+    }
+
     document.querySelectorAll(".review-status").forEach(select => {
       select.addEventListener("change", updateReviewScore);
+    });
+    updateReviewScore();
+    renderDevFeedbackList();
+
+    document.getElementById("addDevFeedbackBtn").addEventListener("click", () => {
+      const type = document.getElementById("devFeedbackType").value;
+      const input = document.getElementById("devFeedbackInput");
+      const text = input.value.trim();
+      if (!text) {
+        showToast("请先填写研发反馈");
+        return;
+      }
+      devFeedbackItems.unshift({
+        id: Date.now().toString(),
+        type,
+        text,
+        status: "待确认"
+      });
+      input.value = "";
+      renderDevFeedbackList();
+      logActivity("activity3", "已收到研发反馈，等待产品确认是否采纳");
+      showToast("已添加研发反馈");
+    });
+
+    document.getElementById("devFeedbackList").addEventListener("click", event => {
+      const btn = event.target.closest("[data-dev-action]");
+      if (!btn) return;
+      const item = devFeedbackItems.find(feedback => feedback.id === btn.dataset.devId);
+      if (!item) return;
+      item.status = btn.dataset.devAction === "accept" ? "已采纳" : "暂不处理";
+      renderDevFeedbackList();
+      syncFeedbackToPrd();
+      logActivity("activity3", item.status === "已采纳" ? "已采纳研发反馈并同步 PRD" : "已记录暂不处理的研发反馈");
+      showToast(item.status === "已采纳" ? "已同步进 PRD" : "已标记暂不处理");
     });
 
     document.getElementById("autoFixBtn").addEventListener("click", () => {
       document.querySelectorAll(".review-status").forEach(select => select.value = "已处理");
       updateReviewScore();
-      showToast("已模拟处理评审问题");
+      showToast("已处理评审问题");
     });
 
     document.getElementById("exportBtn").addEventListener("click", () => {
@@ -1938,9 +2493,11 @@ ${scenario.users}
 
     function openExportModal(type) {
       currentExportText = buildExportText(type);
+      originalExportText = currentExportText;
       modalTitle.textContent = type;
-      modalContent.textContent = currentExportText;
+      modalContent.value = currentExportText;
       exportModal.classList.add("show");
+      setTimeout(() => modalContent.focus(), 60);
     }
 
     function closeExportModal() {
@@ -1955,8 +2512,17 @@ ${scenario.users}
     exportModal.addEventListener("click", e => {
       if (e.target === exportModal) closeExportModal();
     });
+    modalContent.addEventListener("input", () => {
+      currentExportText = modalContent.value;
+    });
+    document.getElementById("restoreExportBtn").addEventListener("click", () => {
+      modalContent.value = originalExportText;
+      currentExportText = originalExportText;
+      showToast("已恢复生成初稿");
+    });
     document.getElementById("copyExportBtn").addEventListener("click", async () => {
       try {
+        currentExportText = modalContent.value;
         await navigator.clipboard.writeText(currentExportText);
         showToast("已复制导出内容");
       } catch {
@@ -1965,6 +2531,7 @@ ${scenario.users}
     });
 
     unlock(0);
+    renderCaseExamples();
     currentScenario = getScenario();
     renderQuestions(currentScenario);
     renderInfoCards(currentScenario, false);
