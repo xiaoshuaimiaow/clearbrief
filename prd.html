@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ClearBrief 清晰启动 - 产品说明文档</title>
 <style>
-body{margin:0;background:#f4f7fc;color:#121722;font-family:Arial,'Microsoft YaHei',sans-serif;line-height:1.7}.wrap{max-width:920px;margin:0 auto;padding:48px 24px 80px}article{background:#fff;border:1px solid #d9e0ea;border-radius:14px;padding:42px 52px;box-shadow:0 14px 38px rgba(18,23,34,.06)}h1{font-size:38px;line-height:1.18;margin:0 0 28px}h2{font-size:25px;margin:38px 0 14px;border-top:1px solid #e5eaf2;padding-top:26px}h3{font-size:18px;margin:28px 0 10px}p{margin:10px 0}ul{margin:10px 0 18px;padding-left:24px}li{margin:6px 0}blockquote{margin:14px 0;padding:14px 18px;background:#f8fafc;border-left:4px solid #2563eb;border-radius:8px;color:#344054}strong{font-weight:700}.toplink{display:inline-flex;margin-bottom:18px;color:#2563eb;text-decoration:none;font-weight:700}@media(max-width:720px){article{padding:28px 22px}.wrap{padding:24px 14px 56px}h1{font-size:30px}}
+body{margin:0;background:#f4f7fc;color:#121722;font-family:Arial,'Microsoft YaHei',sans-serif;line-height:1.7}.wrap{max-width:1180px;margin:0 auto;padding:48px 24px 80px}.doc-shell{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start}.side-toc{position:sticky;top:24px;background:#fff;border:1px solid #d9e0ea;border-radius:14px;padding:18px;box-shadow:0 14px 38px rgba(18,23,34,.04)}.side-toc strong{display:block;margin-bottom:12px}.side-toc a{display:block;text-decoration:none;color:#667085;border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.35;margin-bottom:3px}.side-toc a.active,.side-toc a:hover{background:#e8f0ff;color:#2563eb;font-weight:700}article{background:#fff;border:1px solid #d9e0ea;border-radius:14px;padding:42px 52px;box-shadow:0 14px 38px rgba(18,23,34,.06)}h1{font-size:38px;line-height:1.18;margin:0 0 28px}h2{font-size:25px;margin:38px 0 14px;border-top:1px solid #e5eaf2;padding-top:26px;scroll-margin-top:24px}h3{font-size:18px;margin:28px 0 10px}p{margin:10px 0}ul{margin:10px 0 18px;padding-left:24px}li{margin:6px 0}blockquote{margin:14px 0;padding:14px 18px;background:#f8fafc;border-left:4px solid #2563eb;border-radius:8px;color:#344054}strong{font-weight:700}.toplink{display:inline-flex;margin-bottom:18px;color:#2563eb;text-decoration:none;font-weight:700}@media(max-width:900px){.doc-shell{grid-template-columns:1fr}.side-toc{position:static}}@media(max-width:720px){article{padding:28px 22px}.wrap{padding:24px 14px 56px}h1{font-size:30px}}
 </style>
 </head>
-<body><main class="wrap"><a class="toplink" href="demo.html">打开可点击 Demo</a><article>
+<body><main class="wrap"><a class="toplink" href="demo.html">打开可点击 Demo</a><div class="doc-shell"><aside class="side-toc"><strong>文档目录</strong><nav id="docToc"></nav></aside><article>
 <h1>ClearBrief 清晰启动</h1>
 <h2>1. 项目概述</h2>
 <p><strong>项目名称：</strong> ClearBrief 清晰启动</p>
@@ -375,4 +375,33 @@ body{margin:0;background:#f4f7fc;color:#121722;font-family:Arial,'Microsoft YaHe
 <li>将导出材料沉淀为模板库，按团队角色和项目类型复用。</li>
 <li>上线后追踪项目效果，验证前期澄清质量是否减少返工。</li>
 </ul>
-</article></main></body></html>
+</article></div></main><script>
+  const headings = [...document.querySelectorAll("article h2")];
+  const toc = document.getElementById("docToc");
+  headings.forEach((heading, index) => {
+    heading.id = heading.id || `section-${index + 1}`;
+    const link = document.createElement("a");
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    if (index === 0) link.classList.add("active");
+    link.addEventListener("click", event => {
+      event.preventDefault();
+      document.querySelectorAll(".side-toc a").forEach(item => item.classList.remove("active"));
+      link.classList.add("active");
+      heading.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    toc.appendChild(link);
+  });
+  function updateActiveToc() {
+    const current = [...headings].reduce((best, heading) => {
+      if (!best) return heading;
+      const bestDistance = Math.abs(best.getBoundingClientRect().top - 120);
+      const currentDistance = Math.abs(heading.getBoundingClientRect().top - 120);
+      return currentDistance < bestDistance ? heading : best;
+    }, null);
+    if (!current) return;
+    document.querySelectorAll(".side-toc a").forEach(item => item.classList.toggle("active", item.getAttribute("href") === `#${current.id}`));
+  }
+  window.addEventListener("scroll", updateActiveToc, { passive: true });
+  updateActiveToc();
+</script></body></html>

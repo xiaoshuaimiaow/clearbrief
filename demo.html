@@ -24,6 +24,10 @@
       --purple-soft: #f2edff;
     }
     * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
     body {
       margin: 0;
       background: var(--bg);
@@ -32,7 +36,8 @@
     }
     button, textarea { font: inherit; }
     .app {
-      min-height: 100vh;
+      height: 100vh;
+      min-height: 0;
       display: grid;
       grid-template-columns: 248px 1fr;
       grid-template-rows: 72px 1fr;
@@ -311,6 +316,34 @@
     .answer-box.active { display: block; }
     .info-grid { display: grid; gap: 14px; }
     .doc-layout { display: grid; grid-template-columns: 220px 1fr 280px; gap: 22px; }
+    .doc-layout.document-workspace {
+      height: min(760px, calc(100vh - 230px));
+      min-height: 560px;
+      align-items: stretch;
+    }
+    .document-workspace > .panel {
+      min-height: 0;
+    }
+    .document-workspace .doc {
+      height: 100%;
+      overflow: auto;
+    }
+    .document-workspace .toc {
+      position: sticky;
+      top: 18px;
+      height: fit-content;
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+      align-self: start;
+    }
+    .document-workspace aside {
+      position: sticky;
+      top: 18px;
+      height: fit-content;
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+      align-self: start;
+    }
     .toc a {
       display: block;
       height: 36px;
@@ -324,7 +357,7 @@
     .toc a.active { background: var(--blue-soft); color: var(--blue); font-weight: 700; }
     .doc h2 { font-size: 26px; margin: 0 0 8px; }
     .doc .meta { font-size: 12px; color: var(--muted); margin-bottom: 26px; }
-    .doc h3 { font-size: 18px; margin: 26px 0 10px; }
+    .doc h3 { font-size: 18px; margin: 26px 0 10px; scroll-margin-top: 88px; }
     .doc p, .doc li { font-size: 14px; color: #344054; line-height: 1.62; }
     .doc ul { padding-left: 20px; margin: 0; }
     .doc-editable {
@@ -580,6 +613,11 @@
       .nav { width: max-content; margin-bottom: 0; }
       .sidebar-note { display: none; }
       .grid-2, .doc-layout, .review-grid, .score-grid, .export-grid, .guide, .tool-grid, .analysis-grid { grid-template-columns: 1fr; }
+      .doc-layout.document-workspace { height: auto; min-height: 0; }
+      .document-workspace > .panel,
+      .document-workspace .doc,
+      .document-workspace .toc,
+      .document-workspace aside { height: auto; max-height: none; overflow: visible; position: static; }
     }
   </style>
 </head>
@@ -625,7 +663,7 @@
         <h1>把一句模糊需求变成可启动项目</h1>
         <p class="subtitle">输入现在脑子里的粗略想法即可。系统会先识别项目类型和缺失信息，再进入追问补齐，而不是直接生成一份看起来完整但无法落地的文档。</p>
         <div class="source-row">
-          <span class="source-chip">输入来源：手动输入</span>
+          <span class="source-chip" id="scenarioChip">当前模式：示例案例</span>
           <span class="source-chip">也支持：会议纪要</span>
           <span class="source-chip">也支持：聊天记录</span>
           <span class="source-chip">也支持：文档片段</span>
@@ -639,7 +677,8 @@
             <div class="inline-alert" id="intakeAlert">输入信息太少。请至少说明“谁遇到问题”和“想改善什么”，再开始分析。</div>
             <div class="actions">
               <button class="btn primary" id="analyzeBtn">开始分析</button>
-              <button class="btn" id="sampleBtn">换一个示例</button>
+              <button class="btn" id="sampleBtn">使用示例案例</button>
+              <button class="btn" id="customBtn">输入我的项目</button>
               <button class="btn" id="meetingBtn">导入会议纪要</button>
             </div>
           </div>
@@ -650,20 +689,7 @@
               <h3>等待分析</h3>
               <p>当前还没有识别结果。</p>
             </div>
-            <div id="analysisCards" style="display:none">
-              <div class="card blue">
-                <h3>项目类型</h3>
-                <p>企业知识管理 / 智能问答 / 内部协作工具</p>
-              </div>
-              <div class="card green">
-                <h3>主要用户</h3>
-                <p>新员工、运营、客服、产品团队</p>
-              </div>
-              <div class="card amber">
-                <h3>当前缺失</h3>
-                <p>成功指标、文档范围、权限规则、低置信度回答兜底流程</p>
-              </div>
-            </div>
+            <div id="analysisCards" style="display:none"></div>
           </div>
         </div>
       </section>
@@ -675,38 +701,7 @@
           <div class="panel">
             <h2>优先追问问题</h2>
             <p class="hint">高优先级问题建议在生成文档前回答。</p>
-            <div class="question active">
-              <span class="pill red">高</span>
-              <div>
-                <div class="q-title">本次改版最核心的目标是什么？</div>
-                <div class="q-sub">减少查找时间、降低重复咨询，还是提升新人上手速度？</div>
-              </div>
-              <button class="btn primary" data-answer="goal">回答</button>
-            </div>
-            <div class="question">
-              <span class="pill red">高</span>
-              <div>
-                <div class="q-title">哪些文档进入首期范围？</div>
-                <div class="q-sub">制度、产品资料、会员政策、项目 SOP 是否都包含？</div>
-              </div>
-              <button class="btn" data-answer="scope">回答</button>
-            </div>
-            <div class="question">
-              <span class="pill red">高</span>
-              <div>
-                <div class="q-title">回答没有把握时如何处理？</div>
-                <div class="q-sub">提示来源、转人工、查看原文，还是提交反馈？</div>
-              </div>
-              <button class="btn" data-answer="fallback">回答</button>
-            </div>
-            <div class="question">
-              <span class="pill amber">中</span>
-              <div>
-                <div class="q-title">不同角色可以访问哪些文档？</div>
-                <div class="q-sub">是否需要部门、角色、文档类型三层权限？</div>
-              </div>
-              <button class="btn" data-answer="permission">回答</button>
-            </div>
+            <div id="questionsList"></div>
             <div class="answer-box" id="answerBox">
               <strong>当前回答草稿</strong>
               <p id="answerText">主目标：让新员工和运营同事更快找到制度、会员政策和项目资料，减少重复询问。</p>
@@ -730,25 +725,37 @@
       <section class="page" id="page-document">
         <h1>生成 PRD 草稿</h1>
         <p class="subtitle">系统将补齐后的信息整理成完整 PRD。产品经理可以先看结构化草稿，再一键生成可复制的 PRD 文本。</p>
-        <div class="doc-layout">
+        <div class="doc-layout document-workspace">
           <div class="panel toc">
             <h2>PRD 目录</h2>
-            <a>项目背景</a><a>问题定义</a><a>目标用户</a><a>产品目标</a><a class="active">MVP 范围</a><a>跨部门对齐</a><a>竞品分析</a><a>数据指标</a><a>验收标准</a>
+            <a class="active" href="#doc-background">项目背景</a>
+            <a href="#doc-problem">问题定义</a>
+            <a href="#doc-users">目标用户</a>
+            <a href="#doc-goal">产品目标</a>
+            <a href="#doc-scope">MVP 范围</a>
+            <a href="#doc-departments">跨部门对齐</a>
+            <a href="#doc-competition">竞品分析</a>
+            <a href="#doc-metrics">数据指标</a>
+            <a href="#doc-acceptance">验收标准</a>
           </div>
-          <article class="panel doc">
+          <article class="panel doc doc-scroll">
           <span class="pill blue">生成草稿 v0.3</span>
             <div class="source-row" style="margin-top:14px">
               <span class="source-chip">来源：项目想法</span>
               <span class="source-chip">来源：追问回答</span>
               <span class="source-chip">待补充：权限规则</span>
             </div>
-            <h2>企业内部知识库改版</h2>
+            <h2 id="docTitle">企业内部知识库改版</h2>
             <div class="meta">完整度预估：78/100 · 状态：待评审</div>
-            <h3>项目背景</h3>
+            <h3 id="doc-background">项目背景</h3>
             <p class="doc-editable" id="backgroundText">公司内部文档分散在不同系统中，新员工和运营同事经常需要询问他人才能找到会员政策、流程制度和项目资料，造成重复沟通和信息查找成本。</p>
-            <h3>产品目标</h3>
+            <h3 id="doc-problem">问题定义</h3>
+            <p class="doc-editable" id="problemText">当前需求的关键问题不是“缺一份文档”，而是项目启动前没有把用户、范围、权限、指标和兜底机制问清楚。</p>
+            <h3 id="doc-users">目标用户</h3>
+            <p class="doc-editable" id="usersText">新员工、运营同事、客服同事、产品团队和知识库管理员。</p>
+            <h3 id="doc-goal">产品目标</h3>
             <p class="doc-editable" id="goalText">帮助员工用自然语言快速查找内部知识，并在答案中展示来源，减少重复咨询，提高新人上手效率。</p>
-            <h3>MVP 范围</h3>
+            <h3 id="doc-scope">MVP 范围</h3>
             <ul class="doc-editable" id="scopeList">
               <li>支持自然语言提问，并返回带来源引用的答案。</li>
               <li>首期接入制度文档、会员政策、产品资料和项目 SOP。</li>
@@ -756,12 +763,18 @@
               <li>支持按部门和文档类型配置基础访问权限。</li>
             </ul>
             <div id="extraDocSection"></div>
-            <h3>跨部门待确认</h3>
-            <ul class="doc-editable">
+            <h3 id="doc-departments">跨部门待确认</h3>
+            <ul class="doc-editable" id="departmentDocList">
               <li>研发：来源引用、权限过滤和低置信度兜底的实现方案。</li>
               <li>设计：答案页、未命中页、反馈入口和来源展示的关键状态。</li>
               <li>数据：查找时间、重复咨询量、答案采纳率和未命中率的埋点口径。</li>
             </ul>
+            <h3 id="doc-competition">竞品分析</h3>
+            <p class="doc-editable" id="competitionText">对比 Notion AI、飞书文档、腾讯文档智能助手和 Confluence，明确 ClearBrief 的差异化是“项目启动与需求评审工作流”，而不是单纯文档生成。</p>
+            <h3 id="doc-metrics">数据指标</h3>
+            <p class="doc-editable" id="metricsText">核心指标包括平均查找时间、答案采纳率、未命中率、重复咨询量和反馈处理时长。</p>
+            <h3 id="doc-acceptance">验收标准</h3>
+            <p class="doc-editable" id="acceptanceText">用户可以在 3 步内完成提问并查看答案来源；低置信度回答必须提供查看原文和提交反馈入口。</p>
           </article>
           <aside class="panel">
             <h2>智能建议</h2>
@@ -966,6 +979,355 @@ ORDER BY dt;</div>
     let currentExportText = "";
     let reviewReady = false;
     let currentPrdText = "";
+    let currentScenario = null;
+    let currentAnswerKey = "goal";
+
+    const escapeHtml = text => String(text || "").replace(/[&<>"']/g, ch => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[ch]));
+
+    function inferScenario(rawIdea) {
+      const idea = rawIdea.trim();
+      const lower = idea.toLowerCase();
+      const isTravelCampaign = /旅行|旅游|出行|机票|酒店|高铁|火车|航班|景区|攻略|感恩节|春节|国庆|节日|盲盒|陪伴|同行/.test(idea);
+      const isEducation = /课程|学习|教育|培训|作业|考试|题库|老师|学生|家长|教培|课堂|训练营/.test(idea);
+      const isContentCommunity = /社区|内容|帖子|评论|创作者|ugc|发布|种草|笔记|话题|互动|分享|直播/.test(lower + idea);
+      const isBookingService = /预约|预订|排队|门店|到店|医生|挂号|美容|健身|维修|上门|本地生活|服务/.test(idea);
+      const isWorkflow = /审批|流程|报销|采购|合同|入职|离职|oa|工单流转|协同|权限申请/.test(lower + idea);
+      const isData = /数据|看板|报表|指标|埋点|sql|分析|经营|bi|dashboard/.test(lower + idea);
+      const isSupport = /客服|工单|售后|投诉|咨询|满意度|响应/.test(idea);
+      const isGrowth = !isTravelCampaign && !isEducation && !isContentCommunity && !isBookingService && !isWorkflow && !isSupport && /会员|积分|复购|活动|增长|优惠券|转化|留存|营销|商城|电商/.test(idea);
+      if (isTravelCampaign) {
+        return {
+          key: "travel",
+          title: "节日旅行互动活动",
+          type: "节日营销 / 旅行服务 / 用户互动活动",
+          users: "旅行用户、潜在新客、会员运营、渠道合作方",
+          background: idea || "团队希望围绕节日旅行做一次互动活动，提升用户参与感、品牌温度和旅行产品转化。",
+          problem: "当前问题不是缺一个活动页，而是活动目标、参与路径、奖励机制、业务联动和数据复盘还没有先讲清楚。",
+          goal: "通过节日主题玩法提升用户参与和分享意愿，并把活动流量自然引导到机票、酒店、高铁等旅行产品。",
+          scope: ["设计活动入口、主题任务和分享玩法。", "支持旅行回忆、感谢同行人、好友互动或盲盒抽奖等玩法。", "联动机票、酒店、高铁等业务场景，提供可核销权益。", "沉淀活动数据，看参与、分享、转化和核销效果。"],
+          gaps: "活动目标、参与路径、奖励库存、业务联动、分享机制、转化指标",
+          questions: [
+            ["goal", "这次活动优先服务哪个目标？", "品牌温度、用户参与、拉新分享，还是订单转化？", "主目标：提升节日旅行场景下的用户参与和分享，同时引导部分用户进入机票、酒店、高铁业务链路。"],
+            ["scope", "用户完整参与路径是什么？", "从哪里进入、做什么互动、如何分享、最后跳到哪个业务场景？", "首期范围：活动入口、主题互动、分享海报、权益领取和业务跳转，不做复杂社交关系链。"],
+            ["fallback", "奖品发完或核销失败怎么办？", "展示替代权益、补偿券，还是进入客服处理？", "兜底方式：奖品发完展示替代权益；核销失败进入异常记录，用户可查看处理进度。"],
+            ["permission", "活动规则和预算由谁确认？", "运营、品牌、法务、业务线是否都需要审核？", "权限规则：运营配置玩法，品牌确认表达，法务审核规则，业务线确认权益库存。"]
+          ],
+          departments: ["业务方：确认活动目标、业务联动和转化路径。", "品牌：确认节日主题、文案基调和传播素材。", "研发：确认活动状态、权益发放、库存扣减和异常处理。", "设计：确认活动首页、互动流程、分享海报和结果页。", "数据：确认参与率、分享率、跳转率、券核销率和新客占比。"],
+          competition: "对比携程旅行节、飞猪会员日、同程旅行活动页和小红书旅行话题，重点借鉴节日叙事、互动分享和权益转化链路。",
+          metrics: "核心指标包括活动参与率、分享率、业务跳转率、权益领取率、核销率、新客占比和活动转化 GMV。",
+          acceptance: "用户能完成一次互动并获得明确结果；分享链路可追踪；权益发放和核销状态清晰。",
+          sqlTable: "travel_campaign_event_log",
+          sqlFields: ["campaign_id", "user_segment", "participation_seconds", "share_flag", "redeem_flag"],
+          competitors: [
+            ["携程旅行节", "强活动会场和权益组合", "借鉴旅行场景聚合与券包表达"],
+            ["飞猪会员日", "会员权益和任务激励", "强化会员身份与权益感"],
+            ["同程旅行活动页", "交通住宿业务联动", "学习机票酒店高铁的转化入口"],
+            ["小红书旅行话题", "UGC 分享和情绪表达", "借鉴旅行故事和分享氛围"]
+          ]
+        };
+      }
+      if (isData) {
+        return {
+          key: "data",
+          title: "经营数据看板优化",
+          type: "数据产品 / 指标体系 / 经营分析工具",
+          users: "业务负责人、运营、数据分析师、产品团队",
+          background: idea || "团队希望搭建经营数据看板，但当前指标分散、口径不一致，业务同事需要反复找数据同事确认结果。",
+          problem: "当前问题不是缺一张报表，而是指标口径、数据来源、更新频率和使用场景没有先对齐。",
+          goal: "让业务方可以稳定查看核心经营指标，并能追溯口径、时间范围和异常波动原因。",
+          scope: ["梳理核心指标口径和数据来源。", "提供经营概览、趋势分析和异常提醒。", "支持按时间、渠道、地区或业务线筛选。", "保留指标说明，避免不同部门理解不一致。"],
+          gaps: "指标口径、数据来源、更新频率、权限范围、异常归因方式",
+          questions: [
+            ["goal", "本次看板最想支持哪个决策？", "是日常经营复盘、活动监控，还是管理层周报？", "主目标：让业务负责人更快判断经营状态，减少临时取数和口径争议。"],
+            ["scope", "首期必须包含哪些核心指标？", "GMV、转化率、留存、客单价、渠道 ROI 是否都进入首期？", "首期范围：核心经营指标、渠道维度、时间趋势和异常提醒；不做复杂自助分析。"],
+            ["fallback", "数据异常或延迟时怎么提示？", "展示更新时间、口径说明，还是标记“待确认”？", "兜底方式：展示数据更新时间、指标口径和异常说明，延迟数据必须提示。"],
+            ["permission", "不同角色能看到哪些数据？", "管理层、运营、区域负责人是否需要不同权限？", "权限规则：按角色和业务范围控制数据可见性，敏感经营数据只给授权角色。"]
+          ],
+          departments: ["业务方：确认看板服务的关键决策和优先级。", "研发：确认数据链路、刷新频率、权限过滤和异常处理。", "设计：确认总览页、详情页、筛选器和异常提示方式。", "数据：确认指标口径、埋点字段、数据表和校验规则。"],
+          competition: "对比神策、GrowingIO、观远 BI 和飞书多维表格，ClearBrief 需要突出“从需求到指标口径再到 PRD”的前置梳理能力。",
+          metrics: "核心指标包括看板访问率、指标查询耗时、口径争议次数、异常发现时长和数据采纳率。",
+          acceptance: "用户能在 3 步内定位核心指标；每个指标都能查看口径说明、更新时间和数据来源。",
+          sqlTable: "metric_event_log",
+          sqlFields: ["metric_name", "view_user_role", "query_duration_seconds", "is_adopted", "is_exception"]
+        };
+      }
+      if (isGrowth) {
+        return {
+          key: "growth",
+          title: "会员积分活动优化",
+          type: "运营增长 / 会员体系 / 活动工具",
+          users: "老用户、会员运营、客服、数据分析师",
+          background: idea || "市场团队想优化会员积分活动，希望提高老用户复购，但当前活动规则、核销流程和效果指标还没有说清楚。",
+          problem: "当前问题不是缺活动页面，而是目标人群、激励规则、核销路径、成本边界和复盘指标没有先定下来。",
+          goal: "通过更清晰的积分任务和兑换路径，提高老用户复购和活动参与率，同时控制补贴成本。",
+          scope: ["配置积分任务和奖励规则。", "支持用户查看积分获取、消耗和有效期。", "提供活动报名、核销和客服查询入口。", "输出活动效果看板，跟踪参与率、复购率和成本。"],
+          gaps: "目标人群、奖励规则、成本上限、核销流程、复盘指标",
+          questions: [
+            ["goal", "这次活动最核心的目标是什么？", "提高复购、提升客单价，还是唤醒沉睡用户？", "主目标：提高老用户复购，并控制单用户激励成本。"],
+            ["scope", "哪些用户进入首期活动范围？", "全部会员、沉睡用户、高价值用户是否要分层？", "首期范围：面向近 90 天有购买记录的老用户，先做积分任务和兑换券。"],
+            ["fallback", "积分发放或核销失败时怎么处理？", "自动补发、客服审核，还是用户提交申诉？", "兜底方式：失败订单进入异常队列，用户可查看进度，客服可手动补发。"],
+            ["permission", "谁可以配置活动规则和补贴预算？", "运营、财务、管理员是否需要审批？", "权限规则：运营配置活动，财务确认预算，管理员发布上线。"]
+          ],
+          departments: ["业务方：确认复购目标、预算上限和用户分层。", "研发：确认积分账户、核销状态和异常补偿逻辑。", "设计：确认任务页、积分明细、兑换页和失败提示。", "数据：确认参与率、复购率、核销率和补贴 ROI。"],
+          competition: "对比淘宝会员、京东 Plus、星巴克星礼程和瑞幸优惠券体系，重点借鉴任务激励、权益分层和核销透明度。",
+          metrics: "核心指标包括活动参与率、积分领取率、核销率、复购率、补贴 ROI 和客服咨询量。",
+          acceptance: "用户能完成任务、获得积分并兑换权益；异常核销有明确状态；运营能看到活动效果。",
+          sqlTable: "member_points_activity_log",
+          sqlFields: ["activity_id", "user_segment", "points_issued", "coupon_redeemed", "repurchase_flag"]
+        };
+      }
+      if (isSupport) {
+        return {
+          key: "support",
+          title: "客服工单分流与质检优化",
+          type: "客服效率 / 工单系统 / 服务质量工具",
+          users: "客服一线、客服主管、质检、产品运营",
+          background: idea || "客服团队希望优化工单处理效率，但当前问题分类、分流规则和服务质量指标还没有统一。",
+          problem: "当前问题不是单纯增加自动回复，而是工单分类、优先级、转人工边界和质检口径没有先统一。",
+          goal: "提高工单分流准确率和响应效率，减少重复处理，并让主管更容易发现高风险问题。",
+          scope: ["自动识别工单类型和优先级。", "按问题类型分流到对应处理组。", "提供高风险工单提醒和人工兜底。", "沉淀质检标签和复盘看板。"],
+          gaps: "工单分类、优先级规则、转人工边界、质检标准、响应指标",
+          questions: [
+            ["goal", "最想改善哪个客服指标？", "首次响应、解决时长、满意度，还是升级率？", "主目标：降低首次响应时间，并提高高风险工单识别率。"],
+            ["scope", "首期覆盖哪些工单类型？", "售后、投诉、咨询、退款是否全部包含？", "首期范围：覆盖咨询、退款和投诉三类高频工单，不处理复杂仲裁。"],
+            ["fallback", "系统不确定时如何处理？", "转人工、标记待复核，还是进入主管队列？", "兜底方式：低置信度工单进入人工复核队列，并保留原因标签。"],
+            ["permission", "谁能调整分类规则？", "客服主管、质检、产品运营是否都能配置？", "权限规则：主管维护分流规则，质检维护标签，普通客服只能查看结果。"]
+          ],
+          departments: ["业务方：确认服务目标和优先处理的问题类型。", "研发：确认工单状态、分流规则和人工兜底队列。", "设计：确认客服处理台、风险提示和质检视图。", "数据：确认响应时长、解决率、满意度和升级率。"],
+          competition: "对比 Zendesk、Intercom、飞书客服和企业微信客服，ClearBrief 更强调项目前期把分流规则和质检口径先问清楚。",
+          metrics: "核心指标包括首次响应时长、平均解决时长、自动分流准确率、升级率和满意度。",
+          acceptance: "系统能识别高频工单类型；低置信度工单进入人工复核；主管能查看分流和质检结果。",
+          sqlTable: "support_ticket_log",
+          sqlFields: ["ticket_type", "priority", "first_response_seconds", "resolved_flag", "satisfaction_score"]
+        };
+      }
+      if (isEducation) {
+        return {
+          key: "education",
+          title: "课程学习体验优化",
+          type: "教育产品 / 学习路径 / 课程运营工具",
+          users: "学生、老师、家长、教务运营",
+          background: idea || "团队希望优化课程学习体验，但当前学习路径、作业反馈和效果评估还不够清晰。",
+          problem: "当前问题不是单纯增加课程内容，而是学习目标、用户分层、反馈机制和完课指标没有先定义。",
+          goal: "让学习者更清楚下一步该学什么，并让老师和运营能及时发现掉队用户。",
+          scope: ["梳理课程路径和阶段目标。", "支持作业提交、反馈和提醒。", "展示学习进度、薄弱点和复习建议。", "提供老师/运营查看班级学习状态的看板。"],
+          gaps: "学习目标、课程阶段、作业反馈、提醒策略、完课和学习效果指标",
+          questions: [
+            ["goal", "首期最想改善哪个学习问题？", "完课率、作业提交、学习效果，还是老师反馈效率？", "主目标：提高课程完课率和作业反馈效率，减少学生掉队。"],
+            ["scope", "首期覆盖哪些课程环节？", "课前预习、课中互动、课后作业、复习测验是否都包含？", "首期范围：学习路径、作业提交、反馈提醒和进度看板。"],
+            ["fallback", "学生未完成或成绩异常时怎么处理？", "提醒学生、通知老师，还是推送补学任务？", "兜底方式：未完成进入提醒队列，连续异常时通知老师跟进。"],
+            ["permission", "老师、家长和运营分别能看什么？", "是否需要保护学生成绩和个人信息？", "权限规则：老师看班级明细，家长看个人进度，运营看聚合数据。"]
+          ],
+          departments: ["教研：确认课程目标、阶段任务和测评标准。", "研发：确认作业、提醒、学习记录和权限逻辑。", "设计：确认学习路径、进度反馈和老师看板。", "运营：确认提醒节奏、续报节点和用户触达方式。", "数据：确认完课率、作业提交率、正确率和留存。"],
+          competition: "对比得到、猿辅导、Duolingo 和雨课堂，重点借鉴学习路径、即时反馈和进度激励。",
+          metrics: "核心指标包括完课率、作业提交率、反馈及时率、学习时长、测验正确率和次周留存。",
+          acceptance: "学生能清楚看到学习路径和下一步任务；老师能发现未完成和低分用户；运营能看到课程效果。",
+          sqlTable: "course_learning_log",
+          sqlFields: ["course_id", "student_level", "learning_minutes", "homework_submitted", "quiz_passed"],
+          competitors: [["得到", "课程路径和学习提醒", "借鉴学习计划与复习机制"], ["猿辅导", "作业反馈和班级管理", "借鉴老师工作台"], ["Duolingo", "连续学习和激励", "借鉴轻量任务激励"], ["雨课堂", "课堂互动和数据沉淀", "借鉴教学数据看板"]]
+        };
+      }
+      if (isContentCommunity) {
+        return {
+          key: "community",
+          title: "内容社区互动优化",
+          type: "内容社区 / UGC / 用户互动产品",
+          users: "内容消费者、创作者、社区运营、审核团队",
+          background: idea || "团队希望提升社区内容互动，但当前发布、推荐、评论和治理规则还不够清楚。",
+          problem: "当前问题不是多做几个内容入口，而是创作者激励、内容分发、互动路径和内容治理没有形成闭环。",
+          goal: "提升优质内容供给和互动深度，同时控制低质内容和社区风险。",
+          scope: ["优化内容发布和话题参与路径。", "支持点赞、评论、收藏、分享等基础互动。", "提供创作者数据反馈和内容激励。", "建立内容审核、举报和风险处理机制。"],
+          gaps: "内容定位、推荐机制、创作者激励、审核规则、互动指标",
+          questions: [
+            ["goal", "社区首期最想提升什么？", "发帖量、互动率、内容质量，还是创作者留存？", "主目标：提升优质内容发布和互动率，同时控制低质内容。"],
+            ["scope", "首期支持哪些互动能力？", "发布、评论、点赞、收藏、分享、话题是否都做？", "首期范围：发布、话题、评论、点赞、收藏和基础审核。"],
+            ["fallback", "低质或违规内容怎么处理？", "先审后发、用户举报，还是机器识别后人工复核？", "兜底方式：高风险内容进入人工复核，用户可举报，运营可下架。"],
+            ["permission", "创作者、普通用户、运营权限怎么区分？", "谁能置顶、删除、封禁或推荐内容？", "权限规则：用户发布互动，运营管理内容，审核处理风险。"]
+          ],
+          departments: ["运营：确认内容定位、话题节奏和创作者激励。", "研发：确认发布、互动、推荐和审核状态。", "设计：确认信息流、发布器、评论区和举报入口。", "审核：确认违规类型、处理流程和申诉机制。", "数据：确认发布率、互动率、留存和内容质量指标。"],
+          competition: "对比小红书、豆瓣、即刻和 B 站社区，重点借鉴内容分发、话题运营和创作者反馈。",
+          metrics: "核心指标包括发布率、互动率、评论率、分享率、创作者留存、举报率和内容通过率。",
+          acceptance: "用户能发布和参与互动；运营能治理低质内容；创作者能看到内容反馈。",
+          sqlTable: "community_content_event_log",
+          sqlFields: ["content_id", "author_type", "view_seconds", "share_flag", "audit_passed"],
+          competitors: [["小红书", "种草内容和话题运营", "借鉴内容标签与分享链路"], ["豆瓣", "兴趣小组和长讨论", "借鉴社区氛围和小组规则"], ["即刻", "兴趣圈层和轻互动", "借鉴圈层推荐"], ["B 站社区", "创作者激励和弹幕互动", "借鉴创作者反馈"]]
+        };
+      }
+      if (isBookingService) {
+        return {
+          key: "booking",
+          title: "预约服务流程优化",
+          type: "本地服务 / 预约履约 / 服务体验工具",
+          users: "消费者、门店/服务人员、客服、运营",
+          background: idea || "团队希望优化预约服务流程，但当前可约时间、服务资源、取消改约和到店履约规则还不清楚。",
+          problem: "当前问题不是做一个预约按钮，而是资源排班、履约状态、取消改约和异常处理没有先定义。",
+          goal: "让用户更顺畅地完成预约、到店和改约，同时提升服务资源利用率。",
+          scope: ["展示可预约时间和服务资源。", "支持预约、取消、改约和提醒。", "提供门店/服务人员确认和履约状态更新。", "沉淀爽约、取消和服务完成数据。"],
+          gaps: "服务资源、排班规则、取消改约、提醒策略、爽约处理、履约指标",
+          questions: [
+            ["goal", "这次最想改善预约链路的哪一段？", "预约转化、到店率、资源利用率，还是取消改约体验？", "主目标：提高预约成功率和到店率，同时减少人工协调。"],
+            ["scope", "首期覆盖哪些服务和门店？", "全部门店、部分城市，还是某一类高频服务？", "首期范围：高频服务预约、改约取消、提醒和门店确认。"],
+            ["fallback", "用户迟到、爽约或服务不可用怎么办？", "自动释放名额、收取费用，还是客服介入？", "兜底方式：迟到和爽约进入规则处理，服务不可用时提供改约和客服入口。"],
+            ["permission", "谁能调整排班和预约规则？", "门店、运营、服务人员是否有不同权限？", "权限规则：运营配置规则，门店维护排班，服务人员更新履约状态。"]
+          ],
+          departments: ["业务方：确认服务范围、城市和履约目标。", "门店/服务团队：确认排班、接待能力和异常处理。", "研发：确认库存、时间槽、订单状态和通知链路。", "设计：确认预约路径、提醒、改约取消和到店状态。", "数据：确认预约率、到店率、取消率和资源利用率。"],
+          competition: "对比美团预约、Keep 私教课、医院挂号和美容到店服务，重点借鉴时间槽、提醒和履约状态。",
+          metrics: "核心指标包括预约转化率、到店率、取消率、爽约率、资源利用率和平均等待时长。",
+          acceptance: "用户能完成预约和改约；门店能维护可约资源；异常状态有清晰处理规则。",
+          sqlTable: "booking_service_order_log",
+          sqlFields: ["service_id", "store_id", "waiting_minutes", "arrived_flag", "cancel_flag"],
+          competitors: [["美团预约", "时间槽和门店履约", "借鉴服务库存表达"], ["医院挂号", "科室医生和号源", "借鉴资源排班"], ["Keep 私教课", "课程预约和提醒", "借鉴到课提醒"], ["美容到店服务", "项目套餐和改约", "借鉴改约取消规则"]]
+        };
+      }
+      if (isWorkflow) {
+        return {
+          key: "workflow",
+          title: "企业流程审批优化",
+          type: "企业协同 / 审批流 / 内部效率工具",
+          users: "申请人、审批人、财务/法务/行政、流程管理员",
+          background: idea || "团队希望优化内部审批流程，但当前规则分散、节点不清楚，员工不知道该找谁审批。",
+          problem: "当前问题不是把纸面流程搬到线上，而是审批规则、节点责任、异常处理和时效指标没有统一。",
+          goal: "让员工更快提交正确申请，让审批人清楚处理责任，并减少流程卡住和反复补材料。",
+          scope: ["支持常见审批类型和表单字段。", "按金额、部门、项目类型配置审批路径。", "展示审批状态、补充材料和催办提醒。", "提供流程管理员配置和数据看板。"],
+          gaps: "审批规则、字段要求、节点负责人、超时提醒、异常退回和权限边界",
+          questions: [
+            ["goal", "首期最想优化哪类流程？", "报销、采购、合同、入职，还是权限申请？", "主目标：减少员工提交流程的困惑和审批卡点。"],
+            ["scope", "哪些流程进入首期范围？", "是否先做高频且规则明确的审批？", "首期范围：高频审批类型、表单校验、状态跟踪和催办提醒。"],
+            ["fallback", "审批超时或材料不全怎么办？", "自动提醒、退回补充，还是转管理员处理？", "兜底方式：超时自动提醒，材料不全退回补充，异常进入管理员队列。"],
+            ["permission", "谁能配置审批路径？", "部门管理员、财务、法务是否有不同配置权？", "权限规则：流程管理员配置路径，业务部门维护默认审批人。"]
+          ],
+          departments: ["业务方：确认首期流程和审批规则。", "财务/法务/行政：确认字段、材料和合规要求。", "研发：确认表单、流程引擎、通知和权限。", "设计：确认提交流程、审批状态和补材料体验。", "数据：确认审批时长、退回率和超时率。"],
+          competition: "对比飞书审批、钉钉 OA、企业微信审批和 Jira Service Management，重点借鉴流程配置、状态透明和催办机制。",
+          metrics: "核心指标包括平均审批时长、退回率、超时率、一次通过率和催办次数。",
+          acceptance: "员工能提交正确流程；审批人能处理待办；管理员能配置路径并看到效率数据。",
+          sqlTable: "workflow_approval_log",
+          sqlFields: ["workflow_type", "department_id", "approval_duration_hours", "approved_flag", "returned_flag"],
+          competitors: [["飞书审批", "轻量流程和移动端待办", "借鉴协作通知"], ["钉钉 OA", "审批模板和组织权限", "借鉴企业场景覆盖"], ["企业微信审批", "组织关系和微信触达", "借鉴移动处理"], ["Jira Service Management", "请求流转和 SLA", "借鉴服务台视角"]]
+        };
+      }
+      return {
+        key: "knowledge",
+        title: "企业内部知识库改版",
+        type: "企业知识管理 / 智能问答 / 内部协作工具",
+        users: "新员工、运营、客服、产品团队",
+        background: idea || "公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，想做一个 AI 知识库助手，提高信息查找效率。",
+        problem: "当前需求的关键问题不是“缺一份文档”，而是项目启动前没有把用户、范围、权限、指标和兜底机制问清楚。",
+        goal: "帮助员工用自然语言快速查找内部知识，并在答案中展示来源，减少重复咨询，提高新人上手效率。",
+        scope: ["支持自然语言提问，并返回带来源引用的答案。", "首期接入制度文档、会员政策、产品资料和项目 SOP。", "提供低置信度提示，引导用户查看原文或提交人工反馈。", "支持按部门和文档类型配置基础访问权限。"],
+        gaps: "成功指标、文档范围、权限规则、低置信度回答兜底流程",
+        questions: [
+          ["goal", "本次改版最核心的目标是什么？", "减少查找时间、降低重复咨询，还是提升新人上手速度？", "主目标：让新员工和运营同事更快找到制度、会员政策和项目资料，减少重复询问。"],
+          ["scope", "哪些文档进入首期范围？", "制度、产品资料、会员政策、项目 SOP 是否都包含？", "首期范围：制度文档、会员政策、产品资料和项目 SOP；不接入财务、人事敏感资料。"],
+          ["fallback", "回答没有把握时如何处理？", "提示来源、转人工、查看原文，还是提交反馈？", "兜底方式：低置信度时显示来源、查看原文入口，并允许用户提交反馈。"],
+          ["permission", "不同角色可以访问哪些文档？", "是否需要部门、角色、文档类型三层权限？", "权限规则：首期按部门和文档类型控制访问，敏感内容不进入问答范围。"]
+        ],
+        departments: ["研发：来源引用、权限过滤和低置信度兜底的实现方案。", "设计：答案页、未命中页、反馈入口和来源展示的关键状态。", "数据：查找时间、重复咨询量、答案采纳率和未命中率的埋点口径。", "运营：首期文档清单、内容负责人和反馈收集方式。"],
+        competition: "对比 Notion AI、飞书文档、腾讯文档智能助手和 Confluence，明确 ClearBrief 的差异化是“项目启动与需求评审工作流”，而不是单纯文档生成。",
+        metrics: "核心指标包括平均查找时间、答案采纳率、未命中率、重复咨询量和反馈处理时长。",
+        acceptance: "用户可以在 3 步内完成提问并查看答案来源；低置信度回答必须提供查看原文和提交反馈入口。",
+        sqlTable: "knowledge_question_log",
+        sqlFields: ["answer_status", "feedback", "answer_time_seconds", "source_click", "no_match_rate"]
+      };
+    }
+
+    function getScenario() {
+      currentScenario = inferScenario(document.getElementById("ideaInput").value);
+      return currentScenario;
+    }
+
+    function renderAnalysis(scenario) {
+      document.getElementById("analysisCards").innerHTML = `
+        <div class="card blue"><h3>项目类型</h3><p>${escapeHtml(scenario.type)}</p></div>
+        <div class="card green"><h3>主要用户</h3><p>${escapeHtml(scenario.users)}</p></div>
+        <div class="card amber"><h3>当前缺失</h3><p>${escapeHtml(scenario.gaps)}</p></div>`;
+    }
+
+    function renderQuestions(scenario) {
+      document.getElementById("questionsList").innerHTML = scenario.questions.map((q, index) => `
+        <div class="question ${index === 0 ? "active" : ""}">
+          <span class="pill ${index < 3 ? "red" : "amber"}">${index < 3 ? "高" : "中"}</span>
+          <div>
+            <div class="q-title">${escapeHtml(q[1])}</div>
+            <div class="q-sub">${escapeHtml(q[2])}</div>
+          </div>
+          <button class="btn ${index === 0 ? "primary" : ""}" data-answer="${escapeHtml(q[0])}">回答</button>
+        </div>`).join("");
+    }
+
+    function renderInfoCards(scenario, confirmed = false) {
+      document.getElementById("infoCards").innerHTML = confirmed ? `
+        <div class="card green"><h3>目标用户</h3><p>${escapeHtml(scenario.users)}</p></div>
+        <div class="card blue"><h3>首期范围</h3><p>${escapeHtml(scenario.scope.slice(0, 2).join("；"))}</p></div>
+        <div class="card green"><h3>成功指标</h3><p>${escapeHtml(scenario.metrics)}</p></div>
+        <div class="card amber"><h3>待确认</h3><p>${escapeHtml(scenario.gaps)}</p></div>` : `
+        <div class="card green"><h3>目标用户</h3><p>${escapeHtml(scenario.users)}</p></div>
+        <div class="card amber"><h3>待补齐</h3><p>${escapeHtml(scenario.gaps)}</p></div>`;
+    }
+
+    function renderDocument(scenario) {
+      document.getElementById("docTitle").textContent = scenario.title;
+      document.getElementById("backgroundText").textContent = scenario.background;
+      document.getElementById("problemText").textContent = scenario.problem;
+      document.getElementById("usersText").textContent = scenario.users;
+      document.getElementById("goalText").textContent = scenario.goal;
+      document.getElementById("scopeList").innerHTML = scenario.scope.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+      document.getElementById("departmentDocList").innerHTML = scenario.departments.slice(0, 3).map(item => `<li>${escapeHtml(item)}</li>`).join("");
+      document.getElementById("competitionText").textContent = scenario.competition;
+      document.getElementById("metricsText").textContent = scenario.metrics;
+      document.getElementById("acceptanceText").textContent = scenario.acceptance;
+    }
+
+    function renderWorkbench(scenario) {
+      const departmentList = document.querySelector(".department-list");
+      if (departmentList) {
+        departmentList.innerHTML = scenario.departments.map(item => {
+          const [role, detail] = item.split("：");
+          return `<div class="department-item"><strong>${escapeHtml(role || "协作方")}</strong><span>${escapeHtml(detail || item)}</span></div>`;
+        }).join("");
+      }
+      const competitorBody = document.querySelector("#page-export table tbody");
+      if (competitorBody) {
+        const rows = scenario.competitors || (scenario.key === "growth" ? [
+          ["淘宝会员", "积分任务、权益分层", "学习任务激励和会员分层"],
+          ["京东 Plus", "权益组合和付费会员", "明确权益价值和成本边界"],
+          ["星巴克星礼程", "等级成长和兑换心智", "借鉴等级成长路径"],
+          ["瑞幸优惠券体系", "高频券包和核销提醒", "优化核销路径和提醒"]
+        ] : scenario.key === "data" ? [
+          ["神策数据", "事件分析和漏斗分析", "借鉴指标拆解方式"],
+          ["GrowingIO", "无埋点和行为分析", "关注业务方自助分析门槛"],
+          ["观远 BI", "经营看板和权限管理", "借鉴指标看板组织方式"],
+          ["飞书多维表格", "轻量协作和数据视图", "降低团队使用成本"]
+        ] : scenario.key === "support" ? [
+          ["Zendesk", "工单流转和知识库", "借鉴工单状态和 SLA"],
+          ["Intercom", "自动回复和用户对话", "借鉴对话式处理体验"],
+          ["飞书客服", "内部协作和工单流转", "补强团队协作场景"],
+          ["企业微信客服", "渠道触达和客户管理", "关注私域客服入口"]
+        ] : [
+          ["Notion AI", "文档总结、问答、改写", "更聚焦项目启动和 PRD 评审"],
+          ["飞书妙记 / 文档", "会议纪要和协作沉淀", "把会议内容转成需求缺口和行动项"],
+          ["腾讯文档智能助手", "文档协作与模板生成", "补强跨部门对齐和评审风险检查"],
+          ["Confluence", "知识库与团队协作", "提供更轻的启动流程"]
+        ]);
+        competitorBody.innerHTML = rows.map(row => `<tr><td>${escapeHtml(row[0])}</td><td>${escapeHtml(row[1])}</td><td>${escapeHtml(row[2])}</td></tr>`).join("");
+      }
+      const sql = `SELECT
+  DATE(created_at) AS dt,
+  COUNT(*) AS event_cnt,
+  COUNT(DISTINCT user_id) AS user_cnt,
+  AVG(${scenario.sqlFields[2] || "duration_seconds"}) AS avg_duration,
+  SUM(CASE WHEN ${scenario.sqlFields[3] || "is_success"} THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS key_rate
+FROM ${scenario.sqlTable}
+WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
+GROUP BY DATE(created_at)
+ORDER BY dt;`;
+      document.getElementById("sqlPreview").textContent = sql;
+    }
 
     const exportSamples = {
       "老板摘要": `项目：企业内部知识库改版
@@ -1136,84 +1498,58 @@ GitHub Pages 是静态网站，不能安全保存 API Key。如果把 Key 写在
     };
 
     function buildPrdText() {
-      const idea = document.getElementById("ideaInput").value.trim();
-      return `# ClearBrief 生成 PRD 草稿
+      const scenario = currentScenario || getScenario();
+      const scope = scenario.scope.map(item => `- ${item}`).join("\n");
+      const departments = scenario.departments.map(item => `- ${item}`).join("\n");
+      return `# ${scenario.title} PRD 草稿
 
 ## 1. 项目背景
-${idea || "公司内部文档分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，团队希望提升信息查找效率。"}
+${scenario.background}
 
 ## 2. 问题定义
-- 内部资料分散在不同系统，用户需要反复询问他人。
-- 文档来源和更新时间不清楚，容易使用过期信息。
-- 不同部门对首期范围、权限规则和上线指标理解不一致。
+${scenario.problem}
 
 ## 3. 目标用户
-- 新员工：需要快速了解制度、流程和常见问题。
-- 运营 / 客服：需要快速查找会员政策、活动规则和项目资料。
-- 产品团队：需要减少重复答疑，并沉淀高频问题。
-- 管理员：需要维护文档来源、权限范围和内容更新。
+${scenario.users}
 
 ## 4. 产品目标
-- 平均信息查找时间下降 40%。
-- 重复咨询量下降 30%。
-- 答案采纳率达到 70% 以上。
-- 未命中问题可以进入内容治理清单。
+${scenario.goal}
 
 ## 5. MVP 范围
-- 支持自然语言提问，并返回带来源引用的答案。
-- 首期接入制度文档、会员政策、产品资料和项目 SOP。
-- 低置信度回答展示“查看原文 / 提交反馈”入口。
-- 支持按部门和文档类型配置基础访问权限。
+${scope}
 
 ## 6. 非本期范围
-- 不接入财务、人事等敏感资料。
-- 不做完整企业搜索平台。
-- 不做跨系统自动权限同步。
+- 不做完整项目管理系统。
+- 不做复杂审批流。
 - 不做多人实时协作编辑。
 
 ## 7. 跨部门对齐
-- 业务方：确认目标用户、业务收益、上线时间和优先级。
-- 研发：确认数据来源、接口边界、权限过滤和异常流程。
-- 设计：确认提问页、答案页、未命中页、反馈入口和来源展示。
-- 数据：确认埋点事件、指标口径、看板维度和复盘周期。
-- 运营：确认文档清单、内容负责人、培训材料和 FAQ。
-- 合规 / 管理员：确认敏感文档边界、访问权限和人工审核机制。
+${departments}
 
 ## 8. 竞品分析
-| 竞品 | 可借鉴点 | ClearBrief 机会 |
-| --- | --- | --- |
-| Notion AI | 文档总结、问答、改写 | 更聚焦项目启动和 PRD 评审 |
-| 飞书妙记 / 文档 | 会议纪要和协作沉淀 | 把会议内容转成需求缺口和行动项 |
-| 腾讯文档智能助手 | 文档协作与模板生成 | 补强跨部门对齐和评审风险检查 |
-| Confluence + Atlassian Intelligence | 知识库与团队协作 | 面向产品经理提供更轻的启动流程 |
+${scenario.competition}
 
 ## 9. 数据指标与 SQL 口径
-核心指标包括平均查找时间、答案采纳率、未命中率、重复咨询量和反馈处理时长。
+${scenario.metrics}
 
 \`\`\`sql
 SELECT
   DATE(created_at) AS dt,
-  COUNT(*) AS question_cnt,
-  AVG(answer_time_seconds) AS avg_find_time,
-  SUM(CASE WHEN feedback = 'helpful' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS helpful_rate,
-  SUM(CASE WHEN answer_status = 'no_match' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS no_match_rate
-FROM knowledge_question_log
+  COUNT(*) AS event_cnt,
+  COUNT(DISTINCT user_id) AS user_cnt
+FROM ${scenario.sqlTable}
 WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
 GROUP BY DATE(created_at)
 ORDER BY dt;
 \`\`\`
 
 ## 10. 风险与兜底
-- AI 回答不确定时必须展示低置信度提示。
-- 答案必须展示来源文档和更新时间。
-- 敏感资料不进入首期问答范围。
-- 用户反馈需要进入每周内容治理清单。
+- 输出内容需要区分“已确认”和“待确认”。
+- 关键规则必须有人工确认。
+- 异常和低置信度场景需要兜底入口。
 
 ## 11. 验收标准
-- 用户可以在 3 步内完成提问并查看答案来源。
-- 低置信度回答必须提供查看原文和提交反馈入口。
-- 管理员可以配置首期文档范围。
-- 指标看板能展示查找时间、采纳率和未命中率。
+- ${scenario.acceptance}
 - PRD 中的跨部门问题均有负责人和下一步动作。`;
     }
 
@@ -1268,8 +1604,10 @@ ORDER BY dt;
       current = 0;
       maxUnlocked = 0;
       confirmedAnswers = 0;
+      currentScenario = getScenario();
       unlock(0);
       document.getElementById("analysisEmpty").style.display = "block";
+      document.getElementById("analysisEmpty").innerHTML = "<h3>等待分析</h3><p>当前还没有识别结果。</p>";
       document.getElementById("analysisCards").style.display = "none";
       document.getElementById("answerBox").classList.remove("active");
       document.getElementById("generateDocBtn").disabled = true;
@@ -1280,9 +1618,10 @@ ORDER BY dt;
       document.getElementById("analyzeBtn").innerHTML = "开始分析";
       document.getElementById("analyzeBtn").disabled = false;
       reviewReady = false;
-      document.getElementById("infoCards").innerHTML = `
-        <div class="card green"><h3>目标用户</h3><p>新员工、运营、客服、产品团队</p></div>
-        <div class="card amber"><h3>待补齐</h3><p>目标、文档范围、权限规则、兜底流程</p></div>`;
+      renderInfoCards(currentScenario, false);
+      renderQuestions(currentScenario);
+      renderDocument(currentScenario);
+      renderWorkbench(currentScenario);
       goTo(0);
       logActivity("activity1", "等待输入项目想法");
       logActivity("activity2", "尚未生成追问");
@@ -1292,17 +1631,28 @@ ORDER BY dt;
 
     document.getElementById("ideaInput").addEventListener("input", e => {
       document.getElementById("countHint").textContent = `${e.target.value.length} 字 / 建议 50-300 字`;
+      document.getElementById("scenarioChip").textContent = "当前模式：自定义项目";
     });
 
     document.getElementById("sampleBtn").addEventListener("click", () => {
-      document.getElementById("ideaInput").value = "市场团队想优化会员积分活动，但目前只知道希望提高老用户复购，还没有明确目标用户、活动规则、核销流程和效果指标。";
+      document.getElementById("ideaInput").value = "公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，想做一个 AI 知识库助手，提高信息查找效率。";
       document.getElementById("countHint").textContent = `${document.getElementById("ideaInput").value.length} 字 / 建议 50-300 字`;
-      showToast("已切换示例");
+      document.getElementById("scenarioChip").textContent = "当前模式：示例案例";
+      showToast("已切换到示例案例");
+    });
+
+    document.getElementById("customBtn").addEventListener("click", () => {
+      document.getElementById("ideaInput").value = "";
+      document.getElementById("ideaInput").focus();
+      document.getElementById("countHint").textContent = "0 字 / 建议 50-300 字";
+      document.getElementById("scenarioChip").textContent = "当前模式：自定义项目";
+      showToast("可以输入你的项目了");
     });
 
     document.getElementById("meetingBtn").addEventListener("click", () => {
       document.getElementById("ideaInput").value = "会议纪要：新人经常问运营同事会员政策在哪，客服也会反复找产品资料。大家觉得可以做一个内部知识库，但还没确定首期接入哪些文档，也没讨论权限和答案错误怎么办。";
       document.getElementById("countHint").textContent = `${document.getElementById("ideaInput").value.length} 字 / 建议 50-300 字`;
+      document.getElementById("scenarioChip").textContent = "当前模式：会议纪要";
       showToast("已导入模拟会议纪要");
     });
 
@@ -1318,12 +1668,18 @@ ORDER BY dt;
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span>分析中';
       document.getElementById("analysisEmpty").innerHTML = "<h3>正在分析</h3><p>系统正在识别项目类型、目标用户和信息缺口...</p>";
+      const scenario = getScenario();
+      renderAnalysis(scenario);
+      renderQuestions(scenario);
+      renderInfoCards(scenario, false);
+      renderDocument(scenario);
+      renderWorkbench(scenario);
       setTimeout(() => {
         document.getElementById("analysisEmpty").style.display = "none";
         document.getElementById("analysisCards").style.display = "block";
         unlock(1);
-        logActivity("activity1", "已识别：企业知识管理 / 智能问答");
-        logActivity("activity2", "已生成 4 个追问问题");
+        logActivity("activity1", `已识别：${scenario.type}`);
+        logActivity("activity2", `已生成 ${scenario.questions.length} 个追问问题`);
         btn.disabled = false;
         btn.innerHTML = "重新分析";
         showToast("已识别项目类型和信息缺口");
@@ -1331,27 +1687,24 @@ ORDER BY dt;
       }, 900);
     });
 
-    document.querySelectorAll("[data-answer]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const map = {
-          goal: "主目标：让新员工和运营同事更快找到制度、会员政策和项目资料，减少重复询问。",
-          scope: "首期范围：制度文档、会员政策、产品资料和项目 SOP；不接入财务、人事敏感资料。",
-          fallback: "兜底方式：低置信度时显示来源、查看原文入口，并允许用户提交反馈。",
-          permission: "权限规则：首期按部门和文档类型控制访问，敏感内容不进入问答范围。"
-        };
-        document.getElementById("answerText").textContent = map[btn.dataset.answer];
-        document.getElementById("answerBox").classList.add("active");
-      });
+    document.getElementById("questionsList").addEventListener("click", event => {
+      const btn = event.target.closest("[data-answer]");
+      if (!btn) return;
+      currentAnswerKey = btn.dataset.answer;
+      const scenario = currentScenario || getScenario();
+      const answer = scenario.questions.find(q => q[0] === currentAnswerKey)?.[3] || "建议先补齐这个问题，再生成 PRD 草稿。";
+      document.querySelectorAll(".question").forEach(item => item.classList.remove("active"));
+      btn.closest(".question").classList.add("active");
+      document.querySelectorAll("[data-answer]").forEach(item => item.classList.remove("primary"));
+      btn.classList.add("primary");
+      document.getElementById("answerText").textContent = answer;
+      document.getElementById("answerBox").classList.add("active");
     });
 
     document.getElementById("confirmAnswerBtn").addEventListener("click", () => {
       confirmedAnswers += 1;
-      const infoCards = document.getElementById("infoCards");
-      infoCards.innerHTML = `
-        <div class="card green"><h3>目标用户</h3><p>新员工、运营、客服、产品团队</p></div>
-        <div class="card blue"><h3>文档范围</h3><p>制度文档、会员政策、产品资料、项目 SOP</p></div>
-        <div class="card green"><h3>成功指标</h3><p>平均查找时间下降 40%；重复咨询量下降 30%</p></div>
-        <div class="card amber"><h3>待确认</h3><p>文档级权限、过期内容处理机制</p></div>`;
+      const scenario = currentScenario || getScenario();
+      renderInfoCards(scenario, true);
       if (confirmedAnswers >= 1) {
         document.getElementById("generateDocBtn").disabled = false;
         unlock(2);
@@ -1361,9 +1714,12 @@ ORDER BY dt;
     });
 
     document.getElementById("generateDocBtn").addEventListener("click", () => {
+      const scenario = currentScenario || getScenario();
+      renderDocument(scenario);
+      renderWorkbench(scenario);
       unlock(2);
       goTo(2);
-      logActivity("activity2", "已生成启动文档草稿 v0.3");
+      logActivity("activity2", `已生成 ${scenario.title} PRD 草稿`);
       currentPrdText = buildPrdText();
       document.getElementById("prdPreview").textContent = currentPrdText;
       showToast("已生成 PRD 草稿");
@@ -1375,18 +1731,19 @@ ORDER BY dt;
     });
 
     document.getElementById("applySuggestionBtn").addEventListener("click", () => {
+      const scenario = currentScenario || getScenario();
       document.getElementById("extraDocSection").innerHTML = `
         <h3>风险与兜底</h3>
         <ul class="doc-editable">
-          <li>低置信度回答必须展示来源引用、查看原文入口和提交反馈入口。</li>
-          <li>文档超过更新时间阈值后，答案页需要提示“可能不是最新版本”。</li>
-          <li>首期权限按部门和文档类型控制，敏感资料不进入问答范围。</li>
+          <li>${escapeHtml(scenario.gaps)} 需要在评审前逐项确认。</li>
+          <li>系统输出不确定时，需要提示“待人工确认”，避免把建议当成结论。</li>
+          <li>关键规则、权限和异常流程必须有负责人确认。</li>
         </ul>
         <h3>上线后指标</h3>
         <ul class="doc-editable">
-          <li>平均信息查找时间下降 40%。</li>
-          <li>重复咨询量下降 30%。</li>
-          <li>答案采纳率达到 70% 以上。</li>
+          <li>${escapeHtml(scenario.metrics)}</li>
+          <li>每周复盘一次未命中、异常和用户反馈。</li>
+          <li>根据数据结果调整下一轮范围。</li>
         </ul>`;
       document.getElementById("appliedNote").classList.add("show");
       logActivity("activity2", "已应用建议：补充风险与指标");
@@ -1419,6 +1776,60 @@ ORDER BY dt;
         showToast("当前浏览器不支持自动复制");
       }
     });
+
+    let manualTocLock = false;
+    document.querySelectorAll(".toc a").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        const target = document.querySelector(link.getAttribute("href"));
+        if (!target) return;
+        const mainScroller = document.querySelector("main");
+        const mainScrollTop = mainScroller ? mainScroller.scrollTop : 0;
+        const windowScrollTop = window.scrollY;
+        manualTocLock = true;
+        document.querySelectorAll(".toc a").forEach(item => item.classList.remove("active"));
+        link.classList.add("active");
+        const scroller = target.closest(".doc-scroll");
+        if (scroller && getComputedStyle(scroller).overflowY !== "visible") {
+          const targetTop = target.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+          scroller.scrollTo({
+            top: targetTop - 16,
+            behavior: "auto"
+          });
+          if (mainScroller) {
+            mainScroller.scrollTop = mainScrollTop;
+            requestAnimationFrame(() => { mainScroller.scrollTop = mainScrollTop; });
+            setTimeout(() => { mainScroller.scrollTop = mainScrollTop; }, 120);
+            setTimeout(() => { mainScroller.scrollTop = mainScrollTop; }, 360);
+          }
+          window.scrollTo(0, windowScrollTop);
+          requestAnimationFrame(() => { window.scrollTo(0, windowScrollTop); });
+          setTimeout(() => { window.scrollTo(0, windowScrollTop); }, 120);
+          setTimeout(() => { window.scrollTo(0, windowScrollTop); }, 360);
+          setTimeout(() => { manualTocLock = false; }, 420);
+        } else {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          setTimeout(() => { manualTocLock = false; }, 420);
+        }
+      });
+    });
+
+    const docScroller = document.querySelector(".doc-scroll");
+    if (docScroller) {
+      const docHeadings = [...docScroller.querySelectorAll("h3[id]")];
+      const tocLinks = [...document.querySelectorAll(".toc a")];
+      docScroller.addEventListener("scroll", () => {
+        if (manualTocLock) return;
+        const current = docHeadings.reduce((best, heading) => {
+          if (!best) return heading;
+          const bestDistance = Math.abs(best.getBoundingClientRect().top - docScroller.getBoundingClientRect().top - 18);
+          const currentDistance = Math.abs(heading.getBoundingClientRect().top - docScroller.getBoundingClientRect().top - 18);
+          return currentDistance < bestDistance ? heading : best;
+        }, null);
+        if (!current) return;
+        tocLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${current.id}`));
+      }, { passive: true });
+    }
 
     function updateReviewScore() {
       const statuses = [...document.querySelectorAll(".review-status")].map(s => s.value);
@@ -1466,8 +1877,67 @@ ORDER BY dt;
       goTo(4);
     });
 
+    function buildExportText(type) {
+      const scenario = currentScenario || getScenario();
+      if (type === "老板摘要") {
+        return `项目：${scenario.title}
+
+目标：
+${scenario.goal}
+
+为什么现在做：
+${scenario.problem}
+
+首期范围：
+${scenario.scope.join("\n")}
+
+主要风险：
+${scenario.gaps}
+
+建议：
+可以启动 MVP，但进入开发排期前需要先确认范围、指标、权限和异常兜底。`;
+      }
+      if (type === "研发任务清单") {
+        return `研发任务清单
+
+项目：${scenario.title}
+
+用户故事：
+作为目标用户，我希望在核心场景里更快完成任务，并能看到关键规则或结果来源。
+
+首期功能：
+${scenario.scope.map(item => `- ${item}`).join("\n")}
+
+验收标准：
+- ${scenario.acceptance}
+- 异常状态需要有明确提示和兜底入口。
+- 关键数据需要能被记录和复盘。`;
+      }
+      if (type === "设计 Brief") {
+        return `设计 Brief
+
+项目：${scenario.title}
+
+核心用户：
+${scenario.users}
+
+关键页面：
+- 输入/查询入口
+- 结果页或任务页
+- 异常/未命中状态
+- 反馈或人工处理入口
+
+设计重点：
+把系统判断、来源、状态和下一步动作讲清楚，避免用户误解。`;
+      }
+      if (type === "数据分析与 SQL") {
+        return document.getElementById("sqlPreview").textContent;
+      }
+      return exportSamples[type] || "暂无预览内容。";
+    }
+
     function openExportModal(type) {
-      currentExportText = exportSamples[type] || "暂无预览内容。";
+      currentExportText = buildExportText(type);
       modalTitle.textContent = type;
       modalContent.textContent = currentExportText;
       exportModal.classList.add("show");
@@ -1495,6 +1965,11 @@ ORDER BY dt;
     });
 
     unlock(0);
+    currentScenario = getScenario();
+    renderQuestions(currentScenario);
+    renderInfoCards(currentScenario, false);
+    renderDocument(currentScenario);
+    renderWorkbench(currentScenario);
     renderStepbar();
   </script>
 </body>
