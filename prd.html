@@ -5,132 +5,272 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ClearBrief 清晰启动 - 产品说明</title>
   <style>
-    body{margin:0;background:#f4f7fc;color:#121722;font-family:Arial,'Microsoft YaHei',sans-serif;line-height:1.72}
-    .wrap{max-width:1180px;margin:0 auto;padding:48px 24px 80px}
-    .doc-shell{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start}
-    .side-toc{position:sticky;top:24px;background:#fff;border:1px solid #d9e0ea;border-radius:14px;padding:18px;box-shadow:0 14px 38px rgba(18,23,34,.04)}
-    .side-toc strong{display:block;margin-bottom:12px}
-    .side-toc a{display:block;text-decoration:none;color:#667085;border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.35;margin-bottom:3px}
-    .side-toc a.active,.side-toc a:hover{background:#e8f0ff;color:#2563eb;font-weight:700}
-    article{background:#fff;border:1px solid #d9e0ea;border-radius:14px;padding:42px 52px;box-shadow:0 14px 38px rgba(18,23,34,.06)}
-    h1{font-size:38px;line-height:1.18;margin:0 0 28px}
-    h2{font-size:25px;margin:38px 0 14px;border-top:1px solid #e5eaf2;padding-top:26px;scroll-margin-top:24px}
-    h3{font-size:18px;margin:28px 0 10px}
-    p{margin:10px 0}
-    ul,ol{margin:10px 0 18px;padding-left:24px}
-    li{margin:6px 0}
-    table{width:100%;border-collapse:collapse;margin:16px 0 22px;font-size:14px}
-    th,td{border:1px solid #d9e0ea;padding:10px 12px;text-align:left;vertical-align:top}
-    th{background:#f8fafc}
-    .toplink{display:inline-flex;margin-bottom:18px;color:#2563eb;text-decoration:none;font-weight:700}
-    @media(max-width:900px){.doc-shell{grid-template-columns:1fr}.side-toc{position:static}}
-    @media(max-width:720px){article{padding:28px 22px}.wrap{padding:24px 14px 56px}h1{font-size:30px}}
+    :root {
+      --bg: #f4f7fc;
+      --panel: #ffffff;
+      --ink: #121722;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --soft: #f8fafc;
+      --blue: #2563eb;
+      --blue-soft: #e8f0ff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      line-height: 1.72;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 42px 24px 80px;
+    }
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      border-radius: 8px;
+      padding: 0 16px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+    }
+    .btn.primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+    .doc-shell {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+    .side-toc {
+      position: sticky;
+      top: 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 14px 38px rgba(18, 23, 34, .04);
+    }
+    .side-toc strong { display: block; margin-bottom: 12px; }
+    .side-toc a {
+      display: block;
+      text-decoration: none;
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      line-height: 1.35;
+      margin-bottom: 3px;
+    }
+    .side-toc a:hover {
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 700;
+    }
+    article {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 42px 52px;
+      box-shadow: 0 14px 38px rgba(18, 23, 34, .06);
+    }
+    h1 {
+      font-size: 38px;
+      line-height: 1.18;
+      margin: 0 0 12px;
+    }
+    .lead {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 0 0 26px;
+    }
+    h2 {
+      font-size: 25px;
+      margin: 38px 0 14px;
+      border-top: 1px solid #e5eaf2;
+      padding-top: 26px;
+      scroll-margin-top: 24px;
+    }
+    h2:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+    h3 { font-size: 18px; margin: 28px 0 10px; }
+    p { margin: 10px 0; }
+    ul, ol { margin: 10px 0 18px; padding-left: 24px; }
+    li { margin: 6px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 22px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: var(--soft); }
+    .note {
+      border: 1px solid #bad0ff;
+      background: var(--blue-soft);
+      border-radius: 12px;
+      padding: 16px 18px;
+      color: #244272;
+      margin: 20px 0;
+    }
+    @media(max-width:900px) {
+      .doc-shell { grid-template-columns: 1fr; }
+      .side-toc { position: static; }
+    }
+    @media(max-width:720px) {
+      article { padding: 28px 22px; }
+      .wrap { padding: 24px 14px 56px; }
+      h1 { font-size: 30px; }
+    }
   </style>
 </head>
 <body>
   <main class="wrap">
-    <a class="toplink" href="demo.html">进入在线体验</a>
+    <div class="top-actions">
+      <a class="btn" href="index.html">返回作品集首页</a>
+      <a class="btn primary" href="demo.html">进入在线体验</a>
+      <a class="btn" href="PRD.md">查看 Markdown 版</a>
+    </div>
     <div class="doc-shell">
-      <aside class="side-toc"><strong>文档目录</strong><nav id="docToc"></nav></aside>
+      <aside class="side-toc">
+        <strong>文档目录</strong>
+        <nav>
+          <a href="#overview">项目概述</a>
+          <a href="#problem">背景与问题</a>
+          <a href="#users">目标用户</a>
+          <a href="#goals">产品目标</a>
+          <a href="#flow">核心流程</a>
+          <a href="#scope">MVP 范围</a>
+          <a href="#review">评审模块</a>
+          <a href="#metrics">数据指标</a>
+          <a href="#risks">风险边界</a>
+          <a href="#value">项目价值</a>
+        </nav>
+      </aside>
       <article>
         <h1>ClearBrief 清晰启动 - 产品说明</h1>
+        <p class="lead">一个面向 0-3 年产品经理的需求评审前预检工具，帮助用户把模糊需求变成可讨论、可评审、可分工的项目材料。</p>
 
-        <h2>1. 项目概述</h2>
-        <p>ClearBrief 是一个项目启动与需求预评审工作台，面向产品经理、项目负责人和跨职能协作团队。它帮助用户把模糊业务想法、会议纪要、聊天记录或文档片段整理成可讨论、可评审、可分工的项目材料。</p>
-        <p>当前在线体验内置多个项目案例，覆盖内部知识库、节日营销活动、经营数据看板、会员积分活动、客服工单分流、课程学习体验、内容社区、门店预约和审批流程等场景。</p>
+        <h2 id="overview">1. 项目概述</h2>
+        <p>ClearBrief 优先面向 0-3 年产品经理和临时承担项目 owner 的同学。它支持输入模糊需求、会议纪要、聊天记录或文档片段，并将其整理为结构化的项目启动材料。</p>
+        <p>当前版本是可点击原型，重点展示从输入项目想法到生成 PRD、进入评审、记录研发反馈和导出材料的完整路径。</p>
 
-        <h2>2. 背景与问题</h2>
-        <p>很多项目不是从一份完整 PRD 开始，而是从一句模糊需求开始，例如“想做一个工具提升效率”或“这块流程太乱了，能不能优化一下”。在正式进入开发前，团队需要先确认目标用户、业务目标、范围边界、权限规则、异常流程、数据指标和验收标准。</p>
-        <p>这些问题如果在评审会甚至开发阶段才暴露，会带来重复沟通、范围变更和排期风险。ClearBrief 希望把这些问题前置，让团队在项目启动阶段就能看到缺口，并形成更完整的讨论材料。</p>
+        <h2 id="problem">2. 背景与问题</h2>
+        <p>很多项目不是从完整 PRD 开始，而是从一句模糊需求开始。真正拖慢项目推进的，往往不是没人写文档，而是目标用户、范围边界、权限规则、异常流程、数据指标和验收标准没有在早期被问清楚。</p>
+        <p>如果这些问题到评审会甚至开发阶段才暴露，会导致重复沟通、范围变更和排期风险。ClearBrief 希望把这些问题前置，让团队在项目启动阶段就能看到缺口。</p>
 
-        <h2>3. 目标用户</h2>
+        <h2 id="users">3. 目标用户</h2>
         <ul>
-          <li>产品经理：需要把模糊需求转化为 PRD、评审材料和跨部门任务。</li>
-          <li>项目负责人：需要判断项目是否值得启动、资源是否足够、风险是否可控。</li>
-          <li>运营负责人：经常提出业务需求，需要更快补齐目标、范围和指标。</li>
-          <li>研发、设计、数据成员：需要从同一份材料中看到与自身相关的边界、依赖和验收标准。</li>
+          <li>核心用户：0-3 年产品经理，需要把模糊需求转化为 PRD、评审材料和跨部门任务。</li>
+          <li>次级用户：项目 owner 或运营负责人，需要更快补齐业务目标、活动范围、数据指标和复盘口径。</li>
+          <li>协作用户：研发、设计、测试、数据成员，需要从同一份材料中看到与自己相关的边界、依赖和验收标准。</li>
         </ul>
 
-        <h2>4. 产品目标</h2>
+        <h2 id="goals">4. 产品目标</h2>
         <ul>
           <li>识别模糊需求中的项目类型、目标用户和信息缺口。</li>
           <li>通过追问机制补齐目标、范围、指标、权限和异常流程。</li>
           <li>生成结构化 PRD，降低项目启动材料准备成本。</li>
-          <li>输出需求预评审结果，让关键风险在正式评审前暴露。</li>
+          <li>输出需求评审结论，让关键风险在正式评审前暴露。</li>
           <li>支持按角色导出材料，减少跨部门沟通成本。</li>
         </ul>
 
-        <h2>5. 核心流程</h2>
+        <h2 id="flow">5. 核心流程</h2>
         <ol>
           <li>用户输入项目想法、会议纪要或文档片段。</li>
           <li>系统识别项目类型、目标用户和当前缺失信息。</li>
           <li>系统生成高优先级追问，用户确认关键回答。</li>
           <li>已确认回答进入结构化信息卡。</li>
           <li>系统生成 PRD、竞品分析、数据指标和 SQL 示例。</li>
-          <li>用户进入评审报告，查看完整度评分和问题清单。</li>
-          <li>工作台按角色导出老板摘要、研发任务、设计 brief、运营 FAQ 和 kickoff 议程。</li>
+          <li>用户进入需求评审，检查会前材料、角色意见、阻塞项和研发反馈。</li>
+          <li>工作台按角色导出老板摘要、研发任务、设计 Brief、评审会议纪要和数据分析口径。</li>
         </ol>
 
-        <h2>6. MVP 范围</h2>
+        <h2 id="scope">6. MVP 范围</h2>
         <h3>输入与案例切换</h3>
-        <p>用户可以输入自己的项目，也可以切换内置案例。每个案例都提供足够的上下文，用于触发不同项目类型下的分析逻辑。</p>
+        <p>用户可以输入自己的项目，也可以切换内置案例。案例覆盖内部知识库、活动、数据看板、客服分流、课程体验、审批流程等场景。</p>
         <h3>信息缺口识别</h3>
-        <p>系统会根据输入内容判断项目类型、目标用户、核心问题和缺失信息。缺失项包括目标、范围、权限、指标、预算、异常流程和跨部门依赖。</p>
+        <p>系统根据输入判断项目类型、目标用户、核心问题和缺失信息。缺失项包括目标、范围、权限、指标、预算、异常流程和跨部门依赖。</p>
         <h3>追问补齐</h3>
-        <p>系统按优先级生成追问问题。用户确认回答后，右侧结构化信息卡会同步更新，PRD 中也会写入已确认结论。</p>
+        <p>系统按优先级生成追问问题。用户确认回答后，结构化信息卡、PRD 和后续评审材料会同步更新。</p>
         <h3>PRD 生成</h3>
-        <p>PRD 包含项目背景、问题定义、目标用户、产品目标、已确认结论、典型用户场景、MVP 范围、功能拆解、核心流程、跨部门对齐、竞品分析、数据指标、风险兜底、里程碑和验收标准。</p>
-        <h3>评审与导出</h3>
-        <p>评审报告从目标清晰度、范围完整度、风险覆盖度和验收可执行性四个维度评分。工作台支持导出给不同角色看的材料。</p>
+        <p>PRD 包含项目背景、问题定义、目标用户、产品目标、已确认结论、MVP 范围、核心流程、跨部门对齐、竞品分析、数据指标、数据口径、风险兜底和验收标准。</p>
 
-        <h2>7. 非本期范围</h2>
-        <ul>
-          <li>不做完整项目管理系统。</li>
-          <li>不替代企业内部审批流。</li>
-          <li>不替代业务负责人、研发负责人、法务或财务的最终判断。</li>
-          <li>不处理真实企业敏感数据。</li>
-          <li>不承诺生成内容可以不经人工确认直接进入开发。</li>
-        </ul>
-
-        <h2>8. 竞品与参考</h2>
+        <h2 id="review">7. 评审模块</h2>
+        <p>评审模块不是简单打分，而是关注项目是否可以进入下一阶段。</p>
         <table>
-          <thead><tr><th>产品</th><th>主要能力</th><th>ClearBrief 的差异</th></tr></thead>
+          <thead><tr><th>模块</th><th>作用</th></tr></thead>
           <tbody>
-            <tr><td>Notion AI</td><td>文档总结、问答和内容生成</td><td>更关注项目启动与需求预评审</td></tr>
-            <tr><td>飞书文档 / 妙记</td><td>会议沉淀和协作编辑</td><td>更关注从会议内容到 PRD 的结构化转化</td></tr>
-            <tr><td>腾讯文档智能助手</td><td>协作与文档智能处理</td><td>更强调跨部门对齐、评审清单和数据口径</td></tr>
-            <tr><td>Confluence</td><td>企业知识库和团队文档</td><td>更轻量，适合项目早期快速澄清</td></tr>
+            <tr><td>会前材料检查</td><td>确认背景目标、MVP 范围、流程、权限、数据验收和依赖排期是否齐全。</td></tr>
+            <tr><td>角色意见确认</td><td>记录研发、设计、测试、数据、业务、合规等角色是否已确认或仍有疑问。</td></tr>
+            <tr><td>评审待办清单</td><td>明确阻塞项、非阻塞项、影响、建议动作、Owner 和处理状态。</td></tr>
+            <tr><td>研发反馈回写</td><td>把评审会或协作工具里的研发反馈整理后决定是否写回 PRD。</td></tr>
+            <tr><td>会议纪要导出</td><td>导出评审结论、材料缺口、角色意见、研发反馈和会后动作。</td></tr>
           </tbody>
         </table>
+        <h3>评审状态流转</h3>
+        <p>真实工作里，评审不是简单“打分高就通过”。ClearBrief 用状态流转表达项目是否能进入下一阶段：</p>
+        <ul>
+          <li>会前待补齐：材料缺口较多，不建议直接拉跨部门评审。</li>
+          <li>待复审：存在阻塞项或关键角色疑问，需要补齐后再确认。</li>
+          <li>带条件通过：阻塞项已处理，剩余非阻塞问题可以跟随原型或技术预研继续推进。</li>
+          <li>通过：材料、角色意见和评审待办均已关闭，可以进入开发排期评估。</li>
+        </ul>
 
-        <h2>9. 数据指标</h2>
+        <h2 id="metrics">8. 数据指标</h2>
         <h3>效率指标</h3>
-        <ul><li>PRD 初稿生成时间</li><li>信息补齐耗时</li><li>跨部门确认轮次</li></ul>
+        <ul>
+          <li>评审材料准备时长</li>
+          <li>需求信息补齐耗时</li>
+          <li>跨部门确认轮次</li>
+        </ul>
         <h3>质量指标</h3>
-        <ul><li>需求完整度评分</li><li>评审缺口发现率</li><li>验收标准覆盖率</li></ul>
-        <h3>使用指标</h3>
-        <ul><li>追问确认率</li><li>PRD 复制率</li><li>导出材料使用率</li></ul>
+        <ul>
+          <li>评审前发现的问题数</li>
+          <li>评审缺口发现率</li>
+          <li>验收标准覆盖率</li>
+          <li>PRD 二次修改比例</li>
+        </ul>
+        <h3>协作指标</h3>
+        <ul>
+          <li>角色意见关闭率</li>
+          <li>研发阻塞问题数量</li>
+          <li>评审后返工次数</li>
+        </ul>
 
-        <h2>10. 风险与边界</h2>
+        <h2 id="risks">9. 风险与边界</h2>
         <p>ClearBrief 更适合作为评审前预检助手，而不是最终评审人。它可以帮助团队更早发现问题，但不能替代业务决策、技术评估、法务审核、财务审批和数据安全判断。</p>
-        <p>生产环境如果接入大模型，需要额外处理企业权限、敏感信息、调用成本、失败兜底、日志审计和人工复核机制。</p>
+        <p>当前公开版本是前端可点击原型，模拟 AI 分析流程。生产环境如果接入大模型，需要通过后端接口调用模型，并额外处理企业权限、敏感信息、调用成本、失败兜底、日志审计和人工复核机制。</p>
 
-        <h2>11. 项目价值</h2>
-        <p>ClearBrief 的价值不在于生成一份更长的文档，而在于让团队更早问对问题。它把需求澄清、PRD 生成、评审预检和跨部门材料导出放在同一个流程里，帮助产品经理更稳定地完成项目启动工作。</p>
+        <h2 id="value">10. 项目价值</h2>
+        <div class="note">ClearBrief 的价值不在于生成一份更长的文档，而在于让团队更早问对问题。它把需求澄清、PRD 生成、评审预检、研发反馈和跨部门材料导出放在同一条流程里，帮助产品经理更稳定地完成项目启动工作。</div>
       </article>
     </div>
   </main>
-  <script>
-    const toc = document.getElementById("docToc");
-    const headings = [...document.querySelectorAll("article h2")];
-    toc.innerHTML = headings.map((h, i) => `<a href="#section-${i}">${h.textContent}</a>`).join("");
-    headings.forEach((h, i) => { h.id = `section-${i}`; });
-    const links = [...toc.querySelectorAll("a")];
-    links[0]?.classList.add("active");
-    window.addEventListener("scroll", () => {
-      const current = headings.reduce((active, heading) => heading.getBoundingClientRect().top < 140 ? heading : active, headings[0]);
-      links.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${current.id}`));
-    }, { passive: true });
-  </script>
 </body>
 </html>

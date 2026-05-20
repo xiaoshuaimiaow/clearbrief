@@ -1,9 +1,9 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ClearBrief 清晰启动 - 项目启动与需求评审工作台</title>
+  <title>ClearBrief 清晰启动 - 产品经理作品集案例</title>
   <style>
     :root {
       --bg: #f4f7fc;
@@ -24,6 +24,7 @@
       --purple-soft: #f2edff;
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       background: var(--bg);
@@ -34,8 +35,34 @@
     .wrap {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 52px 24px 72px;
+      padding: 28px 24px 72px;
     }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin: 0 -24px 24px;
+      padding: 14px 24px;
+      background: rgba(244, 247, 252, .92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(217, 224, 234, .76);
+    }
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+    .nav {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .nav a { text-decoration: none; }
     .hero {
       min-height: 520px;
       display: grid;
@@ -57,7 +84,7 @@
     }
     h1 {
       margin: 0;
-      font-size: 54px;
+      font-size: 52px;
       letter-spacing: 0;
       line-height: 1.08;
     }
@@ -66,6 +93,30 @@
       color: var(--muted);
       font-size: 18px;
       line-height: 1.65;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 26px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border-radius: 8px;
+      padding: 0 18px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .btn.primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
     }
     .hero-card {
       background: var(--panel);
@@ -102,30 +153,6 @@
     }
     .mock-row strong { display: block; margin-bottom: 6px; font-size: 14px; }
     .mock-row span { color: var(--muted); font-size: 12px; line-height: 1.45; }
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 26px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 42px;
-      border-radius: 8px;
-      padding: 0 18px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-    }
-    .btn.primary {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: white;
-    }
     section {
       margin-top: 42px;
       background: var(--panel);
@@ -141,18 +168,109 @@
     .section-sub {
       color: var(--muted);
       line-height: 1.6;
-      max-width: 860px;
+      max-width: 880px;
       margin: -4px 0 24px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
     }
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 18px;
     }
-    .grid-2 {
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 20px;
+      background: var(--soft);
+    }
+    .card h3 { margin: 0 0 10px; font-size: 17px; }
+    .card p, .card li {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.58;
+    }
+    .card p { margin: 0; }
+    .card ul { margin: 0; padding-left: 18px; }
+    .tag {
+      display: inline-flex;
+      min-height: 26px;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .tag.blue { background: var(--blue-soft); color: var(--blue); }
+    .tag.green { background: var(--green-soft); color: var(--green); }
+    .tag.amber { background: var(--amber-soft); color: var(--amber); }
+    .tag.purple { background: var(--purple-soft); color: var(--purple); }
+    .tag.red { background: var(--red-soft); color: var(--red); }
+    .flow {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .flow-step {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      background: var(--soft);
+      min-height: 150px;
+    }
+    .num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--blue);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .flow-step h3 { font-size: 15px; margin: 0 0 8px; }
+    .flow-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 150px 1fr;
       gap: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--soft);
+    }
+    .timeline-item strong { font-size: 15px; }
+    .timeline-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.58;
+      font-size: 14px;
+    }
+    .metric {
+      background: var(--blue-soft);
+      border-color: #bad0ff;
+    }
+    .metric strong {
+      display: block;
+      color: var(--blue);
+      font-size: 28px;
+      margin-bottom: 6px;
     }
     .preview-grid {
       display: grid;
@@ -177,12 +295,10 @@
       color: var(--muted);
       font-size: 12px;
     }
-    .preview-body {
-      padding: 18px;
-    }
+    .preview-body { padding: 18px; }
     .preview-line {
       display: grid;
-      grid-template-columns: 92px 1fr;
+      grid-template-columns: 96px 1fr;
       gap: 12px;
       padding: 12px 0;
       border-bottom: 1px solid var(--line);
@@ -191,88 +307,6 @@
     .preview-line:last-child { border-bottom: 0; }
     .preview-line strong { color: var(--ink); }
     .preview-line span { color: var(--muted); line-height: 1.45; }
-    .demo-steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 18px;
-    }
-    .demo-step {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 16px;
-      background: var(--panel);
-      min-height: 120px;
-    }
-    .demo-step strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-    .demo-step span {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 20px;
-      background: var(--soft);
-    }
-    .card h3 { margin: 0 0 10px; font-size: 17px; }
-    .card p, .card li {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.58;
-    }
-    .card p { margin: 0; }
-    .card ul { margin: 0; padding-left: 18px; }
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-    }
-    .flow-step {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 18px;
-      background: var(--soft);
-      min-height: 148px;
-    }
-    .num {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--blue);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .flow-step h3 {
-      font-size: 15px;
-      margin: 0 0 8px;
-    }
-    .flow-step p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .metric {
-      background: var(--blue-soft);
-      border-color: #bad0ff;
-    }
-    .metric strong {
-      display: block;
-      color: var(--blue);
-      font-size: 28px;
-      margin-bottom: 6px;
-    }
     .quote {
       background: var(--ink);
       color: white;
@@ -288,142 +322,151 @@
       margin-top: 16px;
     }
     @media (max-width: 980px) {
-      .hero, .grid-2, .grid-3, .flow, .preview-grid, .demo-steps { grid-template-columns: 1fr; }
+      .hero, .grid-2, .grid-3, .flow, .preview-grid, .timeline-item { grid-template-columns: 1fr; }
       h1 { font-size: 40px; }
+      .nav { display: none; }
+      section { padding: 24px; }
     }
   </style>
 </head>
 <body>
   <main class="wrap">
+    <div class="topbar">
+      <div class="brand">ClearBrief 清晰启动</div>
+      <nav class="nav">
+        <a href="#problem">问题</a>
+        <a href="#solution">方案</a>
+        <a href="#demo">Demo</a>
+        <a href="#review">评审</a>
+        <a href="#reflection">复盘</a>
+      </nav>
+    </div>
+
     <header class="hero">
       <div>
-        <div class="eyebrow">项目启动与需求评审工作台</div>
-        <h1>ClearBrief<br>清晰启动</h1>
-        <p class="lead">把一句还没说清楚的需求，整理成能讨论、能评审、能分工的项目启动材料。适合处理会议纪要、聊天记录、文档片段和临时冒出来的业务想法。</p>
+        <div class="eyebrow">产品经理作品集案例 / 需求评审前预检工具</div>
+        <h1>把模糊需求，变成能评审、能分工、能落地的项目材料</h1>
+        <p class="lead">ClearBrief 面向 0-3 年产品经理和项目 owner，帮助他们在需求评审前发现材料缺口、补齐关键问题，并整理成可评审、可分工的 PRD 与会议材料。</p>
         <div class="actions">
-          <a class="btn primary" href="demo.html">进入在线体验</a>
+          <a class="btn primary" href="demo.html">体验可点击 Demo</a>
           <a class="btn" href="prd.html">查看产品说明</a>
+          <a class="btn" href="PRD.md">查看 PRD</a>
         </div>
       </div>
       <div class="hero-card">
         <div class="screen">
-          <div class="screen-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>ClearBrief 工作台</span></div>
+          <div class="screen-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>评审工作台预览</span></div>
           <div class="screen-body">
-            <div class="mock-row"><strong>输入模糊需求</strong><span>公司内部文档太分散，想做一个知识库助手。</span></div>
-            <div class="mock-row"><strong>追问补齐</strong><span>目标是什么？哪些文档进入首期？低置信度回答如何兜底？</span></div>
-            <div class="mock-row"><strong>评审报告</strong><span>完整度 82/100，发现权限、兜底、指标三类高优先级问题。</span></div>
+            <div class="mock-row"><strong>会前材料检查</strong><span>背景目标、MVP 范围、权限边界、数据验收和依赖排期是否齐全。</span></div>
+            <div class="mock-row"><strong>角色意见确认</strong><span>研发、设计、测试、数据、业务方、合规分别记录确认状态。</span></div>
+            <div class="mock-row"><strong>评审结论</strong><span>根据阻塞项和材料缺口判断：会前待补齐、带条件通过或通过。</span></div>
           </div>
         </div>
       </div>
     </header>
 
-    <section>
-      <h2>为什么做这个项目</h2>
-      <p class="section-sub">很多项目不是从一份完整 PRD 开始，而是从一句“我们想做个工具”开始。真正拖慢进度的，往往不是没人写文档，而是关键问题一开始没被问出来。</p>
+    <section id="problem">
+      <h2>一、项目背景：真实痛点不是“不会写 PRD”</h2>
+      <p class="section-sub">很多团队的需求不是从完整文档开始，而是从一句模糊想法、一次会议纪要或几段聊天记录开始。真正影响推进效率的，是关键问题没有在早期被问清楚。</p>
       <div class="grid-3">
-        <div class="card"><h3>需求表达模糊</h3><p>业务方常说“提升效率”“做个工具”，但缺少目标用户、范围和成功指标。</p></div>
-        <div class="card"><h3>补齐信息依赖经验</h3><p>新人产品经理容易漏掉权限、异常流程、验收标准和上线后指标。</p></div>
-        <div class="card"><h3>评审发现太晚</h3><p>很多问题到评审会甚至开发阶段才暴露，导致重复沟通和返工。</p></div>
+        <div class="card"><span class="tag red">痛点 1</span><h3>需求一开始太粗</h3><p>“做个知识库”“做个活动”“优化流程”这类表达，缺少目标用户、业务目标、首期范围和成功标准。</p></div>
+        <div class="card"><span class="tag amber">痛点 2</span><h3>新人容易漏关键边界</h3><p>权限、异常流程、数据口径、验收标准和研发依赖经常到评审或开发阶段才暴露。</p></div>
+        <div class="card"><span class="tag purple">痛点 3</span><h3>评审会变成补文档</h3><p>如果会前材料不完整，评审会容易变成现场追问，既消耗各部门时间，也影响产品可信度。</p></div>
       </div>
     </section>
 
-    <section>
-      <h2>产品方案</h2>
-      <p class="section-sub">ClearBrief 先帮用户判断哪里还不清楚，再把缺口变成可回答的问题。信息补齐后，系统再整理完整 PRD、跨部门对齐、竞品分析、数据指标和给不同角色看的材料。</p>
+    <section id="solution">
+      <h2>二、产品方案：先澄清，再生成</h2>
+      <p class="section-sub">我的设计判断是：AI 不应该一上来就替用户写长文档，而应该先像有经验的产品经理一样发现缺口、提出追问，再把确认后的信息整理成可评审材料。</p>
       <div class="flow">
         <div class="flow-step"><div class="num">1</div><h3>输入想法</h3><p>录入模糊需求、会议纪要、聊天记录或文档片段。</p></div>
-        <div class="flow-step"><div class="num">2</div><h3>识别缺口</h3><p>判断项目类型、目标用户和当前缺失信息。</p></div>
-        <div class="flow-step"><div class="num">3</div><h3>追问补齐</h3><p>按优先级追问目标、范围、权限、指标和兜底流程。</p></div>
-        <div class="flow-step"><div class="num">4</div><h3>生成 PRD</h3><p>输出项目背景、MVP 范围、竞品分析、数据指标和验收标准。</p></div>
-        <div class="flow-step"><div class="num">5</div><h3>评审工作台</h3><p>检查需求质量，并生成部门对齐、SQL 口径和角色化材料。</p></div>
+        <div class="flow-step"><div class="num">2</div><h3>识别缺口</h3><p>判断项目类型、目标用户、范围和当前信息缺口。</p></div>
+        <div class="flow-step"><div class="num">3</div><h3>追问补齐</h3><p>按优先级追问目标、权限、指标、兜底和依赖。</p></div>
+        <div class="flow-step"><div class="num">4</div><h3>生成 PRD</h3><p>输出项目背景、MVP、流程、竞品、指标、SQL 和验收标准。</p></div>
+        <div class="flow-step"><div class="num">5</div><h3>评审闭环</h3><p>记录会前材料、角色意见、研发反馈和会后动作。</p></div>
       </div>
     </section>
 
     <section>
-      <h2>在线体验</h2>
-      <p class="section-sub">体验路径覆盖从模糊输入到 PRD、评审和导出的完整流程。可以先使用内置案例，也可以切换不同业务场景。</p>
+      <h2>三、我在项目中的产品判断</h2>
+      <div class="timeline">
+        <div class="timeline-item"><strong>目标用户</strong><p>优先服务 0-3 年产品经理和临时承担项目 owner 的同学。重点不是替资深 PM 完成所有判断，而是帮助经验较少的人少漏关键问题。</p></div>
+        <div class="timeline-item"><strong>核心场景</strong><p>需求评审前，用户手里只有模糊想法、会议纪要或业务方描述，需要快速判断材料是否足够进入跨部门讨论。</p></div>
+        <div class="timeline-item"><strong>MVP 取舍</strong><p>首期不做复杂多人协作和真实文档权限系统，而是先验证“需求澄清 -> PRD -> 评审 -> 导出”的闭环是否成立。</p></div>
+        <div class="timeline-item"><strong>AI 位置</strong><p>AI 负责识别缺口、生成追问和整理结构化文本；最终确认、修改、采纳反馈和是否进入排期仍由产品经理完成。</p></div>
+      </div>
+    </section>
+
+    <section id="demo">
+      <h2>四、可点击 Demo：覆盖完整产品流程</h2>
+      <p class="section-sub">Demo 里保留了多个业务案例，也支持输入自定义项目想法。页面会根据项目类型切换追问、PRD 内容、竞品分析、数据指标和评审风险。</p>
       <div class="preview-grid">
         <div class="preview-panel">
-          <div class="preview-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>流程预览</span></div>
+          <div class="preview-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>体验路径</span></div>
           <div class="preview-body">
-            <div class="preview-line"><strong>输入</strong><span>录入一句粗糙需求，或导入会议纪要样例。</span></div>
-            <div class="preview-line"><strong>追问</strong><span>系统识别目标、范围、权限、兜底流程等缺口。</span></div>
-            <div class="preview-line"><strong>PRD</strong><span>生成项目背景、MVP 范围、竞品分析、数据指标和 SQL 示例。</span></div>
-            <div class="preview-line"><strong>评审</strong><span>查看完整度评分，处理高优先级问题。</span></div>
+            <div class="preview-line"><strong>输入</strong><span>选择案例或输入 50 字以上的项目想法。</span></div>
+            <div class="preview-line"><strong>分析</strong><span>系统识别项目类型、目标用户和待补齐信息。</span></div>
+            <div class="preview-line"><strong>追问</strong><span>确认高优先级问题，右侧信息卡实时更新。</span></div>
+            <div class="preview-line"><strong>PRD</strong><span>生成可复制的完整 PRD，并提供目录定位。</span></div>
+            <div class="preview-line"><strong>评审</strong><span>处理阻塞项、角色意见和研发反馈，导出会议纪要。</span></div>
           </div>
         </div>
-        <div>
-          <div class="demo-steps">
-            <div class="demo-step"><strong>1. 开始分析</strong><span>点击输入页的主按钮，进入追问补齐。</span></div>
-            <div class="demo-step"><strong>2. 回答追问</strong><span>至少确认一个回答，生成 PRD 草稿。</span></div>
-            <div class="demo-step"><strong>3. 进入评审</strong><span>应用建议后查看需求完整度和问题清单。</span></div>
-            <div class="demo-step"><strong>4. 工作台</strong><span>查看跨部门对齐、竞品分析、数据指标和 SQL。</span></div>
-          </div>
-          <div class="actions">
-            <a class="btn primary" href="demo.html">直接体验</a>
-          </div>
+        <div class="grid-2">
+          <div class="card"><span class="tag blue">案例切换</span><h3>不只一个固定案例</h3><p>覆盖内部知识库、活动、数据看板、客服分流、课程体验等不同业务场景。</p></div>
+          <div class="card"><span class="tag green">实时联动</span><h3>回答会改变后续输出</h3><p>确认追问、处理评审待办、回写研发反馈后，PRD 和导出材料会同步变化。</p></div>
+          <div class="card"><span class="tag amber">可编辑导出</span><h3>不完全依赖 AI 初稿</h3><p>导出的老板摘要、研发任务、设计 brief 和会议纪要都可以继续修改。</p></div>
+          <div class="card"><span class="tag purple">数据意识</span><h3>包含指标与 SQL 口径</h3><p>不仅写功能，还补充上线后如何看效果、如何用数据验证。</p></div>
         </div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="demo.html">打开 Demo</a>
       </div>
     </section>
 
-    <section>
-      <h2>核心设计亮点</h2>
-      <div class="grid-2">
-        <div class="card">
-          <h3>智能追问，而不是直接生成</h3>
-          <p>系统先判断当前材料缺什么，再生成高、中、低优先级问题，帮助负责人把目标、范围、指标和风险补完整。</p>
-        </div>
-        <div class="card">
-          <h3>需求评审闭环</h3>
-          <p>评审报告不只是列问题，还能标记处理状态。关键问题被解决后，完整度评分会同步变化。</p>
-        </div>
-        <div class="card">
-          <h3>PRD 生成闭环</h3>
-          <p>同一份项目材料可以继续生成完整 PRD、竞品分析、数据指标、研发任务和设计 brief。</p>
-        </div>
-        <div class="card">
-          <h3>真实边界状态</h3>
-          <p>产品保留了空输入、分析加载、信息不足、未处理高风险导出提示等状态，避免只展示理想流程。</p>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>指标与验证</h2>
+    <section id="review">
+      <h2>五、重点模块：需求评审工作台</h2>
+      <p class="section-sub">我后续把评审模块从“简单打分”改成更接近真实工作的判断：材料是否齐、关键角色是否确认、阻塞项是否关闭、研发反馈是否回写。</p>
       <div class="grid-3">
-        <div class="card metric"><strong>效率</strong><p>Kickoff 初稿生成时间、信息补齐耗时、跨部门确认轮次。</p></div>
-        <div class="card metric"><strong>质量</strong><p>需求完整度评分、评审缺口发现率、验收标准覆盖率。</p></div>
-        <div class="card metric"><strong>可用性</strong><p>追问采纳率、内容修改比例、导出内容可用性评分。</p></div>
+        <div class="card"><span class="tag blue">会前预检</span><h3>避免评审会现场补材料</h3><p>检查背景目标、范围、流程、权限、数据验收、依赖排期六类材料。</p></div>
+        <div class="card"><span class="tag amber">角色意见</span><h3>体现跨部门协作</h3><p>研发、设计、测试、数据、业务、合规都能记录确认状态和待跟进问题。</p></div>
+        <div class="card"><span class="tag green">会后沉淀</span><h3>形成可复制会议纪要</h3><p>导出评审结论、阻塞项、角色意见、研发反馈和下一步动作。</p></div>
       </div>
     </section>
 
     <section>
-      <h2>技术落地思路</h2>
-      <p class="section-sub">公开页面展示的是稳定的交互原型。生产环境可以通过后端接口接入大模型，并在权限、成本、日志和人工复核上做完整控制。</p>
+      <h2>六、指标设计与验证方式</h2>
+      <div class="grid-3">
+        <div class="card metric"><strong>效率</strong><p>评审材料准备时长、需求补齐耗时、跨部门确认轮次。</p></div>
+        <div class="card metric"><strong>质量</strong><p>评审前发现的问题数、验收标准覆盖率、PRD 二次修改比例。</p></div>
+        <div class="card metric"><strong>协作</strong><p>角色意见关闭率、研发阻塞问题数量、评审后返工次数。</p></div>
+      </div>
+      <div class="timeline" style="margin-top:18px">
+        <div class="timeline-item"><strong>轻量验证计划</strong><p>找 2-3 位同学或产品求职者试用，让他们输入一个真实项目想法，观察是否能理解流程、是否能补齐关键问题、是否知道下一步该做什么。</p></div>
+        <div class="timeline-item"><strong>预期观察点</strong><p>用户是否卡在输入、追问是否有帮助、PRD 是否需要大改、评审模块是否能解释“为什么暂时不能进开发”。</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>七、技术落地理解</h2>
+      <p class="section-sub">当前公开版本是前端可点击原型，模拟 AI 分析流程。真实接入 AI 时，需要把大模型调用放在后端，避免 API Key 暴露，并处理权限、成本、日志和人工复核。</p>
       <div class="flow">
-        <div class="flow-step"><div class="num">1</div><h3>前端输入</h3><p>用户输入项目想法、会议纪要或文档片段。</p></div>
-        <div class="flow-step"><div class="num">2</div><h3>服务端处理</h3><p>服务端负责鉴权、调用控制、异常重试和日志记录。</p></div>
-        <div class="flow-step"><div class="num">3</div><h3>AI 分析</h3><p>模型输出需求缺口、追问问题、部门对齐和 PRD 草稿。</p></div>
-        <div class="flow-step"><div class="num">4</div><h3>结构化返回</h3><p>返回 JSON，前端分模块展示和复制导出。</p></div>
-        <div class="flow-step"><div class="num">5</div><h3>实时反馈</h3><p>支持逐步展示识别项目类型、生成追问和整理 PRD 的过程。</p></div>
+        <div class="flow-step"><div class="num">1</div><h3>前端输入</h3><p>收集项目想法、会议纪要或文档片段。</p></div>
+        <div class="flow-step"><div class="num">2</div><h3>后端接口</h3><p>负责鉴权、限流、调用成本控制和日志记录。</p></div>
+        <div class="flow-step"><div class="num">3</div><h3>AI 分析</h3><p>生成追问、结构化信息卡、PRD 草稿和评审建议。</p></div>
+        <div class="flow-step"><div class="num">4</div><h3>人工确认</h3><p>用户编辑、采纳或标记本期不处理，避免一次性生成失控。</p></div>
+        <div class="flow-step"><div class="num">5</div><h3>导出沉淀</h3><p>输出 PRD、会议纪要、研发任务和跨部门材料。</p></div>
       </div>
     </section>
 
-    <section>
-      <h2>当前版本</h2>
-      <p class="section-sub">当前版本用于展示产品流程和交互闭环，重点呈现从模糊需求到启动材料的完整路径，以及产品经理如何处理早期需求不清的问题。</p>
-      <div class="grid-3">
-        <div class="card"><h3>已完成</h3><p>项目介绍页、在线体验、产品说明文档和公开 README。</p></div>
-        <div class="card"><h3>可体验</h3><p>分析输入、追问补齐、PRD 生成、竞品分析、数据指标、评审报告和角色导出。</p></div>
-        <div class="card"><h3>可扩展方向</h3><p>接入企业文档、会议纪要和协同工具，让分析结果更贴近真实业务上下文。</p></div>
+    <section id="reflection">
+      <h2>八、项目复盘</h2>
+      <div class="grid-2">
+        <div class="card"><h3>我想展示的产品能力</h3><ul><li>能从真实工作痛点出发，而不是只做一个 AI 生成器。</li><li>能把目标用户收窄到 0-3 年产品经理，围绕评审前预检设计主线。</li><li>能考虑跨部门角色、数据指标、研发风险和验收边界。</li></ul></div>
+        <div class="card"><h3>下一步可优化</h3><ul><li>接入真实 AI 后端，支持用户输入后实时生成。</li><li>接入文档或会议纪要，减少手动输入成本。</li><li>增加历史项目管理和评审记录沉淀。</li></ul></div>
       </div>
-    </section>
-
-    <section>
-      <h2>项目总结</h2>
-      <div class="quote">
-        ClearBrief 的核心价值不是替用户写一份更长的文档，而是在项目早期把目标、范围、风险、权限和验收标准问清楚。在线体验内置多个业务案例，用来展示从模糊需求到可评审材料的完整工作流。
-        <span>它更适合作为评审前预检工具：先发现问题，再组织材料，最后帮助团队更高效地进入讨论。</span>
+      <div class="quote" style="margin-top:20px">
+        ClearBrief 的价值不是替产品经理写一份更长的文档，而是在项目早期把目标、范围、风险、权限和验收标准问清楚。它更像一个评审前预检工具：先发现问题，再组织材料，最后帮助团队更高效地进入讨论。
+        <span>这也是我希望通过这个作品集案例展示的能力：把 AI 放进真实产品经理工作流，而不是停留在“生成一段文字”。</span>
       </div>
     </section>
   </main>

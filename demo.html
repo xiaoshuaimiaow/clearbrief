@@ -451,7 +451,8 @@
       padding: 24px;
       color: var(--green);
     }
-    .score-main strong { font-size: 58px; display: inline-block; margin-top: 12px; }
+    .score-main strong { font-size: 30px; display: block; margin: 12px 0 8px; color: var(--ink); line-height: 1.2; }
+    .score-main em { font-style: normal; font-weight: 700; }
     .metric strong { display: block; font-size: 28px; margin-top: 10px; }
     .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
     .progress {
@@ -462,6 +463,63 @@
       margin-top: 8px;
     }
     .progress span { display: block; height: 100%; background: var(--blue); border-radius: 999px; }
+    .preflight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--soft);
+      padding: 13px 14px;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.45;
+      cursor: pointer;
+    }
+    .check-row input {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      accent-color: var(--blue);
+      flex: 0 0 auto;
+    }
+    .check-row strong {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+    .role-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .role-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      padding: 14px;
+    }
+    .role-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .role-card strong { font-size: 14px; }
+    .role-card p {
+      margin: 0 0 12px;
+      color: #344054;
+      font-size: 12px;
+      line-height: 1.5;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -758,9 +816,9 @@
 
     <aside class="sidebar">
       <button class="nav active" data-page="intake"><span class="nav-num">1</span>输入想法</button>
-      <button class="nav" data-page="clarify" disabled><span class="nav-num">2</span>追问补齐</button>
+      <button class="nav" data-page="clarify" disabled><span class="nav-num">2</span>需求澄清</button>
       <button class="nav" data-page="document" disabled><span class="nav-num">3</span>生成 PRD</button>
-      <button class="nav" data-page="review" disabled><span class="nav-num">4</span>评审报告</button>
+      <button class="nav" data-page="review" disabled><span class="nav-num">4</span>评审与反馈</button>
       <button class="nav" data-page="export" disabled><span class="nav-num">5</span>导出材料</button>
       <div class="sidebar-note">
         体验案例：从模糊项目想法到 PRD、评审清单和跨部门材料。
@@ -785,7 +843,7 @@
 
       <section class="page active" id="page-intake">
         <h1>把一句模糊需求变成可启动项目</h1>
-        <p class="subtitle">输入现在脑子里的粗略想法即可。系统会先识别项目类型和缺失信息，再进入追问补齐，而不是直接生成一份看起来完整但无法落地的文档。</p>
+        <p class="subtitle">输入现在脑子里的粗略想法即可。系统会先识别项目类型和缺失信息，再进入需求澄清，而不是直接生成一份看起来完整但无法落地的文档。</p>
         <div class="source-row">
           <span class="source-chip" id="scenarioChip">当前案例：内部知识库</span>
           <span class="source-chip">也支持：会议纪要</span>
@@ -829,7 +887,7 @@
       </section>
 
       <section class="page" id="page-clarify">
-        <h1>追问补齐</h1>
+        <h1>需求澄清</h1>
         <p class="subtitle">系统把模糊想法拆成可回答的问题。回答确认后会沉淀到右侧信息卡，用于生成启动文档。</p>
         <div class="grid-2">
           <div class="panel">
@@ -960,53 +1018,148 @@
       </section>
 
       <section class="page" id="page-review">
-        <h1>需求评审报告</h1>
-        <p class="subtitle">从目标清晰度、范围完整度、风险覆盖度和验收可执行性四个维度检查项目启动材料。</p>
+        <h1>需求评审与反馈</h1>
+        <p class="subtitle">需求评审不是简单给 PRD 打分，而是让业务、产品、研发、设计、测试和数据一起确认：需求是否合理、方案是否完整、实现成本是否可接受，以及下一步谁负责补齐。</p>
+        <div class="guide" aria-label="需求评审流程">
+          <div class="guide-card primary"><strong>1. 会前预检</strong><span>确认背景、目标、范围、指标和材料完整度，避免评审会变成读文档。</span></div>
+          <div class="guide-card"><strong>2. 会议评审</strong><span>围绕合理性、完整性、严谨性、优先级和实现成本逐项讨论。</span></div>
+          <div class="guide-card"><strong>3. 结论决策</strong><span>给出通过、带条件通过或退回修改，并记录 owner 和截止时间。</span></div>
+          <div class="guide-card"><strong>4. 回写 PRD</strong><span>把研发、设计、数据反馈同步到 PRD，形成可执行版本。</span></div>
+        </div>
+        <div class="panel" style="margin-top:22px">
+          <h2>会前材料检查</h2>
+          <p class="hint">真实评审前，产品经理最好先确认这些材料是否准备好。否则会上很容易变成“大家一起帮你补需求”。</p>
+          <div class="preflight-grid">
+            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>背景与目标</strong>说明为什么现在做、解决谁的问题、业务收益是什么。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>MVP 范围</strong>明确首期做什么、不做什么，避免评审范围无限扩张。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>主流程与异常流</strong>包含正常路径、失败状态、人工兜底和用户反馈入口。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>权限与边界</strong>确认角色、部门、文档类型和敏感内容的访问规则。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>数据与验收</strong>指标口径、埋点、验收标准和上线后复盘方式已写清楚。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>依赖与排期</strong>列出研发、数据、运营、合规等依赖和预计完成时间。</span></label>
+          </div>
+          <div class="review-summary">
+            <div class="mini-stat"><strong id="preflightDone">3/6</strong><span>材料完整度</span></div>
+            <div class="mini-stat"><strong id="preflightMissing">3</strong><span>会前缺口</span></div>
+            <div class="mini-stat"><strong id="meetingMode">先预审</strong><span>会议建议</span></div>
+          </div>
+        </div>
         <div class="score-grid">
-          <div class="score-main"><div>需求完整度</div><strong id="scoreValue">82</strong><span>/ 100</span><p id="scoreHint">建议补齐后再进入开发排期</p></div>
-          <div class="panel metric red"><h2>高优先级</h2><strong id="highRiskCount">3</strong><p class="hint">需要评审前补齐</p></div>
-          <div class="panel metric amber"><h2>中优先级</h2><strong>4</strong><p class="hint">建议下一轮优化</p></div>
-          <div class="panel metric green"><h2>可通过项</h2><strong>9</strong><p class="hint">已满足评审要求</p></div>
-          <div class="panel metric blue"><h2>预计节省</h2><strong>35%</strong><p class="hint">初稿与沟通时间</p></div>
+          <div class="score-main"><div>评审结论</div><strong id="reviewDecision">带条件通过</strong><p id="scoreHint">可进入原型与技术预研，暂不进入开发排期</p><span>预检参考：<em id="scoreValue">82</em>/100</span></div>
+          <div class="panel metric red"><h2>阻塞项</h2><strong id="blockingCount">2</strong><p class="hint">处理前不进开发排期</p></div>
+          <div class="panel metric amber"><h2>非阻塞项</h2><strong id="nonBlockingCount">1</strong><p class="hint">可跟随原型继续补</p></div>
+          <div class="panel metric green"><h2>已关闭</h2><strong id="closedCount">0</strong><p class="hint">评审待办已处理</p></div>
+          <div class="panel metric blue"><h2>下一阶段</h2><strong id="nextStage">技术预研</strong><p class="hint">设计原型 + 研发评估</p></div>
         </div>
         <div class="review-grid">
           <div class="panel">
-            <h2>四维度评分</h2>
-            <p>目标清晰度 <span id="goalScore">88</span></p><div class="progress"><span id="goalBar" style="width:88%"></span></div>
-            <p>范围完整度 <span id="scopeScore">76</span></p><div class="progress"><span id="scopeBar" style="width:76%;background:var(--amber)"></span></div>
-            <p>风险覆盖度 <span id="riskScore">70</span></p><div class="progress"><span id="riskBar" style="width:70%;background:var(--amber)"></span></div>
-            <p>验收可执行性 <span id="acceptScore">84</span></p><div class="progress"><span id="acceptBar" style="width:84%;background:var(--green)"></span></div>
+            <h2>五维度评审</h2>
+            <p>需求合理性 <span id="goalScore">88</span></p><div class="progress"><span id="goalBar" style="width:88%"></span></div>
+            <p>方案完整性 <span id="scopeScore">76</span></p><div class="progress"><span id="scopeBar" style="width:76%;background:var(--amber)"></span></div>
+            <p>方案严谨性 <span id="riskScore">70</span></p><div class="progress"><span id="riskBar" style="width:70%;background:var(--amber)"></span></div>
+            <p>优先级清晰度 <span id="acceptScore">84</span></p><div class="progress"><span id="acceptBar" style="width:84%;background:var(--green)"></span></div>
+            <p>实现成本可控性 <span id="costScore">72</span></p><div class="progress"><span id="costBar" style="width:72%;background:var(--amber)"></span></div>
           </div>
           <div class="panel">
             <h2>评审结论</h2>
             <p class="subtitle" style="margin-bottom:18px">当前文档已经具备项目启动基础，可以用于内部评审讨论。但如果直接进入开发排期，仍可能在权限、答案可信度和上线指标上出现返工。</p>
-            <div class="card amber"><h3>建议先补齐</h3><p>低置信度回答兜底机制、文档级权限、上线后效果指标。</p></div>
+            <div class="card amber"><h3>结论：带条件通过</h3><p>可以继续推进原型和技术预研，但进入开发排期前必须补齐低置信度兜底、文档级权限和上线后指标。</p></div>
+            <div class="card blue"><h3>参会角色</h3><p>产品负责讲清楚目标与范围；研发评估实现成本；设计确认流程状态；测试确认验收边界；数据确认埋点口径；业务确认优先级。</p></div>
           </div>
         </div>
         <div class="panel" style="margin-top:22px">
-          <h2>问题清单</h2>
+          <h2>角色意见确认</h2>
+          <p class="hint">评审不是产品一个人说完就结束。这里模拟不同角色的反馈状态，帮助产品经理判断是否能进入下一阶段。</p>
+          <div class="role-board">
+            <div class="role-card">
+              <div class="role-card-head"><strong>研发</strong><span class="pill amber">关键角色</span></div>
+              <p>关注接口边界、权限过滤、异常状态、实现成本和联调风险。</p>
+              <select class="status-select role-status" data-role="研发"><option>有疑问</option><option>已确认</option><option>需会后评估</option></select>
+            </div>
+            <div class="role-card">
+              <div class="role-card-head"><strong>设计</strong><span class="pill blue">流程体验</span></div>
+              <p>关注页面状态、反馈入口、错误提示、信息层级和用户理解成本。</p>
+              <select class="status-select role-status" data-role="设计"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
+            </div>
+            <div class="role-card">
+              <div class="role-card-head"><strong>测试</strong><span class="pill blue">验收边界</span></div>
+              <p>关注验收标准是否可测、异常分支是否清楚、规则是否互相冲突。</p>
+              <select class="status-select role-status" data-role="测试"><option>有疑问</option><option>已确认</option><option selected>需会后评估</option></select>
+            </div>
+            <div class="role-card">
+              <div class="role-card-head"><strong>数据</strong><span class="pill green">指标口径</span></div>
+              <p>关注埋点、指标定义、看板维度、复盘周期和实验口径。</p>
+              <select class="status-select role-status" data-role="数据"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
+            </div>
+            <div class="role-card">
+              <div class="role-card-head"><strong>业务方</strong><span class="pill green">价值判断</span></div>
+              <p>关注目标用户、优先级、上线时间、运营成本和业务收益。</p>
+              <select class="status-select role-status" data-role="业务方"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
+            </div>
+            <div class="role-card">
+              <div class="role-card-head"><strong>合规 / 管理员</strong><span class="pill red">风险边界</span></div>
+              <p>关注敏感内容、访问权限、内容过期、人工审核和追责链路。</p>
+              <select class="status-select role-status" data-role="合规 / 管理员"><option selected>有疑问</option><option>已确认</option><option>需会后评估</option></select>
+            </div>
+          </div>
+          <div class="review-summary">
+            <div class="mini-stat"><strong id="roleConfirmedCount">3</strong><span>已确认角色</span></div>
+            <div class="mini-stat"><strong id="roleRiskCount">3</strong><span>仍有疑问</span></div>
+            <div class="mini-stat"><strong id="roleMeetingAdvice">补齐关键角色</strong><span>协作建议</span></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:22px">
+          <h2>评审维度说明</h2>
           <table>
-            <thead><tr><th>优先级</th><th>问题</th><th>影响</th><th>建议动作</th><th>状态</th></tr></thead>
+            <thead><tr><th>维度</th><th>评审时真正问什么</th><th>当前判断</th><th>建议动作</th></tr></thead>
             <tbody>
-              <tr><td>高</td><td>缺少低置信度回答兜底流程</td><td>影响用户信任</td><td>增加来源引用、查看原文、提交反馈入口</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
-              <tr><td>高</td><td>权限规则未细化到文档级</td><td>可能造成敏感资料误展示</td><td>按部门、角色、文档类型配置访问边界</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
-              <tr><td>中</td><td>成功指标仍偏宽泛</td><td>上线后难以判断效果</td><td>改成查找时间、重复咨询量、答案采纳率</td><td><select class="status-select review-status"><option>可优化</option><option>已处理</option></select></td></tr>
+              <tr><td>需求合理性</td><td>用户问题是否真实？业务目标是否值得做？</td><td><span class="pill green">基本成立</span></td><td>补充目标用户和收益口径。</td></tr>
+              <tr><td>方案完整性</td><td>主流程、异常流程、权限、数据、运营配置是否覆盖？</td><td><span class="pill amber">待补齐</span></td><td>补充兜底流程和边界状态。</td></tr>
+              <tr><td>方案严谨性</td><td>规则是否自洽？有没有互相冲突或无法验收的描述？</td><td><span class="pill amber">待校验</span></td><td>把模糊描述改成可验收规则。</td></tr>
+              <tr><td>优先级</td><td>哪些必须首期做，哪些可以放到二期？</td><td><span class="pill green">已有 MVP</span></td><td>继续明确非本期范围。</td></tr>
+              <tr><td>实现成本</td><td>研发复杂度、依赖系统、排期和风险是否可控？</td><td><span class="pill red">需研发确认</span></td><td>收集研发反馈并回写 PRD。</td></tr>
+              <tr><td>竞品借鉴合理性</td><td>借鉴的是业务逻辑还是只抄功能点？是否适配当前用户和流程？</td><td><span class="pill amber">需说明</span></td><td>补充竞品功能、适用条件、不可照搬点和本项目取舍。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel" style="margin-top:22px">
+          <h2>竞品借鉴合理性</h2>
+          <p class="hint">评审时不能只说“竞品也这么做”，还要说明它解决什么问题、为什么适合当前业务、哪些地方不能照搬。</p>
+          <table>
+            <thead><tr><th>检查项</th><th>产品经理需要说明</th><th>当前材料状态</th></tr></thead>
+            <tbody>
+              <tr><td>竞品功能点</td><td>竞品具体做了什么，而不是只写竞品名称。</td><td><span class="pill green">已列出</span></td></tr>
+              <tr><td>业务适配</td><td>这个功能为什么适合当前用户、场景和业务目标。</td><td><span class="pill amber">待补充</span></td></tr>
+              <tr><td>取舍理由</td><td>哪些借鉴，哪些不做，原因是什么。</td><td><span class="pill amber">待补充</span></td></tr>
+              <tr><td>实现代价</td><td>借鉴后会不会增加接口、数据、权限或运营成本。</td><td><span class="pill red">需研发确认</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel" style="margin-top:22px">
+          <h2>评审待办清单</h2>
+          <p class="hint">这里记录评审会中已经识别出的待办事项。每一项都需要明确影响、建议动作、负责人和处理状态。</p>
+          <table>
+            <thead><tr><th>优先级</th><th>问题</th><th>影响</th><th>建议动作</th><th>Owner</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>高</td><td>缺少低置信度回答兜底流程</td><td>影响用户信任</td><td>增加来源引用、查看原文、提交反馈入口</td><td>产品 + 研发</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
+              <tr><td>高</td><td>权限规则未细化到文档级</td><td>可能造成敏感资料误展示</td><td>按部门、角色、文档类型配置访问边界</td><td>研发 + 管理员</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
+              <tr><td>中</td><td>成功指标仍偏宽泛</td><td>上线后难以判断效果</td><td>改成查找时间、重复咨询量、答案采纳率</td><td>产品 + 数据</td><td><select class="status-select review-status"><option>可优化</option><option>已处理</option></select></td></tr>
             </tbody>
           </table>
           <div class="review-summary">
-            <div class="mini-stat"><strong id="handledCount">0</strong><span>已处理问题</span></div>
-            <div class="mini-stat"><strong id="remainingCount">3</strong><span>仍需处理</span></div>
-            <div class="mini-stat"><strong id="readyState">待补齐</strong><span>评审状态</span></div>
+            <div class="mini-stat"><strong id="handledCount">0</strong><span>已关闭</span></div>
+            <div class="mini-stat"><strong id="remainingCount">3</strong><span>待办项</span></div>
+            <div class="mini-stat"><strong id="readyState">待复审</strong><span>评审状态</span></div>
           </div>
           <div class="inline-alert" id="reviewAlert">还有高优先级问题未处理。你仍然可以导出材料，但建议先处理关键风险。</div>
           <div class="actions">
             <button class="btn" id="autoFixBtn">一键处理高风险项</button>
+            <button class="btn" data-export="评审会议纪要">导出会议纪要</button>
             <button class="btn primary" id="exportBtn">导出材料</button>
           </div>
         </div>
         <div class="panel" style="margin-top:22px">
-          <h2>研发反馈</h2>
-          <p class="hint">PRD 生成后，研发可以继续补充技术风险、接口依赖、边界条件或排期疑问。采纳后的反馈会同步进入 PRD 的风险兜底和完整 PRD 文本。</p>
+          <h2>研发反馈回写</h2>
+          <p class="hint">评审会或协作工具中收到研发反馈后，PM 可以在这里整理成结构化反馈，并决定是否回写进 PRD。这里不是多人评论区，而是产品经理的反馈整理入口。</p>
           <div class="feedback-form">
             <select id="devFeedbackType">
               <option>技术风险</option>
@@ -1017,7 +1170,7 @@
               <option>排期风险</option>
             </select>
             <textarea id="devFeedbackInput">权限规则需要明确到角色和文档类型，否则接口设计会变复杂，联调时也容易出现敏感内容误展示。</textarea>
-            <button class="btn primary" id="addDevFeedbackBtn">添加反馈</button>
+            <button class="btn primary" id="addDevFeedbackBtn">记录反馈</button>
           </div>
           <div class="feedback-list" id="devFeedbackList"></div>
         </div>
@@ -1141,7 +1294,7 @@ ORDER BY dt;</div>
 
   <script>
     const pages = ["intake", "clarify", "document", "review", "export"];
-    const labels = ["输入想法", "追问补齐", "生成 PRD", "评审报告", "工作台"];
+    const labels = ["输入想法", "需求澄清", "生成 PRD", "评审与反馈", "工作台"];
     let current = 0;
     let maxUnlocked = 0;
     let confirmedAnswers = 0;
@@ -1526,7 +1679,7 @@ ORDER BY dt;</div>
           const question = scenario.questions.find(q => q[0] === key);
           return question ? [question[1], answer] : [key, answer];
         });
-      const acceptedFeedback = devFeedbackItems.filter(item => item.status === "已采纳");
+      const acceptedFeedback = devFeedbackItems.filter(item => item.status === "已回写");
       document.getElementById("docTitle").textContent = scenario.title;
       document.getElementById("backgroundText").textContent = scenario.background;
       document.getElementById("problemText").textContent = scenario.problem;
@@ -1559,7 +1712,7 @@ ORDER BY dt;</div>
         "关键业务规则必须有明确负责人，不能只写成“上线前补齐”。",
         "异常状态需要给用户明确提示、处理入口和内部追踪字段。",
         "上线前需要完成权限、数据口径、验收负责人和回滚方案确认。",
-        ...acceptedFeedback.map(item => `研发反馈：${item.type} - ${item.text}`)
+        ...acceptedFeedback.map(item => `研发反馈回写：${item.type} - ${item.text}`)
       ].map(item => `<li>${escapeHtml(item)}</li>`).join("");
       document.getElementById("acceptanceText").textContent = scenario.acceptance;
     }
@@ -1781,9 +1934,9 @@ ClearBrief 不只生成文档，而是把“需求澄清 -> 部门对齐 -> 竞�
       const scope = scenario.scope.map(item => `- ${item}`).join("\n");
       const departments = scenario.departments.map(item => `- ${item}`).join("\n");
       const acceptedFeedback = devFeedbackItems
-        .filter(item => item.status === "已采纳")
+        .filter(item => item.status === "已回写")
         .map(item => `- ${item.type}：${item.text}`)
-        .join("\n") || "- 暂无已采纳研发反馈。";
+        .join("\n") || "- 暂无已回写研发反馈。";
       const confirmed = Object.entries(confirmedAnswersByKey)
         .map(([key, answer]) => {
           const question = scenario.questions.find(q => q[0] === key);
@@ -1829,7 +1982,7 @@ ${scope}
 | 模块 | 核心能力 | 产出 |
 | --- | --- | --- |
 | 输入识别 | 识别项目类型、目标用户、缺失信息 | 初步分析卡片 |
-| 追问补齐 | 按优先级提出关键问题并归档回答 | 结构化信息卡 |
+| 需求澄清 | 按优先级提出关键问题并归档回答 | 结构化信息卡 |
 | PRD 生成 | 生成背景、范围、指标、风险、验收标准 | 可复制 PRD |
 | 评审工作台 | 从目标、范围、风险、验收维度评分 | 评审结论 |
 | 角色化导出 | 给老板、研发、设计、数据分别生成材料 | 沟通文档 |
@@ -2197,8 +2350,8 @@ ${acceptedFeedback}
     document.getElementById("reviewBtn").addEventListener("click", () => {
       unlock(3);
       goTo(3);
-      logActivity("activity3", "已生成评审报告：完整度 82/100");
-      showToast("已生成需求评审报告");
+      logActivity("activity3", "已生成评审与反馈：完整度 82/100");
+      showToast("已生成需求评审与反馈");
     });
 
     document.getElementById("fullPrdBtn").addEventListener("click", () => {
@@ -2316,29 +2469,83 @@ ${acceptedFeedback}
       updateActiveToc();
     }
 
+    function getPreflightStats() {
+      const checks = [...document.querySelectorAll(".preflight-check")];
+      const done = checks.filter(input => input.checked).length;
+      return { total: checks.length, done, missing: checks.length - done };
+    }
+
+    function getRoleStats() {
+      const roles = [...document.querySelectorAll(".role-status")].map(select => ({
+        role: select.dataset.role,
+        status: select.value
+      }));
+      const confirmed = roles.filter(item => item.status === "已确认").length;
+      const risks = roles.filter(item => item.status !== "已确认");
+      return { roles, confirmed, risks, riskCount: risks.length };
+    }
+
     function updateReviewScore() {
       const statuses = [...document.querySelectorAll(".review-status")].map(s => s.value);
       const handled = statuses.filter(v => v === "已处理").length;
       const remaining = statuses.length - handled;
-      const score = 82 + handled * 4;
+      const blocking = Math.max(0, 2 - Math.min(handled, 2));
+      const nonBlocking = Math.max(0, remaining - blocking);
+      const preflight = getPreflightStats();
+      const roles = getRoleStats();
+      const score = Math.max(60, Math.min(96, 82 + handled * 4 - preflight.missing * 3 - roles.riskCount * 2));
       document.getElementById("scoreValue").textContent = score;
       document.getElementById("handledCount").textContent = handled;
       document.getElementById("remainingCount").textContent = remaining;
-      document.getElementById("highRiskCount").textContent = Math.max(0, 3 - handled);
-      document.getElementById("riskScore").textContent = 70 + handled * 6;
-      document.getElementById("riskBar").style.width = `${70 + handled * 6}%`;
-      document.getElementById("acceptScore").textContent = 84 + handled * 2;
-      document.getElementById("acceptBar").style.width = `${84 + handled * 2}%`;
-      if (remaining === 0) {
-        document.getElementById("readyState").textContent = "可进入评审";
-        document.getElementById("scoreHint").textContent = "关键问题已处理，可以进入团队评审";
-        logActivity("activity3", "评审问题已处理，可进入团队评审");
+      document.getElementById("blockingCount").textContent = blocking;
+      document.getElementById("nonBlockingCount").textContent = nonBlocking;
+      document.getElementById("closedCount").textContent = handled;
+      document.getElementById("preflightDone").textContent = `${preflight.done}/${preflight.total}`;
+      document.getElementById("preflightMissing").textContent = preflight.missing;
+      document.getElementById("meetingMode").textContent = preflight.missing > 2 ? "先补材料" : preflight.missing > 0 ? "先预审" : "可开评审";
+      document.getElementById("roleConfirmedCount").textContent = roles.confirmed;
+      document.getElementById("roleRiskCount").textContent = roles.riskCount;
+      document.getElementById("roleMeetingAdvice").textContent = roles.riskCount > 2 ? "补齐关键角色" : roles.riskCount > 0 ? "会后跟进" : "意见已对齐";
+      const riskScore = Math.max(55, Math.min(96, 70 + handled * 6 - preflight.missing * 4 - roles.riskCount * 2));
+      const acceptScore = Math.max(60, Math.min(96, 84 + handled * 2 - preflight.missing * 2));
+      const costScore = Math.max(55, Math.min(96, 72 + handled * 5 - roles.riskCount * 3));
+      document.getElementById("riskScore").textContent = riskScore;
+      document.getElementById("riskBar").style.width = `${riskScore}%`;
+      document.getElementById("acceptScore").textContent = acceptScore;
+      document.getElementById("acceptBar").style.width = `${acceptScore}%`;
+      document.getElementById("costScore").textContent = costScore;
+      document.getElementById("costBar").style.width = `${costScore}%`;
+      if (preflight.missing > 2) {
+        document.getElementById("reviewDecision").textContent = "会前待补齐";
+        document.getElementById("readyState").textContent = "不建议开评审";
+        document.getElementById("nextStage").textContent = "补齐材料";
+        document.getElementById("scoreHint").textContent = "材料缺口较多，建议先内部预审再拉跨部门评审";
+        document.getElementById("reviewAlert").classList.add("show");
+        logActivity("activity3", `会前材料仍缺 ${preflight.missing} 项，建议先补齐`);
+        reviewReady = false;
+      } else if (remaining === 0 && roles.riskCount === 0 && preflight.missing === 0) {
+        document.getElementById("reviewDecision").textContent = "通过";
+        document.getElementById("readyState").textContent = "可进入下一阶段";
+        document.getElementById("nextStage").textContent = "开发排期";
+        document.getElementById("scoreHint").textContent = "关键待办已关闭，可以进入开发排期评估";
+        logActivity("activity3", "评审待办已关闭，可进入开发排期评估");
         document.getElementById("reviewAlert").classList.remove("show");
         reviewReady = true;
+      } else if (blocking === 0 && roles.riskCount <= 2 && preflight.missing <= 2) {
+        document.getElementById("reviewDecision").textContent = "带条件通过";
+        document.getElementById("readyState").textContent = "可继续推进";
+        document.getElementById("nextStage").textContent = "原型细化";
+        document.getElementById("scoreHint").textContent = "阻塞项已处理，剩余问题可跟随原型和会后动作继续补齐";
+        document.getElementById("reviewAlert").classList.remove("show");
+        logActivity("activity3", `仍有 ${remaining} 个非阻塞项待跟进`);
+        reviewReady = true;
       } else {
-        document.getElementById("readyState").textContent = "待补齐";
-        document.getElementById("scoreHint").textContent = "建议补齐后再进入开发排期";
-        logActivity("activity3", `仍有 ${remaining} 个问题待处理`);
+        document.getElementById("reviewDecision").textContent = "带条件通过";
+        document.getElementById("readyState").textContent = "待复审";
+        document.getElementById("nextStage").textContent = "技术预研";
+        document.getElementById("scoreHint").textContent = "存在阻塞项或关键角色疑问，暂不进入开发排期";
+        document.getElementById("reviewAlert").classList.add("show");
+        logActivity("activity3", `仍有 ${blocking} 个阻塞项、${roles.riskCount} 个角色疑问需要处理`);
         reviewReady = false;
       }
     }
@@ -2350,7 +2557,7 @@ ${acceptedFeedback}
         list.innerHTML = `
           <div class="feedback-item">
             <div class="feedback-item-head"><strong>暂无研发反馈</strong><span class="pill">待输入</span></div>
-            <p>可以添加技术风险、接口依赖、数据口径或排期疑问，再决定是否采纳进 PRD。</p>
+            <p>可以把会议、群聊或文档评论里的研发意见整理到这里，再判断是否回写进 PRD。</p>
           </div>
         `;
         return;
@@ -2359,12 +2566,12 @@ ${acceptedFeedback}
         <div class="feedback-item">
           <div class="feedback-item-head">
             <strong>${escapeHtml(item.type)}</strong>
-            <span class="pill ${item.status === "已采纳" ? "green" : item.status === "暂不处理" ? "amber" : "blue"}">${escapeHtml(item.status)}</span>
+            <span class="pill ${item.status === "已回写" ? "green" : item.status === "本期不处理" ? "amber" : "blue"}">${escapeHtml(item.status)}</span>
           </div>
           <p>${escapeHtml(item.text)}</p>
           <div class="actions">
-            <button class="btn primary" data-dev-action="accept" data-dev-id="${item.id}">采纳进 PRD</button>
-            <button class="btn" data-dev-action="hold" data-dev-id="${item.id}">暂不处理</button>
+            <button class="btn primary" data-dev-action="accept" data-dev-id="${item.id}">回写进 PRD</button>
+            <button class="btn" data-dev-action="hold" data-dev-id="${item.id}">本期不处理</button>
           </div>
         </div>
       `).join("");
@@ -2382,6 +2589,12 @@ ${acceptedFeedback}
     document.querySelectorAll(".review-status").forEach(select => {
       select.addEventListener("change", updateReviewScore);
     });
+    document.querySelectorAll(".preflight-check").forEach(input => {
+      input.addEventListener("change", updateReviewScore);
+    });
+    document.querySelectorAll(".role-status").forEach(select => {
+      select.addEventListener("change", updateReviewScore);
+    });
     updateReviewScore();
     renderDevFeedbackList();
 
@@ -2390,7 +2603,7 @@ ${acceptedFeedback}
       const input = document.getElementById("devFeedbackInput");
       const text = input.value.trim();
       if (!text) {
-        showToast("请先填写研发反馈");
+        showToast("请先填写要记录的反馈");
         return;
       }
       devFeedbackItems.unshift({
@@ -2401,8 +2614,8 @@ ${acceptedFeedback}
       });
       input.value = "";
       renderDevFeedbackList();
-      logActivity("activity3", "已收到研发反馈，等待产品确认是否采纳");
-      showToast("已添加研发反馈");
+      logActivity("activity3", "已记录研发反馈，等待产品判断是否回写 PRD");
+      showToast("已记录反馈");
     });
 
     document.getElementById("devFeedbackList").addEventListener("click", event => {
@@ -2410,17 +2623,19 @@ ${acceptedFeedback}
       if (!btn) return;
       const item = devFeedbackItems.find(feedback => feedback.id === btn.dataset.devId);
       if (!item) return;
-      item.status = btn.dataset.devAction === "accept" ? "已采纳" : "暂不处理";
+      item.status = btn.dataset.devAction === "accept" ? "已回写" : "本期不处理";
       renderDevFeedbackList();
       syncFeedbackToPrd();
-      logActivity("activity3", item.status === "已采纳" ? "已采纳研发反馈并同步 PRD" : "已记录暂不处理的研发反馈");
-      showToast(item.status === "已采纳" ? "已同步进 PRD" : "已标记暂不处理");
+      logActivity("activity3", item.status === "已回写" ? "已将研发反馈回写 PRD" : "已记录本期不处理的研发反馈");
+      showToast(item.status === "已回写" ? "已回写进 PRD" : "已标记本期不处理");
     });
 
     document.getElementById("autoFixBtn").addEventListener("click", () => {
       document.querySelectorAll(".review-status").forEach(select => select.value = "已处理");
+      document.querySelectorAll(".preflight-check").forEach(input => input.checked = true);
+      document.querySelectorAll(".role-status").forEach(select => select.value = "已确认");
       updateReviewScore();
-      showToast("已处理评审问题");
+      showToast("已补齐评审关键项");
     });
 
     document.getElementById("exportBtn").addEventListener("click", () => {
@@ -2434,6 +2649,61 @@ ${acceptedFeedback}
 
     function buildExportText(type) {
       const scenario = currentScenario || getScenario();
+      if (type === "评审会议纪要") {
+        const statuses = [...document.querySelectorAll(".review-status")].map(s => s.value);
+        const handled = statuses.filter(v => v === "已处理").length;
+        const remaining = statuses.length - handled;
+        const blocking = Math.max(0, 2 - Math.min(handled, 2));
+        const nonBlocking = Math.max(0, remaining - blocking);
+        const preflight = getPreflightStats();
+        const roles = getRoleStats();
+        const decision = preflight.missing > 2 ? "会前待补齐" : remaining === 0 && roles.riskCount === 0 && preflight.missing === 0 ? "通过" : "带条件通过";
+        const nextStage = document.getElementById("nextStage").textContent;
+        const roleText = roles.roles.map(item => `- ${item.role}：${item.status}`).join("\n");
+        const feedback = devFeedbackItems.length
+          ? devFeedbackItems.map(item => `- ${item.type}（${item.status}）：${item.text}`).join("\n")
+          : "- 暂无研发反馈回写。";
+        return `需求评审会议纪要
+
+项目：${scenario.title}
+
+评审结论：
+${decision}
+
+当前判断：
+- 会前材料：${preflight.done}/${preflight.total} 已准备，${preflight.missing} 项待补齐
+- 角色意见：${roles.confirmed} 个已确认，${roles.riskCount} 个仍需跟进
+- 阻塞项：${blocking} 个
+- 非阻塞项：${nonBlocking} 个
+- 已关闭：${handled} 个
+- 下一阶段：${nextStage}
+
+评审关注点：
+1. 需求合理性：是否解决真实业务问题，目标用户和场景是否清楚。
+2. 方案完整性：主流程、异常流程、权限、反馈入口和验收方式是否覆盖。
+3. 方案严谨性：关键规则是否有边界条件，低置信度或失败场景是否有兜底。
+4. 优先级清晰度：MVP 范围是否足够收敛，哪些内容可以后置。
+5. 实现成本可控性：研发依赖、数据口径和上线风险是否提前暴露。
+
+待办与责任人：
+- 产品 + 研发：补齐低置信度回答的来源引用、查看原文和反馈入口。
+- 研发 + 管理员：按部门、角色、文档类型细化访问边界。
+- 产品 + 数据：把效果指标收敛到查找时间、重复咨询量、答案采纳率。
+
+角色意见状态：
+${roleText}
+
+研发反馈回写：
+${feedback}
+
+会议后动作：
+${preflight.missing > 2
+  ? "- 先补齐会前材料，再组织跨部门评审。\n- 产品经理先做内部预审，避免评审会现场补文档。"
+  : blocking > 0 || roles.riskCount > 0
+    ? "- 先关闭阻塞项和关键角色疑问，再进入开发排期评估。\n- 非阻塞问题可随原型和技术预研继续补充。"
+    : "- 可继续推进原型细化和技术预研。\n- 非阻塞问题在排期前确认负责人和完成时间。"}
+`;
+      }
       if (type === "老板摘要") {
         return `项目：${scenario.title}
 
@@ -2541,3 +2811,4 @@ ${scenario.users}
   </script>
 </body>
 </html>
+
