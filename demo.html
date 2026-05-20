@@ -62,6 +62,14 @@
       flex: 1;
     }
     .top-actions { display: flex; gap: 10px; }
+    .floating-next {
+      position: fixed;
+      right: 28px;
+      bottom: 24px;
+      z-index: 20;
+      min-width: 190px;
+      box-shadow: 0 16px 36px rgba(37, 99, 235, .28);
+    }
     .sidebar {
       background: var(--panel);
       border-right: 1px solid var(--line);
@@ -239,14 +247,12 @@
     .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
     .action-stack {
       display: grid;
-      gap: 10px;
+      gap: 8px;
       margin-top: 18px;
     }
     .action-row {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 12px;
-      background: var(--soft);
+      display: grid;
+      gap: 6px;
     }
     .action-row .btn {
       width: 100%;
@@ -402,26 +408,70 @@
     .info-grid { display: grid; gap: 14px; }
     .doc-layout { display: grid; grid-template-columns: 220px 1fr 280px; gap: 22px; }
     .doc-layout.document-workspace {
-      height: min(760px, calc(100vh - 230px));
-      min-height: 560px;
-      align-items: stretch;
-    }
-    .document-workspace > .panel {
-      min-height: 0;
+      align-items: start;
     }
     .document-workspace .doc {
-      height: 100%;
+      max-height: 760px;
       overflow: auto;
     }
-    .document-workspace .toc {
+    .workspace-actions {
       position: sticky;
       top: 18px;
-      height: fit-content;
-      max-height: calc(100vh - 120px);
+      display: grid;
+      gap: 12px;
+      max-height: calc(100vh - 48px);
       overflow: auto;
-      align-self: start;
     }
-    .document-workspace aside {
+    .workspace-actions h2 {
+      margin-bottom: 2px;
+    }
+    .suggestion-list {
+      display: grid;
+      gap: 10px;
+    }
+    .suggestion-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--soft);
+      padding: 12px;
+    }
+    .suggestion-item strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+    .suggestion-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .next-action {
+      position: sticky;
+      bottom: 0;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.82), var(--panel) 28%);
+      padding-top: 14px;
+      margin-top: 2px;
+    }
+    .next-action .btn {
+      width: 100%;
+      justify-content: center;
+    }
+    .next-action p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    /*
+      Kept for small screens where the PRD page becomes a single column.
+      The main document still flows naturally instead of being clipped.
+    */
+    .doc-layout.document-workspace.compact {
+      align-items: stretch;
+    }
+    .document-workspace .toc {
       position: sticky;
       top: 18px;
       height: fit-content;
@@ -855,10 +905,18 @@
       .document-workspace > .panel,
       .document-workspace .doc,
       .document-workspace .toc,
-      .document-workspace aside { height: auto; max-height: none; overflow: visible; position: static; }
+      .document-workspace aside,
+      .workspace-actions,
+      .next-action { height: auto; max-height: none; overflow: visible; position: static; }
     }
     @media (max-width: 620px) {
       .case-grid { grid-template-columns: 1fr; }
+      .floating-next {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        width: auto;
+      }
     }
   </style>
 </head>
@@ -869,7 +927,6 @@
       <div class="tagline">项目启动与需求评审工作台</div>
       <div class="top-actions">
         <button class="btn" id="resetBtn">重置体验</button>
-        <button class="btn primary" id="nextTopBtn">下一步</button>
       </div>
     </header>
 
@@ -1048,31 +1105,31 @@
             <h3 id="doc-acceptance">验收标准</h3>
             <p class="doc-editable" id="acceptanceText">用户可以在 3 步内完成提问并查看答案来源；低置信度回答必须提供查看原文和提交反馈入口。</p>
           </article>
-          <aside class="panel">
-            <h2>智能建议</h2>
-            <div class="card amber"><h3>建议补充</h3><p>文档过期后的答案处理规则还不清楚。</p></div>
-            <div class="card red"><h3>风险提示</h3><p>权限粒度不足可能导致敏感信息误展示。</p></div>
-            <div class="card green"><h3>可量化指标</h3><p>查找时间、重复咨询量、答案采纳率。</p></div>
+          <aside class="panel workspace-actions">
+            <h2>操作栏</h2>
+            <p class="hint">处理建议、生成完整 PRD，然后进入评审。</p>
+            <div class="suggestion-list">
+              <div class="suggestion-item"><strong>建议补充</strong><p>文档过期后的答案处理规则还不清楚。</p></div>
+              <div class="suggestion-item"><strong>风险提示</strong><p>权限粒度不足可能导致敏感信息误展示。</p></div>
+              <div class="suggestion-item"><strong>可量化指标</strong><p>查找时间、重复咨询量、答案采纳率。</p></div>
+            </div>
             <div class="action-stack">
               <div class="action-row">
                 <button class="btn" id="editDocBtn">开启文档编辑</button>
-                <p>把左侧 PRD 草稿切换成可编辑状态，用来模拟产品经理继续人工修改。</p>
               </div>
               <div class="action-row">
                 <button class="btn primary" id="applySuggestionBtn">补充风险与指标</button>
-                <p>把右侧建议写回 PRD 草稿，补齐风险兜底、上线后指标和验收说明。</p>
               </div>
             </div>
             <div class="applied-note" id="appliedNote">已补充风险与验收标准。需求完整度预计从 78 提升到 82。</div>
             <div class="action-stack">
               <div class="action-row">
                 <button class="btn primary" id="fullPrdBtn">生成下方完整 PRD</button>
-                <p>把当前草稿整理成一份可复制、可下载的完整 PRD，并自动跳到输出区。</p>
               </div>
-              <div class="action-row">
-                <button class="btn primary" id="reviewBtn">进入需求评审</button>
-                <p>检查会前材料、角色意见、阻塞项和研发反馈，判断是否能进入下一阶段。</p>
-              </div>
+            </div>
+            <div class="next-action">
+              <button class="btn primary" id="reviewBtn">下一步：进入需求评审</button>
+              <p>评审会检查材料、角色意见和阻塞项。</p>
             </div>
           </aside>
         </div>
@@ -1344,6 +1401,7 @@ ORDER BY dt;</div>
         </div>
       </section>
     </main>
+    <button class="btn primary floating-next" id="nextTopBtn">下一步</button>
   </div>
 
   <div class="toast" id="toast">已完成</div>
@@ -2168,6 +2226,26 @@ ${acceptedFeedback}
       });
     }
 
+    function updateNextButton() {
+      const nextBtn = document.getElementById("nextTopBtn");
+      if (!nextBtn) return;
+      if (current >= pages.length - 1) {
+        nextBtn.textContent = "已到最后一步";
+        nextBtn.disabled = true;
+        return;
+      }
+      nextBtn.disabled = false;
+      if (current < maxUnlocked) {
+        nextBtn.textContent = `下一步：${labels[current + 1]}`;
+        return;
+      }
+      if (current === 0) nextBtn.textContent = "先开始分析";
+      else if (current === 1) nextBtn.textContent = "先确认回答";
+      else if (current === 2) nextBtn.textContent = "先生成完整 PRD";
+      else if (current === 3) nextBtn.textContent = "先进入工作台";
+      else nextBtn.textContent = "继续";
+    }
+
     function showToast(text) {
       toast.textContent = text;
       toast.classList.add("show");
@@ -2185,17 +2263,22 @@ ${acceptedFeedback}
       document.getElementById(`page-${pages[index]}`).classList.add("active");
       navButtons.forEach((btn, i) => btn.classList.toggle("active", i === index));
       renderStepbar();
+      updateNextButton();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function unlock(index) {
       maxUnlocked = Math.max(maxUnlocked, index);
       navButtons.forEach((btn, i) => btn.disabled = i > maxUnlocked);
+      updateNextButton();
     }
 
     function next() {
       if (current < maxUnlocked) goTo(current + 1);
-      else showToast("请先完成当前步骤");
+      else {
+        const nextBtn = document.getElementById("nextTopBtn");
+        showToast(nextBtn?.textContent || "请先完成当前步骤");
+      }
     }
 
     document.getElementById("nextTopBtn").addEventListener("click", next);
