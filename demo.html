@@ -25,8 +25,9 @@
     }
     * { box-sizing: border-box; }
     html, body {
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
     body {
       margin: 0;
@@ -36,11 +37,10 @@
     }
     button, textarea { font: inherit; }
     .app {
-      height: 100vh;
-      min-height: 0;
+      min-height: 100vh;
       display: grid;
       grid-template-columns: 248px 1fr;
-      grid-template-rows: 72px 1fr;
+      grid-template-rows: 72px auto;
     }
     .top {
       grid-column: 1 / 3;
@@ -131,8 +131,8 @@
       margin-top: 8px;
     }
     main {
-      padding: 32px 42px 54px 48px;
-      overflow: auto;
+      padding: 32px 42px 140px 48px;
+      overflow: visible;
     }
     .stepbar {
       display: flex;
@@ -165,7 +165,12 @@
     .step.active .dot, .step.done .dot { background: var(--blue); color: white; border-color: var(--blue); }
     .bar { height: 2px; flex: 1; background: var(--line); min-width: 22px; }
     .bar.done { background: var(--blue); }
-    .page { display: none; max-width: 1120px; }
+    .page {
+      display: none;
+      max-width: 1120px;
+      min-height: calc(100vh - 180px);
+      padding-bottom: 90px;
+    }
     .page.active { display: block; }
     h1 { margin: 0; font-size: 30px; letter-spacing: 0; }
     .subtitle {
@@ -232,6 +237,27 @@
     }
     textarea:focus { border-color: #9bb9ff; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); }
     .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+    .action-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .action-row {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      background: var(--soft);
+    }
+    .action-row .btn {
+      width: 100%;
+      justify-content: center;
+    }
+    .action-row p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
     .btn {
       height: 42px;
       border-radius: 8px;
@@ -443,6 +469,21 @@
       line-height: 1.45;
     }
     .applied-note.show { display: block; }
+    .status-note {
+      margin-top: 12px;
+      border: 1px solid #bad0ff;
+      background: var(--blue-soft);
+      color: #244272;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .status-note.success {
+      border-color: #a5d8cf;
+      background: var(--green-soft);
+      color: var(--green);
+    }
     .score-grid { display: grid; grid-template-columns: 230px repeat(4, 1fr); gap: 16px; margin-bottom: 22px; }
     .score-main {
       background: var(--green-soft);
@@ -455,14 +496,32 @@
     .score-main em { font-style: normal; font-weight: 700; }
     .metric strong { display: block; font-size: 28px; margin-top: 10px; }
     .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-    .progress {
-      height: 8px;
-      background: #e9eef6;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 8px;
+    .review-checklist {
+      display: grid;
+      gap: 12px;
     }
-    .progress span { display: block; height: 100%; background: var(--blue); border-radius: 999px; }
+    .review-check {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--soft);
+      padding: 13px 14px;
+    }
+    .review-check-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 7px;
+    }
+    .review-check strong {
+      font-size: 14px;
+    }
+    .review-check p {
+      margin: 0;
+      color: #344054;
+      font-size: 12px;
+      line-height: 1.5;
+    }
     .preflight-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -994,14 +1053,26 @@
             <div class="card amber"><h3>建议补充</h3><p>文档过期后的答案处理规则还不清楚。</p></div>
             <div class="card red"><h3>风险提示</h3><p>权限粒度不足可能导致敏感信息误展示。</p></div>
             <div class="card green"><h3>可量化指标</h3><p>查找时间、重复咨询量、答案采纳率。</p></div>
-            <div class="actions">
-              <button class="btn" id="editDocBtn">编辑文档</button>
-              <button class="btn primary" id="applySuggestionBtn">应用建议</button>
+            <div class="action-stack">
+              <div class="action-row">
+                <button class="btn" id="editDocBtn">开启文档编辑</button>
+                <p>把左侧 PRD 草稿切换成可编辑状态，用来模拟产品经理继续人工修改。</p>
+              </div>
+              <div class="action-row">
+                <button class="btn primary" id="applySuggestionBtn">补充风险与指标</button>
+                <p>把右侧建议写回 PRD 草稿，补齐风险兜底、上线后指标和验收说明。</p>
+              </div>
             </div>
             <div class="applied-note" id="appliedNote">已补充风险与验收标准。需求完整度预计从 78 提升到 82。</div>
-            <div class="actions">
-              <button class="btn primary" id="fullPrdBtn">生成完整 PRD</button>
-              <button class="btn primary" id="reviewBtn">进入评审</button>
+            <div class="action-stack">
+              <div class="action-row">
+                <button class="btn primary" id="fullPrdBtn">生成下方完整 PRD</button>
+                <p>把当前草稿整理成一份可复制、可下载的完整 PRD，并自动跳到输出区。</p>
+              </div>
+              <div class="action-row">
+                <button class="btn primary" id="reviewBtn">进入需求评审</button>
+                <p>检查会前材料、角色意见、阻塞项和研发反馈，判断是否能进入下一阶段。</p>
+              </div>
             </div>
           </aside>
         </div>
@@ -1009,6 +1080,7 @@
           <h2>完整 PRD 输出</h2>
           <p class="hint">系统会根据已输入内容和已确认追问，整理一份可复制、可继续编辑的 PRD 文本。</p>
           <div class="prd-preview" id="prdPreview">点击“生成完整 PRD”后，会在这里输出一份可复制的 PRD 草稿。</div>
+          <div class="status-note" id="prdStatus">尚未生成完整 PRD。建议先应用建议，再生成完整版本。</div>
           <div class="actions">
             <button class="btn primary" id="copyPrdBtn">复制 PRD</button>
             <button class="btn" id="copyWordPrdBtn">复制 Word 版</button>
@@ -1052,12 +1124,30 @@
         </div>
         <div class="review-grid">
           <div class="panel">
-            <h2>五维度评审</h2>
-            <p>需求合理性 <span id="goalScore">88</span></p><div class="progress"><span id="goalBar" style="width:88%"></span></div>
-            <p>方案完整性 <span id="scopeScore">76</span></p><div class="progress"><span id="scopeBar" style="width:76%;background:var(--amber)"></span></div>
-            <p>方案严谨性 <span id="riskScore">70</span></p><div class="progress"><span id="riskBar" style="width:70%;background:var(--amber)"></span></div>
-            <p>优先级清晰度 <span id="acceptScore">84</span></p><div class="progress"><span id="acceptBar" style="width:84%;background:var(--green)"></span></div>
-            <p>实现成本可控性 <span id="costScore">72</span></p><div class="progress"><span id="costBar" style="width:72%;background:var(--amber)"></span></div>
+            <h2>评审检查项</h2>
+            <p class="hint">这里保留“五维度”的判断框架，但不再用抽象分数。评审时更应该看每一项是否会影响进入下一阶段。</p>
+            <div class="review-checklist">
+              <div class="review-check">
+                <div class="review-check-head"><strong>需求合理性</strong><span class="pill green">基本成立</span></div>
+                <p>用户问题真实，业务目标方向明确；还需要补充目标用户分层和收益口径。</p>
+              </div>
+              <div class="review-check">
+                <div class="review-check-head"><strong>方案完整性</strong><span class="pill amber">待补齐</span></div>
+                <p>主流程已有，但异常流程、权限边界、运营配置和低置信度兜底还需要补充。</p>
+              </div>
+              <div class="review-check">
+                <div class="review-check-head"><strong>方案严谨性</strong><span class="pill amber">待校验</span></div>
+                <p>需要把“后续确认”等模糊表述改成明确规则、负责人和验收标准。</p>
+              </div>
+              <div class="review-check">
+                <div class="review-check-head"><strong>优先级清晰度</strong><span class="pill green">已有 MVP</span></div>
+                <p>首期范围基本收敛，但仍需写清楚哪些需求不在本期做。</p>
+              </div>
+              <div class="review-check">
+                <div class="review-check-head"><strong>实现成本可控性</strong><span class="pill red">需研发确认</span></div>
+                <p>权限、数据来源、接口依赖和异常状态会影响排期，需要研发反馈后再进开发排期。</p>
+              </div>
+            </div>
           </div>
           <div class="panel">
             <h2>评审结论</h2>
@@ -1106,20 +1196,6 @@
             <div class="mini-stat"><strong id="roleRiskCount">3</strong><span>仍有疑问</span></div>
             <div class="mini-stat"><strong id="roleMeetingAdvice">补齐关键角色</strong><span>协作建议</span></div>
           </div>
-        </div>
-        <div class="panel" style="margin-top:22px">
-          <h2>评审维度说明</h2>
-          <table>
-            <thead><tr><th>维度</th><th>评审时真正问什么</th><th>当前判断</th><th>建议动作</th></tr></thead>
-            <tbody>
-              <tr><td>需求合理性</td><td>用户问题是否真实？业务目标是否值得做？</td><td><span class="pill green">基本成立</span></td><td>补充目标用户和收益口径。</td></tr>
-              <tr><td>方案完整性</td><td>主流程、异常流程、权限、数据、运营配置是否覆盖？</td><td><span class="pill amber">待补齐</span></td><td>补充兜底流程和边界状态。</td></tr>
-              <tr><td>方案严谨性</td><td>规则是否自洽？有没有互相冲突或无法验收的描述？</td><td><span class="pill amber">待校验</span></td><td>把模糊描述改成可验收规则。</td></tr>
-              <tr><td>优先级</td><td>哪些必须首期做，哪些可以放到二期？</td><td><span class="pill green">已有 MVP</span></td><td>继续明确非本期范围。</td></tr>
-              <tr><td>实现成本</td><td>研发复杂度、依赖系统、排期和风险是否可控？</td><td><span class="pill red">需研发确认</span></td><td>收集研发反馈并回写 PRD。</td></tr>
-              <tr><td>竞品借鉴合理性</td><td>借鉴的是业务逻辑还是只抄功能点？是否适配当前用户和流程？</td><td><span class="pill amber">需说明</span></td><td>补充竞品功能、适用条件、不可照搬点和本项目取舍。</td></tr>
-            </tbody>
-          </table>
         </div>
         <div class="panel" style="margin-top:22px">
           <h2>竞品借鉴合理性</h2>
@@ -2109,6 +2185,7 @@ ${acceptedFeedback}
       document.getElementById(`page-${pages[index]}`).classList.add("active");
       navButtons.forEach((btn, i) => btn.classList.toggle("active", i === index));
       renderStepbar();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function unlock(index) {
@@ -2185,6 +2262,8 @@ ${acceptedFeedback}
       document.getElementById("answerBox").classList.remove("active");
       document.getElementById("generateDocBtn").disabled = true;
       document.getElementById("prdPreview").textContent = "点击“生成完整 PRD”后，会在这里输出一份可复制的 PRD 草稿。";
+      document.getElementById("prdStatus").textContent = "尚未生成完整 PRD。建议先应用建议，再生成完整版本。";
+      document.getElementById("prdStatus").classList.remove("success");
       currentPrdText = "";
       document.getElementById("intakeAlert").classList.remove("show");
       document.getElementById("reviewAlert").classList.remove("show");
@@ -2319,12 +2398,20 @@ ${acceptedFeedback}
       logActivity("activity2", `已生成 ${scenario.title} PRD 草稿`);
       currentPrdText = buildPrdText();
       document.getElementById("prdPreview").textContent = currentPrdText;
+      document.getElementById("prdStatus").textContent = "已生成初版 PRD。可以继续补充风险指标、生成完整版本或进入评审。";
+      document.getElementById("prdStatus").classList.add("success");
       showToast("已生成 PRD 草稿");
     });
 
     document.getElementById("editDocBtn").addEventListener("click", () => {
-      document.querySelectorAll(".doc-editable").forEach(el => el.classList.toggle("editing"));
-      showToast("已切换文档编辑状态");
+      const editableItems = [...document.querySelectorAll(".doc-editable")];
+      const nextEditing = !editableItems.some(el => el.classList.contains("editing"));
+      editableItems.forEach(el => {
+        el.classList.toggle("editing", nextEditing);
+        el.setAttribute("contenteditable", nextEditing ? "true" : "false");
+      });
+      document.getElementById("editDocBtn").textContent = nextEditing ? "完成编辑" : "开启文档编辑";
+      showToast(nextEditing ? "已开启文档编辑" : "已退出文档编辑");
     });
 
     document.getElementById("applySuggestionBtn").addEventListener("click", () => {
@@ -2343,6 +2430,10 @@ ${acceptedFeedback}
           <li>根据数据结果调整下一轮范围。</li>
         </ul>`;
       document.getElementById("appliedNote").classList.add("show");
+      currentPrdText = buildPrdText();
+      document.getElementById("prdPreview").textContent = currentPrdText;
+      document.getElementById("prdStatus").textContent = "已把建议写回 PRD，并同步更新下方完整 PRD 输出。";
+      document.getElementById("prdStatus").classList.add("success");
       logActivity("activity2", "已应用建议：补充风险与指标");
       showToast("已应用智能建议");
     });
@@ -2356,7 +2447,11 @@ ${acceptedFeedback}
 
     document.getElementById("fullPrdBtn").addEventListener("click", () => {
       currentPrdText = buildPrdText();
-      document.getElementById("prdPreview").textContent = currentPrdText;
+      const preview = document.getElementById("prdPreview");
+      preview.textContent = currentPrdText;
+      document.getElementById("prdStatus").textContent = "完整 PRD 已生成。现在可以复制、复制 Word 版或下载 Markdown。";
+      document.getElementById("prdStatus").classList.add("success");
+      preview.scrollIntoView({ behavior: "smooth", block: "center" });
       logActivity("activity2", "已生成完整 PRD：含竞品分析、部门对齐、数据指标");
       showToast("已生成完整 PRD");
     });
@@ -2506,15 +2601,6 @@ ${acceptedFeedback}
       document.getElementById("roleConfirmedCount").textContent = roles.confirmed;
       document.getElementById("roleRiskCount").textContent = roles.riskCount;
       document.getElementById("roleMeetingAdvice").textContent = roles.riskCount > 2 ? "补齐关键角色" : roles.riskCount > 0 ? "会后跟进" : "意见已对齐";
-      const riskScore = Math.max(55, Math.min(96, 70 + handled * 6 - preflight.missing * 4 - roles.riskCount * 2));
-      const acceptScore = Math.max(60, Math.min(96, 84 + handled * 2 - preflight.missing * 2));
-      const costScore = Math.max(55, Math.min(96, 72 + handled * 5 - roles.riskCount * 3));
-      document.getElementById("riskScore").textContent = riskScore;
-      document.getElementById("riskBar").style.width = `${riskScore}%`;
-      document.getElementById("acceptScore").textContent = acceptScore;
-      document.getElementById("acceptBar").style.width = `${acceptScore}%`;
-      document.getElementById("costScore").textContent = costScore;
-      document.getElementById("costBar").style.width = `${costScore}%`;
       if (preflight.missing > 2) {
         document.getElementById("reviewDecision").textContent = "会前待补齐";
         document.getElementById("readyState").textContent = "不建议开评审";
