@@ -34,6 +34,13 @@
     .rail{padding:22px}.suggest{border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:14px}.suggest h3{font-size:13px;margin:0 0 8px}.suggest p{font-size:12px;color:var(--muted);line-height:1.45;margin:0}
     .amber{background:var(--amber-soft);border-color:#fed7aa}.amber h3{color:var(--amber)}.red{background:var(--red-soft);border-color:#ffc9c9}.red h3{color:var(--red)}.green{background:var(--green-soft);border-color:#a5d8cf}.green h3{color:var(--green)}
     .pill{height:28px;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;display:inline-flex;align-items:center}.pill.blue{background:var(--blue-soft);color:var(--blue)}
+    @media (max-width: 900px) {
+      .frame{width:100%;grid-template-columns:1fr;grid-template-rows:auto auto 1fr}
+      .top{grid-column:1;flex-wrap:wrap;height:auto;padding:18px}
+      .brand{width:auto}.side{display:flex;gap:8px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px}
+      .nav{width:max-content;margin-bottom:0}.content{padding:24px 16px 92px}.steps{overflow-x:auto;padding-bottom:6px}
+      .subtitle{width:auto}.layout{grid-template-columns:1fr}.toc{display:none}.rail{order:3}
+    }
   </style>
 </head>
 <body>
@@ -42,21 +49,21 @@
       <div class="brand">ClearBrief 清晰启动</div>
       <div class="crumb">企业内部 AI 知识库改版 / 启动文档</div>
       <button class="btn">导出草稿</button>
-      <button class="btn primary">进入评审</button>
+      <button class="btn primary">进入方案评审</button>
     </header>
     <aside class="side">
-      <div class="nav">Dashboard</div><div class="nav">新建 Kickoff</div><div class="nav">追问补齐</div><div class="nav active">启动文档</div><div class="nav">评审报告</div><div class="nav">导出中心</div>
+      <div class="nav">Dashboard</div><div class="nav">新建 Kickoff</div><div class="nav">问题诊断</div><div class="nav active">启动文档</div><div class="nav">方案评审</div><div class="nav">导出中心</div>
     </aside>
     <main class="content">
       <div class="steps">
-        <div class="step done"><div class="dot">1</div>输入想法</div><div class="connector"></div>
-        <div class="step done"><div class="dot">2</div>智能追问</div><div class="connector"></div>
+        <div class="step done"><div class="dot">1</div>描述问题</div><div class="connector"></div>
+        <div class="step done"><div class="dot">2</div>问题诊断</div><div class="connector"></div>
         <div class="step active"><div class="dot">3</div>生成文档</div><div class="connector muted"></div>
         <div class="step"><div class="dot">4</div>评审检查</div><div class="connector muted"></div>
         <div class="step"><div class="dot">5</div>导出材料</div>
       </div>
       <h1>项目启动文档</h1>
-      <p class="subtitle">系统将补齐后的信息整理成可评审的项目启动材料。产品经理可以继续编辑正文，也可以直接进入需求评审。</p>
+      <p class="subtitle">系统将已确认的问题判断和方案取舍整理成可评审的项目启动材料。产品经理可以继续编辑正文，也可以直接进入方案评审。</p>
       <section class="layout">
         <aside class="panel toc">
           <h2>文档目录</h2>
@@ -64,7 +71,7 @@
         </aside>
         <article class="panel doc">
           <span class="pill blue">AI 生成草稿 v0.3</span>
-          <h2>企业内部 AI 知识库改版</h2>
+          <h2>企业内部知识库改版</h2>
           <div class="meta">最近更新：今天 16:30 · 完整度预估：78/100</div>
           <h3>项目背景</h3>
           <p>公司内部文档分散在不同系统中，新员工和运营同事经常需要询问他人才能找到会员政策、流程制度和项目资料，造成重复沟通和信息查找成本。</p>
@@ -90,7 +97,7 @@
           <div class="suggest amber"><h3>建议补充</h3><p>文档过期后的答案处理规则还不清楚，建议补充定期校验或过期标记机制。</p></div>
           <div class="suggest red"><h3>风险提示</h3><p>权限粒度不足可能导致敏感信息误展示，建议至少支持部门和文档类型两层控制。</p></div>
           <div class="suggest green"><h3>可量化指标</h3><p>建议使用平均查找时间、重复咨询量、答案采纳率作为上线后观察指标。</p></div>
-          <button class="btn primary" style="width:100%;margin-top:18px">进入评审</button>
+          <button class="btn primary" style="width:100%;margin-top:18px">进入方案评审</button>
         </aside>
       </section>
     </main>

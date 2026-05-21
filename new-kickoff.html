@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>New Kickoff 输入模糊需求 - polished</title>
+  <title>New Kickoff 描述业务问题 - polished</title>
   <style>
     :root {
       --bg: #f4f7fc;
@@ -207,6 +207,20 @@
     }
     .template h3 { margin: 0 0 8px; font-size: 14px; }
     .template p { margin: 0; color: var(--muted); font-size: 12px; }
+    @media (max-width: 900px) {
+      .frame { width: 100%; grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+      .top { grid-column: 1; flex-wrap: wrap; height: auto; padding: 18px; }
+      .brand { width: auto; }
+      .side { display: flex; gap: 8px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 12px; }
+      .nav-item { width: max-content; margin-bottom: 0; }
+      .side-bottom, .side .pill { display: none; }
+      .content { padding: 24px 16px 92px; }
+      .steps { overflow-x: auto; padding-bottom: 6px; }
+      .subtitle { width: auto; }
+      .header-row { display: block; }
+      .main-grid, .template-grid { grid-template-columns: 1fr; }
+      .input-box { font-size: 16px; }
+    }
   </style>
 </head>
 <body>
@@ -221,9 +235,9 @@
     <aside class="side">
       <div class="nav-item">Dashboard</div>
       <div class="nav-item active">新建 Kickoff</div>
-      <div class="nav-item">追问补齐</div>
+      <div class="nav-item">问题诊断</div>
       <div class="nav-item">启动文档</div>
-      <div class="nav-item">评审报告</div>
+      <div class="nav-item">方案评审</div>
       <div class="nav-item">导出中心</div>
 
       <div class="side-bottom">示例模板</div>
@@ -234,9 +248,9 @@
 
     <main class="content">
       <div class="steps">
-        <div class="step active"><div class="dot">1</div>输入想法</div>
+        <div class="step active"><div class="dot">1</div>描述问题</div>
         <div class="connector"></div>
-        <div class="step"><div class="dot">2</div>智能追问</div>
+        <div class="step"><div class="dot">2</div>问题诊断</div>
         <div class="connector"></div>
         <div class="step"><div class="dot">3</div>生成文档</div>
         <div class="connector"></div>
@@ -247,8 +261,8 @@
 
       <div class="header-row">
         <div>
-          <h1>把一句模糊需求变成可启动项目</h1>
-          <p class="subtitle">输入现在脑子里的粗略想法即可。系统会先识别项目类型和缺失信息，再进入追问补齐，而不是直接生成一份看起来完整但无法落地的文档。</p>
+          <h1>把业务问题变成可评审方案</h1>
+          <p class="subtitle">输入现在遇到的业务问题即可。系统会先识别问题类型、受影响用户和待判断事项，再进入方案对比，而不是直接生成一份看起来完整但缺少取舍依据的文档。</p>
         </div>
         <div class="chips">
           <span class="pill blue">Step 1 / 5</span>
@@ -258,19 +272,19 @@
 
       <section class="main-grid">
         <div class="panel">
-          <h2>项目想法</h2>
-          <div class="hint">可以很粗糙。比如“公司文档太散，想做 AI 知识库”。</div>
-          <div class="input-box">公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，想做一个 AI 知识库助手，提高信息查找效率。</div>
+          <h2>业务问题</h2>
+          <div class="hint">可以先描述现状。比如“公司文档太散，不确定该先做治理、搜索优化还是 AI 知识库”。</div>
+          <div class="input-box">公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度。业务方希望提升查找效率，但还不确定应该先做文档治理、搜索优化，还是 AI 知识库助手。</div>
           <div class="count">128 字 / 建议 50-300 字</div>
           <div class="actions">
             <button class="btn primary">开始分析</button>
-            <button class="btn">换一个示例</button>
+            <button class="btn">换一个案例</button>
             <button class="btn">导入会议纪要</button>
           </div>
           <div class="divider"></div>
           <div class="input-tip">
             <strong>输入提示</strong>
-            <span>尽量包含：谁遇到问题、现在怎么做、想改善什么、有没有时间或资源限制。</span>
+            <span>尽量包含：谁遇到问题、现状卡在哪里、尝试过什么、还不确定哪些解决路径。</span>
           </div>
         </div>
 
@@ -286,17 +300,17 @@
             <p>新员工、运营、客服、产品团队</p>
           </div>
           <div class="card amber-card">
-            <h3>当前缺失</h3>
-            <p>成功指标、文档范围、权限规则、AI 低置信度回答兜底流程</p>
+            <h3>待判断事项</h3>
+            <p>首期方案、成功指标、文档范围、权限规则、低置信度回答兜底流程</p>
           </div>
         </div>
       </section>
 
       <section class="templates">
-        <h2>也可以从模板开始</h2>
+        <h2>也可以从案例开始</h2>
         <div class="template-grid">
           <div class="template">
-            <h3>AI 知识库改版</h3>
+            <h3>内部知识库问题</h3>
             <p>适合 B 端 AI / 企业协作场景</p>
           </div>
           <div class="template">
