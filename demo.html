@@ -35,7 +35,24 @@
       color: var(--ink);
       font-family: Arial, "Microsoft YaHei", sans-serif;
     }
+    :focus-visible {
+      outline: 3px solid rgba(37, 99, 235, .38);
+      outline-offset: 3px;
+    }
     button, textarea { font: inherit; }
+    .skip-link {
+      position: absolute;
+      left: 20px;
+      top: -48px;
+      z-index: 80;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .skip-link:focus { top: 16px; }
     .app {
       min-height: 100vh;
       display: grid;
@@ -80,7 +97,7 @@
       white-space: nowrap;
     }
     .mode-option {
-      height: 36px;
+      min-height: 38px;
       border: 0;
       border-radius: 8px;
       background: transparent;
@@ -125,7 +142,7 @@
     }
     .nav {
       width: 100%;
-      height: 42px;
+      min-height: 44px;
       border: 0;
       border-radius: 8px;
       background: transparent;
@@ -301,6 +318,34 @@
     }
     .panel h2 { margin: 0 0 8px; font-size: 18px; }
     .hint { color: var(--muted); font-size: 12px; line-height: 1.45; margin-bottom: 18px; }
+    .readiness-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: -8px 0 22px;
+    }
+    .readiness-step {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      padding: 12px;
+      min-height: 88px;
+    }
+    .readiness-step strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+    .readiness-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.42;
+    }
+    .readiness-step.current {
+      border-color: #fed7aa;
+      background: var(--amber-soft);
+    }
     body.compact-mode .portfolio-only,
     body.compact-mode .guide,
     body.compact-mode .flow-helper,
@@ -370,7 +415,7 @@
       line-height: 1.45;
     }
     .btn {
-      height: 42px;
+      min-height: 44px;
       border-radius: 8px;
       border: 1px solid var(--line);
       background: var(--panel);
@@ -449,6 +494,52 @@
       outline: none;
       font-family: inherit;
     }
+    .structured-input {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0 0 14px;
+    }
+    .field-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--soft);
+      padding: 10px 12px;
+      min-height: 86px;
+    }
+    .field-card strong {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .field-card span {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .source-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .source-tag {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      border-radius: 999px;
+      padding: 0 8px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .source-tag.high { color: var(--red); border-color: #ffc9c9; background: var(--red-soft); }
+    .source-tag.infer { color: var(--blue); border-color: #bad0ff; background: var(--blue-soft); }
+    .source-tag.confirm { color: var(--amber); border-color: #fed7aa; background: var(--amber-soft); }
     .case-picker {
       margin-top: 24px;
       border-top: 1px solid var(--line);
@@ -717,7 +808,7 @@
       line-height: 1.45;
     }
     /*
-      Kept for small screens where the PRD page becomes a single column.
+      Kept for small screens where the document page becomes a single column.
       The main document still flows naturally instead of being clipped.
     */
     .doc-layout.document-workspace.compact {
@@ -1236,6 +1327,35 @@
         padding: 0 8px;
       }
       .case-grid { grid-template-columns: 1fr; }
+      .readiness-strip { grid-template-columns: 1fr; }
+      main {
+        padding: 18px 14px 116px;
+      }
+      .page,
+      .panel,
+      .readiness-strip,
+      .solution-compare,
+      .doc-layout,
+      .review-grid,
+      .score-grid,
+      .export-grid,
+      .analysis-grid,
+      .tool-grid {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+      .readiness-step,
+      .solution-card,
+      .card,
+      .panel {
+        min-width: 0;
+      }
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
       .floating-next {
         left: 16px;
         right: 16px;
@@ -1247,10 +1367,11 @@
   </style>
 </head>
 <body class="compact-mode">
+  <a class="skip-link" href="#main">跳到主要内容</a>
   <div class="app">
     <header class="top">
       <div class="brand">ClearBrief 清晰启动</div>
-      <div class="tagline">方案预评审工作台</div>
+      <div class="tagline">评审前方案预审台</div>
       <div class="top-actions">
         <div class="mode-switcher" aria-label="体验模式切换">
           <span class="mode-caption">模式</span>
@@ -1264,26 +1385,26 @@
     <aside class="sidebar">
       <button class="nav active" data-page="intake"><span class="nav-num">1</span>描述问题</button>
       <button class="nav" data-page="clarify" disabled><span class="nav-num">2</span>问题诊断</button>
-      <button class="nav" data-page="document" disabled><span class="nav-num">3</span>整理 PRD</button>
-      <button class="nav" data-page="review" disabled><span class="nav-num">4</span>评审与反馈</button>
+      <button class="nav" data-page="document" disabled><span class="nav-num">3</span>整理材料</button>
+      <button class="nav" data-page="review" disabled><span class="nav-num">4</span>预审与反馈</button>
       <button class="nav" data-page="export" disabled><span class="nav-num">5</span>导出材料</button>
       <div class="sidebar-note">
-        体验案例：从业务问题到方案取舍、PRD、评审清单和跨部门材料。
+        体验案例：从业务问题到信息取舍、执行门槛、阻塞项和可执行判断。
       </div>
       <div class="activity-log">
         <strong>活动记录</strong>
         <div id="activity1">等待输入业务问题</div>
         <div id="activity2">尚未形成诊断</div>
-        <div id="activity3">尚未进入评审</div>
+        <div id="activity3">尚未进入预审</div>
       </div>
     </aside>
 
-    <main>
+    <main id="main">
       <div class="stepbar" id="stepbar"></div>
       <div class="guide" aria-label="体验操作引导">
-        <div class="guide-card primary"><strong>为什么先诊断</strong><span>真实项目不是缺一份 PRD，而是缺少对问题根因、投入价值和首期范围的判断。</span></div>
-        <div class="guide-card"><strong>为什么不直接写 PRD</strong><span>先比较流程优化、轻量工具和系统建设，避免把还没验证的想法直接排进开发。</span></div>
-        <div class="guide-card"><strong>判断会流向哪里</strong><span>每个确认动作都会影响信息卡、PRD、评审风险和最终导出材料。</span></div>
+        <div class="guide-card primary"><strong>为什么先诊断</strong><span>真实项目不是缺一份 PRD，而是执行前缺少对目标、约束、角色责任和验收标准的判断。</span></div>
+        <div class="guide-card"><strong>为什么不直接写 PRD</strong><span>先比较信息优先级、低成本验证和正式打样路径，避免把没确认的想法直接带进执行。</span></div>
+        <div class="guide-card"><strong>判断会流向哪里</strong><span>每个确认动作都会影响信息卡、预审材料、阻塞项和能否进入执行的判断。</span></div>
       </div>
       <div class="flow-helper" id="flowHelper">
         <div>
@@ -1294,16 +1415,35 @@
       </div>
 
       <section class="page active" id="page-intake">
-        <h1>先判断这个需求值不值得做</h1>
-        <p class="subtitle">输入一个业务问题，先看该不该做、先做什么、怎么评审，再整理成 PRD 和跨部门材料。</p>
+        <h1>先判断这个事项能不能进入执行</h1>
+        <p class="subtitle">输入一个业务问题，先看能不能执行、先确认什么、哪些问题会卡住推进，再整理成预审材料。</p>
         <div class="source-row">
-          <span class="source-chip" id="scenarioChip">当前案例：消费凭证上传与核销</span>
+          <span class="source-chip" id="scenarioChip">当前案例：信息展示物料预审</span>
           <span class="source-chip">支持会议纪要、聊天记录、业务规则、旧文档片段</span>
+          <span class="source-chip">模拟样例：基于实习观察抽象，不代表企业内部真实数据</span>
+        </div>
+        <div class="readiness-strip" aria-label="评审推进状态">
+          <div class="readiness-step">
+            <strong>不能执行</strong>
+            <span>目标、约束或验收标准缺失，不建议进入正式执行。</span>
+          </div>
+          <div class="readiness-step current">
+            <strong>可预讨论</strong>
+            <span>可以先讨论方向、约束和方案取舍。</span>
+          </div>
+          <div class="readiness-step">
+            <strong>可预审</strong>
+            <span>路径、边界和主要风险已经清楚。</span>
+          </div>
+          <div class="readiness-step">
+            <strong>具备执行条件</strong>
+            <span>标准、验收和负责人基本明确，仍需人工确认。</span>
+          </div>
         </div>
         <div class="grid-2">
           <div class="panel">
             <h2>业务问题</h2>
-            <p class="hint portfolio-only">设计意图：把入口做成“业务问题”而不是“写 PRD”，因为真实工作里最难的是判断问题是否值得进入项目。</p>
+            <p class="hint portfolio-only">设计意图：把入口做成“业务问题”而不是“写 PRD”，因为真实工作里最难的是判断问题现在是否足够清楚、能不能进入执行。</p>
             <div class="source-control">
               <label for="sourceType">材料来源</label>
               <select id="sourceType">
@@ -1315,8 +1455,8 @@
                 <option value="自定义业务问题" selected>自定义业务问题</option>
               </select>
             </div>
-            <textarea id="ideaInput">线下消费活动希望让用户上传小票兑换积分或礼券，但现在小票识别、人工审核、重复上传、金额累计、券库存和门店核销流程都还没定清楚。团队想先做一个可演示 MVP，判断首期应该做 OCR 自动识别、人工审核，还是门店扫码核销。</textarea>
-            <p class="hint" id="countHint">61 字 / 建议 50-300 字</p>
+            <textarea id="ideaInput">足霜标签需要在小尺寸包装上同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。包装空间有限，设计、品牌、供应商、打样和展示材料之间需要反复确认。团队希望在正式 Figma 排版和打印打样前，先确认信息优先级、尺寸约束、风险点、角色责任和验收标准。</textarea>
+            <p class="hint" id="countHint">126 字 / 建议 50-300 字</p>
             <div class="inline-alert" id="intakeAlert">输入信息太少。请至少说明“谁遇到问题”“现状卡在哪里”和“尝试过什么”，再开始分析。</div>
             <div class="actions">
               <button class="btn primary" id="analyzeBtn">开始分析</button>
@@ -1328,7 +1468,7 @@
                   <strong>快速切换案例</strong>
                   <span>每个案例都可直接分析，也可以改成你的真实项目。</span>
                 </div>
-                <span>覆盖活动、数据、客服、教育、社区、流程等场景</span>
+                  <span>覆盖包装、活动、数据、客服、教育、社区、流程等场景</span>
               </div>
               <div class="case-grid" id="caseGrid"></div>
             </div>
@@ -1347,7 +1487,7 @@
 
       <section class="page" id="page-clarify">
         <h1>问题诊断与方案取舍</h1>
-        <p class="subtitle">确认关键判断后，推荐方案和 PRD 会同步更新。</p>
+        <p class="subtitle">确认关键判断后，推荐路径、预审材料和推进状态会同步更新。</p>
         <div class="grid-2">
           <div class="panel">
             <h2>关键判断问题</h2>
@@ -1355,8 +1495,8 @@
             <div id="questionsList"></div>
             <div class="answer-box" id="answerBox">
               <strong>当前判断草稿</strong>
-              <p id="answerText">主判断：先用文档治理和搜索体验验证问题，再评估问答试点是否值得进入首期。</p>
-              <div class="answer-meta" id="currentDecisionMeta">选择一个处理方式，方案推荐、信息卡和 PRD 会同步更新。</div>
+              <p id="answerText">主判断：先确认信息优先级和尺寸约束，再做低成本贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</p>
+              <div class="answer-meta" id="currentDecisionMeta">选择一个处理方式，路径推荐、信息卡和预审材料会同步更新。</div>
               <div class="decision-actions">
                 <button class="btn primary" data-diagnosis-action="main">设为主要判断</button>
                 <button class="btn" data-diagnosis-action="verify">标记待验证</button>
@@ -1369,116 +1509,94 @@
             <h2>结构化信息卡</h2>
             <p class="hint portfolio-only">已确认的问题根因、方案取舍和 MVP 边界会自动归档。</p>
             <div class="info-grid" id="infoCards">
-              <div class="card green"><h3>目标用户</h3><p>新员工、运营、客服、产品团队</p></div>
-              <div class="card amber"><h3>待补齐</h3><p>目标、文档范围、权限规则、兜底流程</p></div>
+              <div class="card green"><h3>相关角色</h3><p>产品、设计、品牌、供应商、销售展示同学</p></div>
+              <div class="card amber"><h3>待补齐</h3><p>标签尺寸、必填信息、打印边距、贴标位置、验收标准</p></div>
             </div>
             <div class="actions">
-              <button class="btn primary" id="generateDocBtn" disabled>整理 PRD 草稿</button>
+              <button class="btn primary" id="generateDocBtn" disabled>整理预审材料</button>
             </div>
-            <p class="action-hint" id="generateDocHint">先确认至少一个关键判断，才能整理 PRD 草稿。</p>
+            <p class="action-hint" id="generateDocHint">先确认至少一个关键判断，才能整理预审材料。</p>
           </div>
         </div>
         <div class="panel solution-panel">
           <span class="pill blue">方案对比</span>
-          <h2 style="margin-top:10px">不要一上来就默认做复杂系统</h2>
-          <p class="hint">先比较不同解决路径的收益、成本、风险和适用时机，再决定首期 MVP。</p>
+          <h2 style="margin-top:10px">不要一上来就直接进正式制作</h2>
+          <p class="hint">先比较不同解决路径的收益、成本、风险和适用时机，再决定是否进入正式执行。</p>
           <div class="solution-compare" id="solutionCompare"></div>
-          <div class="recommendation-box" id="solutionRecommendation">推荐：先做低成本治理和搜索入口优化，再小范围试点知识库问答。</div>
+          <div class="recommendation-box" id="solutionRecommendation">推荐 P0 路径：方案 A 信息优先级表 + 方案 C 低保真贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</div>
           <div class="decision-summary-grid" id="decisionSummary">
-            <div class="decision-summary-item"><strong>推荐理由</strong><span>用中低成本方案先验证主要问题，避免过早投入复杂系统。</span></div>
-            <div class="decision-summary-item"><strong>暂不选择</strong><span>全量知识库问答依赖权限、文档质量和兜底机制，直接做风险偏高。</span></div>
-            <div class="decision-summary-item"><strong>进入条件</strong><span>高频问题、文档来源、权限边界和低置信度兜底需要先验证清楚。</span></div>
+            <div class="decision-summary-item"><strong>推荐理由</strong><span>先把信息层级和尺寸限制对齐，再验证贴到实物上是否可读，避免正式打样后返工。</span></div>
+            <div class="decision-summary-item"><strong>暂不选择</strong><span>不建议首期直接进入高精度视觉精修，因为必填信息和贴标约束还没完全确认。</span></div>
+            <div class="decision-summary-item"><strong>进入条件</strong><span>标签尺寸、必填信息、打印边距、贴标位置、供应商样张标准先确认。</span></div>
           </div>
         </div>
       </section>
 
       <section class="page" id="page-document">
-        <h1>整理 PRD 草稿</h1>
-        <p class="subtitle">先看结构化草稿，再整理成可复制的完整 PRD。</p>
+        <h1>整理预审材料草稿</h1>
+        <p class="subtitle">先看结构化草稿，确认是否足够进入执行，再按需要沉淀执行清单。</p>
         <div class="doc-layout document-workspace">
           <div class="panel toc">
-            <h2>PRD 目录</h2>
+            <h2>预审材料目录</h2>
             <a class="active" href="#doc-background">项目背景</a>
             <a href="#doc-problem">问题定义</a>
             <a href="#doc-users">目标用户</a>
             <a href="#doc-goal">产品目标</a>
-            <a href="#doc-business-goals">业务指标</a>
             <a href="#doc-scope">MVP 范围</a>
-            <a href="#doc-scope-priority">优先级</a>
-            <a href="#doc-requirements">功能需求</a>
-            <a href="#doc-permissions">权限角色</a>
             <a href="#doc-flow">核心流程</a>
             <a href="#doc-departments">跨部门对齐</a>
-            <a href="#doc-competition">竞品分析</a>
-            <a href="#doc-metrics">数据指标</a>
-            <a href="#doc-sql">数据口径</a>
             <a href="#doc-risks">风险兜底</a>
             <a href="#doc-acceptance">验收标准</a>
           </div>
           <article class="panel doc doc-scroll">
-          <span class="pill blue">PRD v0.3</span>
+          <span class="pill blue">预审 v0.3</span>
             <div class="source-row" style="margin-top:14px">
               <span class="source-chip">来源：业务问题</span>
-              <span class="source-chip">来源：方案取舍</span>
-              <span class="source-chip">待研发确认：权限边界</span>
+              <span class="source-chip">来源：系统推断</span>
+              <span class="source-chip">待人工确认：供应商样张标准</span>
             </div>
-            <h2 id="docTitle">企业内部知识库改版</h2>
-            <div class="meta">v0.1 业务问题 · v0.2 方案取舍 · v0.3 整理 PRD 草稿 · 后续动作：评审前确认负责人</div>
+            <h2 id="docTitle">足霜产品信息展示物料迭代预审</h2>
+            <div class="meta">v0.1 业务问题 · v0.2 信息取舍 · v0.3 预审材料草稿 · 后续动作：执行前确认负责人</div>
             <h3 id="doc-background">项目背景</h3>
-            <p class="doc-editable" id="backgroundText">公司内部文档分散在不同系统中，新员工和运营同事经常需要询问他人才能找到会员政策、流程制度和项目资料，造成重复沟通和信息查找成本。</p>
+            <p class="doc-editable" id="backgroundText">足霜包装和展示材料需要在有限空间内同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。正式制作和打样前，需要先确认信息优先级、尺寸约束和验收标准。</p>
             <h3 id="doc-problem">问题定义</h3>
-            <p class="doc-editable" id="problemText">当前需求的关键问题不是“缺一份文档”，而是项目启动前没有把用户、范围、权限、指标和兜底机制问清楚。</p>
+            <p class="doc-editable" id="problemText">当前需求的关键问题不是“缺一版设计”，而是执行前没有把信息优先级、尺寸边界、贴标位置、供应商标准和角色责任问清楚。</p>
             <h3 id="doc-users">目标用户</h3>
-            <p class="doc-editable" id="usersText">新员工、运营同事、客服同事、产品团队和知识库管理员。</p>
+            <p class="doc-editable" id="usersText">产品、设计、品牌、供应商、销售展示同学。</p>
             <h3 id="doc-goal">产品目标</h3>
-            <p class="doc-editable" id="goalText">帮助员工用自然语言快速查找内部知识，并在答案中展示来源，减少重复咨询，提高新人上手效率。</p>
-            <div id="businessGoalSection"></div>
+            <p class="doc-editable" id="goalText">用低成本预审和贴标验证先确认包装标签是否可读、可印、可贴、可展示，再进入正式 Figma 精修和打印打样。</p>
             <h3 id="doc-scope">MVP 范围</h3>
             <ul class="doc-editable" id="scopeList">
-              <li>支持自然语言提问，并返回带来源引用的答案。</li>
-              <li>首期接入制度文档、会员政策、产品资料和项目 SOP。</li>
-              <li>提供低置信度提示，引导用户查看原文或提交人工反馈。</li>
-              <li>支持按部门和文档类型配置基础访问权限。</li>
+              <li>整理产品名、成分说明、使用信息和品牌表达的信息优先级。</li>
+              <li>确认标签尺寸、打印边距、贴标位置和供应商样张要求。</li>
+              <li>用低保真样张完成实物贴标验证，检查可读性和展示距离。</li>
+              <li>通过后进入 Figma 精修、打印打样和展示材料整理。</li>
             </ul>
-            <div id="scopePrioritySection"></div>
-            <div id="extraDocSection"></div>
-            <div id="requirementSection"></div>
-            <div id="permissionSection"></div>
             <h3 id="doc-flow">核心流程</h3>
             <ol class="doc-editable" id="flowList">
               <li>用户提交业务问题、会议纪要或反馈片段。</li>
               <li>系统识别问题类型、受影响用户和方案风险。</li>
-              <li>产品经理确认关键取舍，整理 PRD 和评审材料。</li>
+              <li>产品经理确认关键取舍，整理预审材料和必要的执行清单。</li>
             </ol>
             <h3 id="doc-departments">跨部门待确认</h3>
             <ul class="doc-editable" id="departmentDocList">
-              <li>研发：来源引用、权限过滤和低置信度兜底的实现方案。</li>
-              <li>设计：答案页、未命中页、反馈入口和来源展示的关键状态。</li>
-              <li>数据：查找时间、重复咨询量、答案采纳率和未命中率的埋点口径。</li>
-            </ul>
-            <h3 id="doc-competition">竞品分析</h3>
-            <p class="doc-editable" id="competitionText">对比 Notion、飞书文档、腾讯文档和 Confluence，明确 ClearBrief 的差异化是“项目启动与需求评审工作流”，而不是单纯文档生成。</p>
-            <h3 id="doc-metrics">数据指标</h3>
-            <p class="doc-editable" id="metricsText">核心指标包括平均查找时间、答案采纳率、未命中率、重复咨询量和反馈处理时长。</p>
-            <h3 id="doc-sql">数据口径</h3>
-            <ul class="doc-editable" id="sqlDocList">
-              <li>事件表：knowledge_question_log</li>
-              <li>核心字段：answer_status、feedback、answer_time_seconds、source_click、no_match_rate</li>
-              <li>复盘维度：日期、用户角色、来源渠道和处理状态。</li>
+              <li>产品：确认卖点、必填信息、用户理解优先级和验收标准。</li>
+              <li>设计：确认版式层级、字号、边距、贴标位置和样张输出。</li>
+              <li>供应商：确认打印尺寸、材质限制、贴标工艺和打样反馈。</li>
             </ul>
             <h3 id="doc-risks">风险兜底</h3>
             <ul class="doc-editable" id="riskList">
-              <li>信息不完整时不直接进入开发排期。</li>
-              <li>异常状态需要明确提示和人工处理入口。</li>
-              <li>上线前确认权限、数据口径和验收负责人。</li>
+              <li>信息不完整时不直接进入正式制作和打印打样。</li>
+              <li>高风险限制需要明确负责人和人工复核入口。</li>
+              <li>执行前确认尺寸、边距、贴标位置和验收负责人。</li>
             </ul>
             <h3 id="doc-acceptance">验收标准</h3>
-            <p class="doc-editable" id="acceptanceText">用户可以在 3 步内完成提问并查看答案来源；低置信度回答必须提供查看原文和提交反馈入口。</p>
+            <p class="doc-editable" id="acceptanceText">样张贴到实物后，产品名、核心卖点、成分说明和使用信息可读；贴标位置不遮挡关键区域；展示材料与实物包装保持一致。</p>
           </article>
           <aside class="panel workspace-actions">
-            <h2>评审前动作</h2>
+            <h2>执行前动作</h2>
             <div class="suggestion-list">
-              <div class="suggestion-item"><strong>已纳入</strong><p>风险、指标、验收标准和跨部门待确认项。</p></div>
+              <div class="suggestion-item"><strong>已纳入</strong><p>风险、验收标准、信源标注和跨角色待确认项。</p></div>
             </div>
             <div class="action-stack">
               <div class="action-row">
@@ -1487,23 +1605,23 @@
             </div>
             <div class="action-stack">
               <div class="action-row">
-                <button class="btn primary" id="fullPrdBtn">整理完整 PRD</button>
+              <button class="btn primary" id="fullPrdBtn">整理完整材料</button>
               </div>
             </div>
             <div class="next-action">
-              <button class="btn primary" id="reviewBtn">进入方案评审</button>
+              <button class="btn primary" id="reviewBtn">进入执行预审</button>
               <p>检查推荐路径、风险和推进条件。</p>
             </div>
           </aside>
         </div>
         <details class="panel detail-panel">
-          <summary>完整 PRD 可复制区</summary>
+          <summary>完整预审材料可复制区</summary>
           <div class="detail-body">
-          <div class="prd-preview" id="prdPreview">点击“整理完整 PRD”后，会在这里输出一份可复制的 PRD 草稿。</div>
-          <div class="status-note" id="prdStatus">尚未整理完整 PRD。整理后会默认包含风险、指标、验收标准和跨部门待确认项。</div>
+          <div class="prd-preview" id="prdPreview">点击“整理完整材料”后，会在这里输出一份可复制的预审材料草稿。</div>
+          <div class="status-note" id="prdStatus">尚未整理完整预审材料。整理后会默认包含风险、信源、验收标准和跨角色待确认项。</div>
           <div class="actions">
-            <button class="btn primary" id="copyPrdBtn">复制 PRD</button>
-            <button class="btn" id="copyWordPrdBtn">复制 Word 版</button>
+            <button class="btn primary" id="copyPrdBtn">复制材料</button>
+            <button class="btn" id="copyWordPrdBtn">复制 Word 版材料</button>
             <button class="btn" id="downloadMarkdownBtn">下载 Markdown</button>
           </div>
           </div>
@@ -1511,41 +1629,41 @@
       </section>
 
       <section class="page" id="page-review">
-        <h1>方案评审与推进决策</h1>
-        <p class="subtitle">先看推进结论，再展开检查项。评审关注的是方案是否值得进入下一阶段。</p>
+        <h1>执行前预审与推进决策</h1>
+        <p class="subtitle">先看建议推进状态，再展开检查项。状态基于用户勾选、角色反馈和预审检查项生成，最终仍由负责人确认。</p>
         <div class="score-grid">
-          <div class="score-main"><div>推进结论</div><strong id="reviewDecision">带条件通过</strong><p id="scoreHint">可进入原型与技术预研，暂不进入开发排期</p><span id="reviewGate">推进判断：先做原型与技术预研</span></div>
-          <div class="panel metric red"><h2>阻塞项</h2><strong id="blockingCount">2</strong><p class="hint">处理前不进开发排期</p></div>
+          <div class="score-main"><div>建议推进状态</div><strong id="reviewDecision">建议先做低成本验证</strong><p id="scoreHint">可进入低保真贴标验证，暂不进入正式打样</p><span id="reviewGate">建议依据：先做低成本验证</span></div>
+          <div class="panel metric red"><h2>阻塞项</h2><strong id="blockingCount">2</strong><p class="hint">处理前不进正式打样</p></div>
           <div class="panel metric amber"><h2>非阻塞项</h2><strong id="nonBlockingCount">1</strong><p class="hint">可跟随原型继续补</p></div>
-          <div class="panel metric green"><h2>已关闭</h2><strong id="closedCount">0</strong><p class="hint">评审待办已处理</p></div>
-          <div class="panel metric blue"><h2>下一阶段</h2><strong id="nextStage">技术预研</strong><p class="hint">设计原型 + 研发评估</p></div>
+          <div class="panel metric green"><h2>已关闭</h2><strong id="closedCount">0</strong><p class="hint">预审待办已处理</p></div>
+          <div class="panel metric blue"><h2>下一阶段</h2><strong id="nextStage">贴标验证</strong><p class="hint">低保真样张 + 实物检查</p></div>
         </div>
         <div class="decision-panel">
           <div class="decision-card">
             <span class="pill blue">决策解释</span>
-            <h2>为什么是这个结论</h2>
-            <p id="decisionReason">当前还有会前材料缺口、阻塞项和关键角色疑问，因此可以继续做原型和技术预研，但暂不建议进入开发排期。</p>
+            <h2>为什么给出这个建议</h2>
+            <p id="decisionReason">当前还有执行前材料缺口、阻塞项和关键角色疑问，因此可以继续做低保真样张和贴标验证，但暂不建议进入正式打印打样。</p>
           </div>
           <div class="decision-card">
             <span class="pill amber">下一步动作</span>
-            <h2>进入排期前必须验证</h2>
+            <h2>进入正式打样前必须验证</h2>
             <div class="decision-list" id="decisionActions">
-              <span>验证搜索 + 标签优化是否能降低查找时间和重复咨询。</span>
-              <span>明确低置信度兜底、文档级权限和敏感内容边界。</span>
-              <span>拉齐研发、数据、运营和管理员对投入成本的判断。</span>
+              <span>确认标签尺寸、贴标区域和打印边距。</span>
+              <span>明确产品名、成分说明、使用信息和品牌表达的优先级。</span>
+              <span>拉齐产品、设计、品牌和供应商对样张验收标准的判断。</span>
             </div>
           </div>
         </div>
         <details class="panel detail-panel primary-detail" open>
-          <summary>方案进入评审前检查</summary>
+          <summary>进入正式执行前检查</summary>
           <div class="detail-body">
           <div class="preflight-grid">
-            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>问题根因</strong>区分内容、入口、权限和体验问题。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>推荐方案</strong>说明为什么先做文档治理 + 搜索优化。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>MVP 边界</strong>明确本期做什么、不做什么。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>权限与兜底</strong>确认角色、部门、文档类型和低置信度规则。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>验证指标</strong>写清查找时间、采纳率、未命中率口径。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>投入与排期</strong>列出依赖和预计完成时间。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>问题根因</strong>区分信息过载、尺寸约束、贴标位置和验收标准缺失。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>推荐路径</strong>说明为什么先做信息优先级和低保真贴标验证。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>执行边界</strong>明确本期做什么、不做什么。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>角色与兜底</strong>确认产品、设计、品牌、供应商分别负责哪些确认。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>验证指标</strong>写清可读性、样张修改次数、打样返工和展示一致性。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>投入与节奏</strong>列出依赖和预计完成时间。</span></label>
           </div>
           <div class="review-summary">
             <div class="mini-stat"><strong id="preflightDone">3/6</strong><span>材料完整度</span></div>
@@ -1555,40 +1673,40 @@
           </div>
         </details>
         <details class="panel detail-panel">
-          <summary>方案检查项与结论</summary>
+          <summary>路径检查项与结论</summary>
           <div class="detail-body">
         <div class="review-grid">
           <div class="panel">
-            <h2>方案检查项</h2>
-            <p class="hint">这里不做抽象打分，而是看每一项是否会影响方案进入下一阶段。</p>
+            <h2>路径检查项</h2>
+            <p class="hint">这里不做抽象打分，而是看每一项是否会影响事项进入下一阶段。</p>
             <div class="review-checklist">
               <div class="review-check">
                 <div class="review-check-head"><strong>问题价值</strong><span class="pill green">基本成立</span></div>
-                <p>资料难找影响新人上手和运营效率，问题真实；还需要补充量化损失和优先级。</p>
+                <p>包装标签需要同时表达产品卖点、成分和使用信息，问题真实；还需要补齐尺寸、贴标位置和验收标准。</p>
               </div>
               <div class="review-check">
-                <div class="review-check-head"><strong>方案取舍</strong><span class="pill green">方向明确</span></div>
-                <p>先做文档治理和搜索优化，再试点问答能力，避免一上来做高成本全量改造。</p>
+                <div class="review-check-head"><strong>路径取舍</strong><span class="pill green">方向明确</span></div>
+                <p>先做信息优先级表 + 低保真贴标验证，避免首期被高精度视觉精修和打样成本拖住。</p>
               </div>
               <div class="review-check">
                 <div class="review-check-head"><strong>风险可控</strong><span class="pill amber">待校验</span></div>
-                <p>权限、敏感内容、低置信度回答和人工反馈还需要明确规则、负责人和验收标准。</p>
+                <p>打印边距、材质限制、贴标位置和供应商样张标准还需要明确规则、负责人和验收标准。</p>
               </div>
               <div class="review-check">
-                <div class="review-check-head"><strong>MVP 收敛</strong><span class="pill green">已有边界</span></div>
-                <p>首期范围基本收敛，但仍需写清楚哪些问答能力不在本期做。</p>
+                <div class="review-check-head"><strong>范围收敛</strong><span class="pill green">已有边界</span></div>
+                <p>首期范围基本收敛：信息优先级、低保真样张、实物贴标验证和展示一致性检查；正式打样后置到 P1。</p>
               </div>
               <div class="review-check">
                 <div class="review-check-head"><strong>投入产出</strong><span class="pill red">需确认</span></div>
-                <p>文档治理需要运营投入，问答试点需要研发和成本评估，需要确认投入是否匹配收益。</p>
+                <p>供应商打样和材料输出需要时间成本，需要确认低保真验证是否能提前降低返工风险。</p>
               </div>
             </div>
           </div>
           <div class="panel">
-            <h2>方案结论</h2>
-            <p class="subtitle" style="margin-bottom:18px">当前推荐路径具备进入原型和技术预研的基础，但还不建议直接进入开发排期。排期前需要验证搜索优化的效果、权限边界和问答试点成本。</p>
-            <div class="card amber"><h3>结论：带条件通过</h3><p>推荐先推进“文档治理 + 搜索入口优化”的 MVP，同时小范围验证知识库问答，不做全量知识库问答。</p></div>
-            <div class="card blue"><h3>参会角色</h3><p>产品负责讲清楚推荐理由和不选理由；研发评估实现成本；设计确认查找体验；数据确认验证指标；运营确认文档治理责任。</p></div>
+            <h2>预审结论</h2>
+            <p class="subtitle" style="margin-bottom:18px">当前推荐路径具备进入低成本验证的基础，但还不建议直接进入正式打印打样。打样前需要确认标签尺寸、打印边距、贴标位置、必填信息和供应商样张标准。</p>
+            <div class="card amber"><h3>建议：先做低成本验证</h3><p>推荐先推进“信息优先级表 + 低保真贴标验证”的 P0 组合，正式 Figma 精修和打印打样后置到 P1。</p></div>
+            <div class="card blue"><h3>参会角色</h3><p>产品讲清楚推荐理由和不选理由；设计确认版式层级和样张输出；品牌确认表达边界；供应商确认打印和贴标限制；销售确认展示材料一致性。</p></div>
           </div>
         </div>
           </div>
@@ -1598,34 +1716,34 @@
           <div class="detail-body">
           <div class="role-board">
             <div class="role-card">
-              <div class="role-card-head"><strong>研发</strong><span class="pill amber">关键角色</span></div>
-              <p>关注接口边界、权限过滤、异常状态、实现成本和联调风险。</p>
-              <select class="status-select role-status" data-role="研发"><option>有疑问</option><option>已确认</option><option>需会后评估</option></select>
+              <div class="role-card-head"><strong>供应商</strong><span class="pill amber">关键角色</span></div>
+              <p>关注打印尺寸、材质限制、贴标工艺、样张标准和交付周期。</p>
+              <select class="status-select role-status" data-role="供应商"><option>有疑问</option><option>已确认</option><option>需会后评估</option></select>
             </div>
             <div class="role-card">
-              <div class="role-card-head"><strong>设计</strong><span class="pill blue">流程体验</span></div>
-              <p>关注页面状态、反馈入口、错误提示、信息层级和用户理解成本。</p>
+              <div class="role-card-head"><strong>设计</strong><span class="pill blue">视觉执行</span></div>
+              <p>关注版式层级、字号、边距、贴标位置、样张输出和展示一致性。</p>
               <select class="status-select role-status" data-role="设计"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
             </div>
             <div class="role-card">
-              <div class="role-card-head"><strong>测试</strong><span class="pill blue">验收边界</span></div>
-              <p>关注验收标准是否可测、异常分支是否清楚、规则是否互相冲突。</p>
-              <select class="status-select role-status" data-role="测试"><option>有疑问</option><option>已确认</option><option selected>需会后评估</option></select>
+              <div class="role-card-head"><strong>品牌</strong><span class="pill blue">表达边界</span></div>
+              <p>关注卖点表达、品牌语气、必填信息和对外展示一致性。</p>
+              <select class="status-select role-status" data-role="品牌"><option>有疑问</option><option>已确认</option><option selected>需会后评估</option></select>
             </div>
             <div class="role-card">
-              <div class="role-card-head"><strong>数据</strong><span class="pill green">指标口径</span></div>
-              <p>关注埋点、指标定义、看板维度、复盘周期和实验口径。</p>
-              <select class="status-select role-status" data-role="数据"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
+              <div class="role-card-head"><strong>销售展示</strong><span class="pill green">使用场景</span></div>
+              <p>关注客户介绍、展示距离、样品拍摄和后续物料一致性。</p>
+              <select class="status-select role-status" data-role="销售展示"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
             </div>
             <div class="role-card">
-              <div class="role-card-head"><strong>业务方</strong><span class="pill green">价值判断</span></div>
-              <p>关注目标用户、优先级、上线时间、运营成本和业务收益。</p>
-              <select class="status-select role-status" data-role="业务方"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
+              <div class="role-card-head"><strong>产品</strong><span class="pill green">价值判断</span></div>
+              <p>关注目标用户、信息优先级、执行时间、返工风险和验收标准。</p>
+              <select class="status-select role-status" data-role="产品"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
             </div>
             <div class="role-card">
-              <div class="role-card-head"><strong>合规 / 管理员</strong><span class="pill red">风险边界</span></div>
-              <p>关注敏感内容、访问权限、内容过期、人工审核和追责链路。</p>
-              <select class="status-select role-status" data-role="合规 / 管理员"><option selected>有疑问</option><option>已确认</option><option>需会后评估</option></select>
+              <div class="role-card-head"><strong>负责人</strong><span class="pill red">风险边界</span></div>
+              <p>关注成本、时间、最终确认口径和出现返工时的处理方式。</p>
+              <select class="status-select role-status" data-role="负责人"><option selected>有疑问</option><option>已确认</option><option>需会后评估</option></select>
             </div>
           </div>
           <div class="review-summary">
@@ -1636,42 +1754,42 @@
           </div>
         </details>
         <details class="panel detail-panel">
-          <summary>评审待办清单</summary>
+          <summary>预审待办清单</summary>
           <div class="detail-body">
           <table>
             <thead><tr><th>优先级</th><th>问题</th><th>影响</th><th>建议动作</th><th>负责人</th><th>截止时间</th><th>状态</th></tr></thead>
             <tbody>
-              <tr><td>高</td><td>缺少低置信度回答兜底流程</td><td>影响用户信任</td><td>增加来源引用、查看原文、提交反馈入口</td><td>产品 + 研发</td><td>评审后 2 日内</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
-              <tr><td>高</td><td>权限规则未细化到文档级</td><td>可能造成敏感资料误展示</td><td>按部门、角色、文档类型配置访问边界</td><td>研发 + 管理员</td><td>技术预研前</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
-              <tr><td>中</td><td>成功指标仍偏宽泛</td><td>上线后难以判断效果</td><td>改成查找时间、重复咨询量、答案采纳率</td><td>产品 + 数据</td><td>排期评估前</td><td><select class="status-select review-status"><option>可优化</option><option>已处理</option></select></td></tr>
+              <tr><td>高</td><td>标签尺寸和打印边距未定</td><td>会影响 Figma 排版、打印打样和贴标位置</td><td>确认最终尺寸、出血边距、最小字号和安全区域</td><td>设计 + 供应商</td><td>打样前</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
+              <tr><td>高</td><td>必填信息和卖点优先级未定</td><td>可能造成信息拥挤、表达冲突或客户理解成本高</td><td>明确产品名、成分、使用信息和品牌表达的排序</td><td>产品 + 品牌</td><td>正式制作前</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
+              <tr><td>中</td><td>样张验收标准未定</td><td>无法判断打样是否通过，容易反复改稿</td><td>设置可读性、贴标位置、展示一致性和供应商反馈检查项</td><td>产品 + 设计</td><td>贴标验证前</td><td><select class="status-select review-status"><option>可优化</option><option>已处理</option></select></td></tr>
             </tbody>
           </table>
           <div class="review-summary">
             <div class="mini-stat"><strong id="handledCount">0</strong><span>已关闭</span></div>
             <div class="mini-stat"><strong id="remainingCount">3</strong><span>待办项</span></div>
-            <div class="mini-stat"><strong id="readyState">待复审</strong><span>评审状态</span></div>
+            <div class="mini-stat"><strong id="readyState">待复审</strong><span>预审状态</span></div>
           </div>
           <div class="inline-alert" id="reviewAlert">还有高优先级问题未处理。你仍然可以导出材料，但建议先处理关键风险。</div>
           <div class="actions">
             <button class="btn" id="autoFixBtn">模拟采纳反馈</button>
-            <button class="btn" data-export="评审会议纪要">导出会议纪要</button>
+            <button class="btn" data-export="预审会议纪要">导出会议纪要</button>
             <button class="btn primary" id="exportBtn">导出材料</button>
           </div>
           </div>
         </details>
         <details class="panel detail-panel">
-          <summary>研发反馈回写</summary>
+          <summary>供应商反馈回写</summary>
           <div class="detail-body">
           <div class="feedback-form">
             <select id="devFeedbackType">
-              <option>技术风险</option>
+              <option>打样风险</option>
               <option>范围疑问</option>
-              <option>接口依赖</option>
-              <option>数据口径</option>
-              <option>异常流程</option>
-              <option>排期风险</option>
+              <option>尺寸依赖</option>
+              <option>验收口径</option>
+              <option>贴标流程</option>
+              <option>周期风险</option>
             </select>
-            <textarea id="devFeedbackInput">权限规则需要明确到角色和文档类型，否则接口设计会变复杂，联调时也容易出现敏感内容误展示。</textarea>
+            <textarea id="devFeedbackInput">标签尺寸、最小字号和贴标安全区域需要先定清楚，否则打样时容易出现文字过小、边距不足或贴标位置偏移。</textarea>
             <button class="btn primary" id="addDevFeedbackBtn">记录反馈</button>
           </div>
           <div class="feedback-list" id="devFeedbackList"></div>
@@ -1681,94 +1799,43 @@
 
       <section class="page" id="page-export">
         <h1>产品经理工作台</h1>
-        <p class="subtitle">同一份项目启动材料，可以继续整理成跨部门对齐、竞品分析、数据分析和 SQL 口径。这里展示的是产品闭环：系统不只整理 PRD，还能帮助产品经理把项目往落地推进。</p>
+        <p class="subtitle">最后只保留对推进有用的内容：谁需要看什么、导出什么材料、AI 的边界在哪里。</p>
         <div class="analysis-grid">
           <div class="panel">
-            <span class="pill blue">跨部门对齐</span>
-            <h2>各部门关注点</h2>
+            <span class="pill blue">跨角色对齐</span>
+            <h2>各角色关注点</h2>
             <div class="department-list">
-              <div class="department-item"><strong>业务方</strong><span>确认核心目标、目标用户、优先级、上线时间和业务收益口径。</span></div>
-              <div class="department-item"><strong>研发</strong><span>确认数据来源、权限过滤、接口边界、异常流程、低置信度兜底和验收标准。</span></div>
-              <div class="department-item"><strong>设计</strong><span>确认提问页、答案页、未命中页、反馈入口、来源引用和错误提示状态。</span></div>
-              <div class="department-item"><strong>数据</strong><span>确认埋点、指标口径、看板维度、实验分组和上线后复盘周期。</span></div>
-              <div class="department-item"><strong>运营</strong><span>确认首期文档清单、内容负责人、培训材料、FAQ 和反馈收集方式。</span></div>
-              <div class="department-item"><strong>合规 / 管理员</strong><span>确认敏感文档边界、访问权限、过期内容治理和人工审核机制。</span></div>
+              <div class="department-item"><strong>产品</strong><span>确认核心目标、信息优先级、必填内容、验收标准和推进节奏。</span></div>
+              <div class="department-item"><strong>设计</strong><span>确认版式层级、字号、边距、贴标位置和样张输出方式。</span></div>
+              <div class="department-item"><strong>品牌</strong><span>确认卖点表达、品牌语气、视觉元素和对外展示一致性。</span></div>
+              <div class="department-item"><strong>供应商</strong><span>确认打印尺寸、材质限制、贴标工艺、出血边距和交付周期。</span></div>
+              <div class="department-item"><strong>销售展示</strong><span>确认客户介绍场景、样品拍摄、PPT 物料和后续展示需求。</span></div>
+              <div class="department-item"><strong>负责人</strong><span>确认成本、时间、最终确认口径和返工时的处理方式。</span></div>
             </div>
           </div>
           <div class="panel">
-            <span class="pill purple">竞品分析</span>
-            <h2>可借鉴方向</h2>
-            <table>
-              <thead><tr><th>竞品</th><th>借鉴点</th><th>ClearBrief 机会</th></tr></thead>
-              <tbody>
-                <tr><td>Notion</td><td>文档总结、问答、改写</td><td>更聚焦项目启动和 PRD 评审</td></tr>
-                <tr><td>飞书妙记 / 文档</td><td>会议纪要和协作沉淀</td><td>把会议内容转成需求缺口和行动项</td></tr>
-                <tr><td>腾讯文档</td><td>文档协作与模板能力</td><td>补强跨部门对齐和评审风险检查</td></tr>
-                <tr><td>Confluence</td><td>知识库与团队协作</td><td>面向产品经理提供更轻的启动流程</td></tr>
-              </tbody>
-            </table>
-            <ul class="insight-list">
-              <li><strong>差异化：</strong>不只整理文档，而是围绕问题诊断、方案取舍、部门协作、风险评审和 PRD 交付形成闭环。</li>
-              <li><strong>产品机会：</strong>把“竞品分析”输出成可直接放进 PRD 的模块，而不是停留在资料罗列。</li>
-            </ul>
-          </div>
-        </div>
-        <div class="tool-grid">
-          <div class="panel">
-            <span class="pill green">数据分析</span>
-            <h2>上线后指标看板</h2>
-            <table>
-              <thead><tr><th>指标</th><th>定义</th><th>用途</th></tr></thead>
-              <tbody>
-                <tr><td>平均查找时间</td><td>从进入搜索到点击答案来源的平均时长</td><td>衡量效率提升</td></tr>
-                <tr><td>答案采纳率</td><td>用户点击“有帮助”的问答占比</td><td>衡量答案质量</td></tr>
-                <tr><td>未命中率</td><td>未返回有效答案的问题占比</td><td>发现文档缺口</td></tr>
-                <tr><td>重复咨询量</td><td>运营群内重复提问次数</td><td>衡量协作成本下降</td></tr>
-              </tbody>
-            </table>
-            <div class="sql-box" id="sqlPreview">SELECT
-  DATE(created_at) AS dt,
-  COUNT(*) AS question_cnt,
-  AVG(answer_time_seconds) AS avg_find_time,
-  SUM(CASE WHEN feedback = 'helpful' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS helpful_rate,
-  SUM(CASE WHEN answer_status = 'no_match' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS no_match_rate
-FROM knowledge_question_log
-WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
-GROUP BY DATE(created_at)
-ORDER BY dt;</div>
-          </div>
-          <div class="panel">
-            <span class="pill amber">PRD 增强</span>
-            <h2>可继续整理的模块</h2>
-            <ul class="insight-list">
-              <li>竞品分析表：竞品能力、适用场景、优缺点、可借鉴点。</li>
-              <li>埋点方案：事件名、触发时机、属性字段、看板指标。</li>
-              <li>研发拆解：用户故事、接口需求、权限规则、异常流程。</li>
-              <li>评审 Checklist：上线前必须确认的问题和负责人。</li>
-            </ul>
-          </div>
-          <div class="panel">
             <span class="pill blue">产品边界</span>
-            <h2>能力边界说明</h2>
+            <h2>AI 只做预审辅助</h2>
             <ul class="insight-list">
-              <li>适合做方案预评审，帮助团队提前发现根因、范围、指标和风险缺口。</li>
-              <li>不替代业务、研发、法务、财务等角色的最终决策。</li>
-              <li>正式接入企业系统时，需要结合权限、数据安全、调用成本和审计要求。</li>
+              <li>适合提前发现目标、约束、验收和风险缺口。</li>
+              <li>不替代产品、设计、供应商、业务负责人的最终判断。</li>
+              <li>系统输出必须保留来源标注、人工确认和编辑入口。</li>
             </ul>
           </div>
         </div>
         <h2 style="margin-top:28px">角色化导出</h2>
+        <p class="hint">首期优先支持“负责人摘要”和“供应商确认单”。设计 Brief 和会议纪要作为后续扩展，先不把协作链路做重。</p>
         <div class="export-grid">
-          <div class="panel export-card"><div><span class="pill blue">给老板</span><h2>项目摘要</h2><p class="hint">业务价值、投入产出、核心风险、是否建议启动。</p></div><button class="btn primary" data-export="老板摘要">整理摘要</button></div>
-          <div class="panel export-card"><div><span class="pill green">给研发</span><h2>任务拆解</h2><p class="hint">用户故事、功能清单、验收标准、边界条件。</p></div><button class="btn primary" data-export="研发任务清单">整理任务</button></div>
-          <div class="panel export-card"><div><span class="pill purple">给设计</span><h2>设计 Brief</h2><p class="hint">用户路径、页面需求、关键状态、提示语规则。</p></div><button class="btn primary" data-export="设计 Brief">整理 Brief</button></div>
-          <div class="panel export-card"><div><span class="pill amber">给团队</span><h2>评审会议纪要</h2><p class="hint">评审结论、阻塞项、角色意见、研发反馈和会后动作。</p></div><button class="btn primary" data-export="评审会议纪要">生成纪要</button></div>
+          <div class="panel export-card"><div><span class="pill blue">P0 给负责人</span><h2>预审摘要</h2><p class="hint">当前建议状态、关键风险、是否建议进入下一步。</p></div><button class="btn primary" data-export="老板摘要">整理摘要</button></div>
+          <div class="panel export-card"><div><span class="pill green">P0 给供应商</span><h2>打样确认单</h2><p class="hint">尺寸、材质、边距、贴标位置、样张标准。</p></div><button class="btn primary" data-export="供应商确认单">整理确认单</button></div>
+          <div class="panel export-card"><div><span class="pill purple">P1 给设计</span><h2>设计 Brief</h2><p class="hint">信息层级、版式要求、贴标限制、输出规格。</p></div><button class="btn" data-export="设计 Brief">整理 Brief</button></div>
+          <div class="panel export-card"><div><span class="pill amber">P1 给团队</span><h2>预审会议纪要</h2><p class="hint">预审结论、阻塞项、角色意见、供应商反馈和会后动作。</p></div><button class="btn" data-export="预审会议纪要">生成纪要</button></div>
         </div>
       </section>
     </main>
     <div class="floating-helper" id="floatingHelper">
       <strong>当前动作：开始分析</strong>
-      <span>先识别问题类型、影响对象和方案风险。</span>
+      <span>先识别问题类型、影响对象和执行风险。</span>
     </div>
     <button class="btn primary floating-next" id="nextTopBtn">开始分析</button>
   </div>
@@ -1797,8 +1864,8 @@ ORDER BY dt;</div>
 
   <script>
     const pages = ["intake", "clarify", "document", "review", "export"];
-    const labels = ["描述问题", "问题诊断", "整理 PRD", "评审与反馈", "工作台"];
-    const actionLabels = ["开始分析", "查看问题诊断", "整理 PRD", "进入评审", "导出材料"];
+    const labels = ["描述问题", "问题诊断", "整理材料", "预审与反馈", "工作台"];
+    const actionLabels = ["开始分析", "查看问题诊断", "整理材料", "进入预审", "导出材料"];
     let current = 0;
     let maxUnlocked = 0;
     let confirmedAnswers = 0;
@@ -1817,7 +1884,7 @@ ORDER BY dt;</div>
     let fullPrdReady = false;
     let currentScenario = null;
     let currentAnswerKey = "goal";
-    let activeExampleKey = "receipt";
+    let activeExampleKey = "label";
     let confirmedAnswersByKey = {};
     let diagnosisStatusByKey = {};
     let devFeedbackItems = [];
@@ -1838,10 +1905,10 @@ ORDER BY dt;</div>
 
     const caseExamples = [
       {
-        key: "receipt",
-        label: "消费凭证核销",
-        tag: "小票上传 / 审核核销",
-        text: "线下消费活动希望让用户上传小票兑换积分或礼券，但现在小票识别、人工审核、重复上传、金额累计、券库存和门店核销流程都还没定清楚。团队想先做一个可演示 MVP，判断首期应该做 OCR 自动识别、人工审核，还是门店扫码核销。"
+        key: "label",
+        label: "信息展示物料预审",
+        tag: "足霜标签 / 打印打样",
+        text: "足霜标签需要在小尺寸包装上同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。包装空间有限，设计、品牌、供应商、打样和展示材料之间需要反复确认。团队希望在正式 Figma 排版和打印打样前，先确认信息优先级、尺寸约束、风险点、角色责任和验收标准。"
       },
       {
         key: "knowledge",
@@ -1918,83 +1985,117 @@ ORDER BY dt;</div>
       const isKnowledge = /知识库|文档|资料|制度|政策|sop|查找|搜索|检索|新人|新员工/.test(lower + idea);
       const isData = /数据|看板|报表|指标|埋点|sql|分析|经营|bi|dashboard/.test(lower + idea);
       const isSupport = /客服|工单|售后|投诉|咨询|满意度|响应/.test(idea);
+      const isLabel = /包装|标签|足霜|贴标|打样|样张|figma|排版|印刷|打印|成分|品牌表达|供应商|物料/.test(lower + idea);
       const isReceipt = !isTravelCampaign && /小票|消费凭证|发票|收据|ocr|识别小票|上传凭证|门店核销|扫码核销|券库存/.test(lower + idea);
       const isGrowth = !isKnowledge && !isTravelCampaign && !isEducation && !isContentCommunity && !isBookingService && !isWorkflow && !isSupport && /会员|积分|复购|活动|增长|优惠券|转化|留存|营销|商城|电商/.test(idea);
-      if (isReceipt) {
+      if (isLabel || isReceipt) {
         return {
-          key: "receipt",
-          title: "消费凭证上传与核销小程序",
-          type: "活动运营 / 审核核销 / 规则配置工具",
-          users: "参与活动用户、门店店员、运营审核员、客服、数据分析师",
-          background: idea || "线下消费活动希望让用户上传小票兑换积分或礼券，但小票识别、人工审核、重复上传、金额累计、券库存和门店核销规则还没有先对齐。",
-          problem: "当前问题不是缺一个上传页面，而是用户、系统、门店三方协作链路没有拆清楚：哪些信息自动识别、哪些进入人工审核、怎样防重复上传、怎样保证门店核销可追踪。",
-          goal: "用低风险 MVP 验证上传、审核、发券和门店核销闭环，先降低活动执行成本，再决定是否扩大到 OCR 自动识别和更多门店。",
-          scope: ["用户上传小票图片，填写消费金额、门店和消费时间。", "系统做基础格式校验和重复上传提示，高风险记录进入人工审核。", "运营审核通过后发放积分或礼券，并记录券库存和有效期。", "门店扫码核销礼券，核销状态回写到活动订单。"],
-          gaps: "小票字段、OCR 识别准确率、人工审核 SLA、重复上传规则、券库存、门店核销、异常申诉",
+          key: "label",
+          title: "足霜产品信息展示物料迭代预审",
+          type: "包装物料 / 信息架构 / 打印打样预审",
+          users: "产品、设计、品牌、供应商、销售展示同学",
+          background: idea || "足霜标签需要在小尺寸包装上同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。包装空间有限，设计、品牌、供应商、打样和展示材料之间需要反复确认。",
+          problem: "当前问题不是缺一版设计，而是执行前没有把信息优先级、尺寸边界、贴标位置、供应商样张标准和角色责任问清楚。",
+          goal: "用低成本预审和贴标验证先确认包装标签是否可读、可印、可贴、可展示，再进入正式 Figma 精修和打印打样。",
+          scope: ["整理产品名、成分说明、使用信息和品牌表达的信息优先级。", "确认标签尺寸、打印边距、贴标位置和供应商样张要求。", "用低保真样张完成实物贴标验证，检查可读性和展示距离。", "通过后进入 Figma 精修、打印打样和展示材料整理。"],
+          gaps: "标签尺寸、必填信息、打印边距、贴标位置、供应商样张标准、展示材料一致性",
           questions: [
-            ["goal", "首期活动最先验证什么？", "验证用户上传意愿、审核效率、核销转化，还是补贴 ROI？", "主目标：先验证用户愿意上传凭证并完成礼券核销，同时观察审核成本和补贴 ROI。"],
-            ["scope", "首期应该用 OCR 还是人工审核？", "直接做 OCR 自动识别、人工审核，还是 OCR 预识别 + 人工复核？", "首期方案：先做人工审核 + 基础字段校验，保留 OCR 识别为 P1，避免识别准确率不足影响活动上线。"],
-            ["fallback", "重复上传和核销失败怎么处理？", "拦截重复小票、进入人工复核，还是允许用户申诉？", "兜底方式：用金额、门店、时间和图片哈希做重复上传提示；核销失败进入异常单，客服可手动处理。"],
-            ["permission", "谁能审核、发券和修改规则？", "运营、门店、客服、管理员分别能操作哪些状态？", "权限规则：运营审核凭证和配置活动；门店只能核销；客服处理申诉；管理员调整规则和库存。"]
+            ["goal", "标签最先解决什么问题？", "是让用户快速理解用途、强调成分卖点，还是保证品牌表达和展示一致？", "主目标：先让用户在小尺寸包装上快速看懂产品用途和核心卖点，同时保证必填信息可读。"],
+            ["scope", "正式制作前先确认什么？", "直接 Figma 精修、先做信息优先级表，还是先做低保真贴标测试？", "首期路径：先确认信息优先级和尺寸约束，再用低保真样张验证贴标位置和可读性。"],
+            ["fallback", "样张不清楚时怎么处理？", "减少文案、调整层级、换贴标位置，还是重新定义展示材料？", "兜底方式：优先压缩低优先级文案，保留产品名、核心卖点、成分和使用信息；贴标偏移则回到供应商确认。"],
+            ["permission", "谁能确认最终口径？", "产品、品牌、设计、供应商分别负责哪些确认？", "权限规则：产品确认信息优先级，品牌确认表达，设计确认版式，供应商确认打印和贴标限制。"],
+            ["data", "执行后怎么证明预审有用？", "只看是否打样成功，还是看确认轮次、返工次数和展示一致性？", "验证口径：低保真修改次数、打样后二次修改率、角色确认轮次、展示材料一致性和样张验收通过率。"]
           ],
-          departments: ["业务方：确认活动目标、补贴预算、参与门店和活动周期。", "研发：确认图片上传、审核状态机、重复上传判断、券库存扣减和门店核销接口。", "设计：确认上传页、审核状态页、失败提示、门店扫码页和申诉入口。", "数据：确认上传转化率、审核通过率、核销率、重复上传率和补贴 ROI。", "运营：确认审核规则、异常处理 SOP、门店培训材料和活动复盘节奏。"],
-          competition: "对比支付宝/微信卡券核销、商场小票积分、瑞幸优惠券和会员积分活动，重点借鉴凭证上传、审核状态透明、券有效期提醒和门店核销链路。",
-          metrics: "核心指标包括小票上传率、审核通过率、平均审核时长、重复上传拦截率、礼券核销率、客服申诉率和补贴 ROI。",
-          acceptance: "用户能完成上传并查看审核状态；运营能处理待审核凭证；重复上传有拦截或复核；门店能扫码核销并回写状态。",
-          sqlTable: "receipt_redemption_event_log",
-          sqlFields: ["activity_id", "receipt_id", "store_id", "audit_status", "duplicate_flag", "coupon_redeemed"],
+          departments: ["产品：确认核心卖点、必填信息、用户理解优先级和验收标准。", "设计：确认版式层级、字号、边距、贴标位置和样张输出。", "品牌：确认表达边界、视觉元素和对外展示一致性。", "供应商：确认打印尺寸、材质限制、贴标工艺和交付周期。", "销售展示：确认客户介绍、样品拍摄和 PPT 物料的一致性。"],
+          competition: "对比同类护肤品小包装、药妆标签、旅行装包装和电商展示图，重点借鉴首屏卖点、成分可读性、使用信息和品牌一致性。",
+          metrics: "核心指标包括关键信息识别率、低保真样张修改次数、打样后二次修改率、角色确认轮次和展示材料一致性。",
+          acceptance: "样张贴到实物后，产品名、核心卖点、成分说明和使用信息可读；贴标位置不遮挡关键区域；展示材料与实物包装保持一致。",
+          sqlTable: "label_review_checklist",
+          sqlFields: ["label_id", "version", "info_priority", "print_size", "margin_status", "supplier_feedback", "confirm_rounds", "rework_after_sample"],
           statusFlow: [
-            ["待上传", "用户未提交小票", "展示活动规则、金额门槛和上传示例"],
-            ["待审核", "小票已提交，等待运营处理", "展示预计审核时间，允许用户补充信息"],
-            ["审核通过", "金额、门店、时间符合活动规则", "发放积分或礼券，扣减券库存"],
-            ["审核驳回", "小票不清晰、门店不参与、金额不达标或重复上传", "展示驳回原因，允许重新上传或申诉"],
-            ["待核销", "礼券已发放但未到店使用", "展示有效期、可用门店和核销码"],
-            ["已核销", "门店扫码成功", "回写核销门店、时间和操作人"],
-            ["已过期", "超过券有效期未使用", "券不可恢复，保留过期记录"],
-            ["申诉中", "用户对驳回或核销失败提出异议", "客服处理并记录补发、维持驳回或人工核销结果"]
+            ["信息收集", "收集产品名、成分、用法、品牌表达和贴标要求", "标注来源：用户输入 / 旧物料 / 供应商要求"],
+            ["优先级确认", "决定哪些信息必须第一眼可见", "产品和品牌确认，不确定项标记待复核"],
+            ["低保真样张", "用黑白样张检查空间和可读性", "先验证版面，不进入高成本精修"],
+            ["贴标验证", "贴到实物包装上检查位置和展示距离", "记录偏移、遮挡和阅读困难"],
+            ["正式制作", "进入 Figma 精修和视觉统一", "设计输出可打印文件"],
+            ["打印打样", "供应商输出样张", "按验收清单检查尺寸、边距和材质效果"],
+            ["展示同步", "整理 PPT、展示图和客户介绍物料", "确保信息与实物包装一致"]
           ],
           ruleConfig: [
-            ["活动门槛", "最低消费金额、参与门店、活动时间、单用户参与次数", "运营配置，发布前由业务负责人确认"],
-            ["审核规则", "小票清晰度、消费时间、金额字段、门店名称、重复上传判断", "运营维护规则，研发提供基础校验字段"],
-            ["奖励规则", "积分数量、礼券面额、券库存、有效期、发放失败重试", "运营配置，财务/业务确认预算上限"],
-            ["核销规则", "可核销门店、核销码有效性、店员操作权限、核销失败提示", "门店只能核销，不能改券状态"],
-            ["异常规则", "重复上传、图片缺失、库存不足、核销失败、用户申诉", "进入异常队列并记录负责人和处理结果"]
+            ["信息规则", "产品名、核心卖点、成分说明、使用信息、品牌表达", "产品和品牌确认优先级"],
+            ["尺寸规则", "标签尺寸、出血边距、安全区域、最小字号", "设计和供应商共同确认"],
+            ["贴标规则", "贴标位置、对齐方式、遮挡风险、实物弧度", "低保真样张先验证"],
+            ["输出规则", "Figma 文件、打印格式、颜色模式、样张编号", "设计输出，供应商复核"],
+            ["验收规则", "可读性、位置偏移、展示一致性、返工处理", "负责人确认通过标准"]
           ],
           competitors: [
-            ["商场小票积分", "上传凭证后人工或半自动审核", "借鉴审核状态和积分到账提示"],
-            ["微信卡券", "扫码核销和券状态管理", "借鉴门店核销、有效期和核销记录"],
-            ["支付宝会员活动", "活动任务与权益发放", "借鉴用户任务路径和权益提醒"],
-            ["瑞幸优惠券", "券领取、使用门槛和过期提醒", "借鉴券库存、有效期和失败提示"]
+            ["同类护肤品小包装", "产品名和核心卖点优先", "借鉴首屏信息层级"],
+            ["药妆包装标签", "成分、用法和注意事项清晰分区", "借鉴必填信息布局"],
+            ["旅行装/小样包装", "小尺寸下控制字号和边距", "借鉴可读性和空间压缩"],
+            ["电商展示图", "实物包装与展示物料一致", "借鉴卖点露出和拍摄适配"]
           ],
           solutionOptions: [
             {
-              name: "方案 A：人工审核 MVP",
+              name: "方案 A：信息优先级表",
+              tag: "P0 / 推荐",
               cost: "低",
-              benefit: "上线快，规则可控，适合先验证用户上传和核销意愿。",
-              summary: "用户上传小票后进入运营审核，审核通过再发积分或礼券。",
-              risk: "审核量变大后运营成本上升，审核标准需要提前沉淀。"
+              value: "最快对齐产品、品牌和设计对信息层级的判断。",
+              benefit: "先决定哪些信息必须保留，避免版面阶段反复争论。",
+              summary: "把产品名、核心卖点、成分、用法和品牌表达按优先级排序。",
+              risk: "如果没有实物验证，仍可能低估小尺寸下的可读性。"
             },
             {
-              name: "方案 B：OCR 预识别 + 人工复核",
+              name: "方案 B：直接 Figma 精修",
+              tag: "P1 / 暂缓",
               cost: "中",
-              benefit: "减少人工录入，能逐步积累小票识别样本。",
-              summary: "OCR 识别金额、门店、时间等字段，低置信度或异常记录进入人工复核。",
-              risk: "依赖小票图片质量和识别准确率，需要低置信度兜底。"
+              value: "视觉完成度高，适合信息和尺寸都已确认的情况。",
+              benefit: "能快速产出漂亮稿件，便于展示。",
+              summary: "直接进入 Figma 高保真排版和视觉统一。",
+              risk: "必填信息、尺寸和贴标位置未确认时，精修稿容易返工。"
             },
             {
-              name: "方案 C：门店扫码核销闭环",
+              name: "方案 C：低保真贴标验证",
+              tag: "P0 / 推荐",
               cost: "中",
-              benefit: "能验证券是否真正到店使用，形成完整活动闭环。",
-              summary: "用户获券后到门店扫码核销，核销状态回写活动订单和数据看板。",
-              risk: "需要门店培训、设备适配和异常核销处理。"
+              value: "能在打样前验证可读性、贴标位置和展示距离。",
+              benefit: "用低成本样张提前暴露返工风险。",
+              summary: "先打印黑白样张贴到实物包装上，检查字号、边距和信息遮挡。",
+              risk: "需要供应商或实物样品配合，验证节奏要提前安排。"
             }
           ],
-          recommendation: "推荐先做方案 A+C：用人工审核 MVP 验证用户上传和门店核销闭环，同时预留 OCR 字段和图片样本沉淀。OCR 自动识别放到 P1，等审核样本和规则稳定后再接入。",
+          recommendation: "推荐 P0 组合：方案 A + 方案 C。先用信息优先级表对齐判断，再用低保真贴标验证可读性和位置；正式 Figma 精修和打印打样放到 P1，等尺寸和样张标准稳定后再进入。",
           decisionSummary: {
-            recommend: "A+C 可以最快跑通用户上传、运营审核、发券、门店核销和数据复盘，投入可控，也能直接验证活动是否值得扩大。",
-            notNow: "不建议首期直接做完整 OCR 自动识别，因为不同门店小票格式、图片质量和字段缺失会放大识别风险。",
-            entry: "当上传量、审核通过率、重复上传规则和门店核销流程都跑通后，再进入 OCR 预识别和自动审核。"
-          }
+            recommend: "A+C 可以最快对齐信息优先级，并在低成本样张里验证可读性、贴标位置和展示一致性。",
+            notNow: "不建议首期直接做完整高保真视觉稿，因为尺寸、边距和必填信息未确认会放大返工风险。",
+            entry: "当信息优先级、标签尺寸、贴标位置和供应商样张标准都确认后，再进入正式 Figma 精修和打印打样。"
+          },
+          launchGates: [
+            ["信息门槛", "产品名、核心卖点、成分说明和使用信息的优先级已确认", "产品 + 品牌"],
+            ["尺寸门槛", "标签尺寸、出血边距、安全区域和最小字号已确认", "设计 + 供应商"],
+            ["贴标门槛", "贴标位置、对齐方式、遮挡风险和实物弧度已验证", "设计 + 供应商"],
+            ["样张门槛", "低保真样张和正式打样的验收标准已确认", "产品 + 设计"],
+            ["展示门槛", "PPT、展示图和实物包装的信息一致性已检查", "销售展示"]
+          ],
+          exceptionQueue: [
+            ["信息过载", "必填信息和卖点都想保留，版面拥挤", "压缩低优先级内容，保留第一眼信息"],
+            ["文字过小", "小尺寸标签导致成分或用法不可读", "调整层级或拆分展示材料"],
+            ["贴标偏移", "实物弧度或贴标位置导致视觉不居中", "回到供应商确认贴标工艺"],
+            ["打印边距不足", "出血和安全区域不满足供应商要求", "修改版式后重新出样"],
+            ["展示不一致", "PPT 或展示图与实物包装信息不一致", "统一文案版本和素材来源"]
+          ],
+          eventTracking: [
+            ["label_info_prioritized", "确认信息优先级", "label_id、version、owner_role、priority_level"],
+            ["label_sample_printed", "输出低保真样张", "label_id、version、print_size、margin_status"],
+            ["label_fit_checked", "完成贴标验证", "label_id、position_status、readability_score、issue_count"],
+            ["supplier_feedback_logged", "记录供应商反馈", "feedback_type、owner_role、blocking_flag"],
+            ["label_revision_closed", "关闭修改项", "version、closed_count、confirm_rounds"]
+          ],
+          rolloutPlan: [
+            ["第 1 步", "确认信息优先级、标签尺寸、打印边距和贴标位置", "形成可预审材料"],
+            ["第 2 步", "输出低保真样张并贴到实物包装检查", "P0 验证可读性和位置"],
+            ["第 3 步", "根据样张反馈调整信息层级和表达重点", "判断是否进入正式制作"],
+            ["通过后", "进入 Figma 精修、打印打样和展示材料同步", "避免首期被高成本返工拖住"]
+          ]
         };
       }
       if (isTravelCampaign) {
@@ -2274,34 +2375,35 @@ ORDER BY dt;</div>
         <div class="card blue"><h3>问题类型</h3><p>${escapeHtml(scenario.type)}</p></div>
         <div class="card green"><h3>受影响用户</h3><p>${escapeHtml(scenario.users)}</p></div>
         <div class="card amber"><h3>待判断</h3><p>${escapeHtml(scenario.gaps)}</p></div>
-        <div class="card blue"><h3>信息成熟度</h3><p>可初步讨论：已具备；可方案对比：需要确认首期目标；可写 PRD：需要补规则和状态；可进入评审：需要跨角色确认。</p></div>`;
+        <div class="card blue"><h3>信息成熟度</h3><p>不能执行：缺少目标和约束；可预讨论：已具备业务问题；可预审：需要确认执行门槛；具备执行条件：需要跨角色确认。</p></div>`;
     }
 
     function getReadinessRows(scenario) {
       const baseRows = [
-        ["可初步讨论", "已具备", "业务问题、受影响用户和大致目标已出现。", "可以进入问题诊断，不需要一次性填完整 PRD。"],
-        ["可方案对比", confirmedAnswersByKey.goal ? "基本具备" : "待补充", "需要确认首期优先验证什么。", "先确认目标，再比较低/中/高成本方案。"],
-        ["可写 PRD", confirmedAnswers >= 2 ? "基本具备" : "待补充", "需要补齐核心流程、状态流转、规则配置和验收标准。", "未确认内容进入 PRD 的待确认项。"],
-        ["可进入评审", confirmedAnswers >= 3 ? "带条件具备" : "暂不建议", "需要研发、设计、运营、数据等角色确认风险和口径。", "生成跨角色确认清单，不假装已全部确定。"]
+        ["不能执行", "已避开", "业务问题、受影响角色和大致目标已出现。", "可以进入问题诊断，不需要一次性填完整材料。"],
+        ["可预讨论", "已具备", "可以先讨论问题根因和首期目标。", "先确认目标，再比较低/中/高成本方案。"],
+        ["可预审", confirmedAnswers >= 2 ? "基本具备" : "待补充", "需要补齐核心流程、规则配置和验收标准。", "未确认内容进入预审待确认项。"],
+        ["具备执行条件", confirmedAnswers >= 3 ? "带条件具备" : "暂不建议", "需要产品、设计、品牌、供应商等角色确认风险和口径。", "生成跨角色确认清单，不假装已全部确定。"]
       ];
-      if (scenario.key === "receipt") {
-        baseRows[2][2] = "需要补齐小票字段、审核状态、重复上传、发券库存、门店核销和申诉处理。";
-        baseRows[3][2] = "需要运营确认审核 SLA，研发确认状态机和核销接口，数据确认补贴 ROI。";
+      if (scenario.key === "label") {
+        baseRows[2][2] = "需要补齐标签尺寸、必填信息、打印边距、贴标位置和样张验收标准。";
+        baseRows[3][2] = "需要产品确认信息优先级，设计确认版式约束，供应商确认打印和贴标限制。";
+        baseRows[3][3] = confirmedAnswers >= 4 ? "可以进入正式 Figma 排版和打印打样，但仍需保留样张复核。" : "先关闭尺寸、边距、贴标位置和供应商样张标准，不直接打样。";
       }
       return baseRows;
     }
 
     function getGapGroups(scenario) {
-      if (scenario.key === "receipt") {
+      if (scenario.key === "label") {
         return [
-          ["必须先确认", "活动目标、参与用户、首期是否人工审核、补贴预算上限。"],
-          ["进入 PRD 前确认", "小票字段、重复上传规则、券库存、状态流转、异常申诉。"],
-          ["跨角色确认", "研发确认 OCR 和核销接口；运营确认审核 SOP；门店确认核销流程；数据确认指标口径。"]
+          ["必须先确认", "标签目标、信息优先级、必填内容、尺寸和贴标位置。"],
+          ["进入预审前确认", "打印边距、最小字号、供应商样张标准、展示材料一致性。"],
+          ["跨角色确认", "产品确认卖点和必填信息；设计确认版式；供应商确认工艺；品牌确认表达边界。"]
         ];
       }
       return [
         ["必须先确认", "目标用户、核心问题、业务目标和首期约束。"],
-        ["进入 PRD 前确认", "流程规则、状态边界、验收标准、异常处理和数据指标。"],
+        ["进入预审前确认", "流程规则、状态边界、验收标准、异常处理和数据指标。"],
         ["跨角色确认", "研发评估实现成本；设计确认关键页面；运营确认执行责任；数据确认口径。"]
       ];
     }
@@ -2359,7 +2461,7 @@ ORDER BY dt;</div>
       const compare = document.getElementById("solutionCompare");
       if (!compare) return;
       compare.innerHTML = options.map((option, index) => `
-        <article class="solution-card ${index === 1 ? "recommended" : ""}">
+        <article class="solution-card ${(scenario.key === "label" ? index === 0 || index === 2 : index === 1) ? "recommended" : ""}">
           <span class="pill ${index === 0 ? "green" : index === 1 ? "blue" : "amber"}">${escapeHtml(option.tag)}</span>
           <h3>${escapeHtml(option.name)}</h3>
           <p>${escapeHtml(option.summary)}</p>
@@ -2389,6 +2491,15 @@ ORDER BY dt;</div>
       }
     }
 
+    function renderLandingPack(scenario) {
+      if (scenario.key !== "label") return "";
+      return `
+        <div class="card blue"><h3>验证范围</h3><p>先用低保真样张验证信息层级、贴标位置和可读性，不直接进入高成本打样。</p></div>
+        <div class="card green"><h3>P0 闭环</h3><p>信息优先级表 + 低保真贴标验证。正式 Figma 精修和打印打样不作为首期依赖。</p></div>
+        <div class="card amber"><h3>执行门槛</h3><p>标签尺寸、打印边距、贴标位置、必填信息和供应商样张标准全部确认后，才进入正式执行。</p></div>
+      `;
+    }
+
     function renderInfoCards(scenario, confirmed = false) {
       const confirmedEntries = Object.entries(confirmedAnswersByKey)
         .map(([key, answer]) => {
@@ -2398,20 +2509,21 @@ ORDER BY dt;</div>
       const remaining = scenario.questions
         .filter(q => !confirmedAnswersByKey[q[0]])
         .map(q => q[1])
-        .join("；") || "核心判断已确认，可以进入 PRD 评审。";
+        .join("；") || "核心判断已确认，可以进入执行预审。";
       const confirmedHtml = confirmedEntries.map(([title, answer, status]) => `
         <div class="card ${status === "待验证" ? "amber" : status === "本期不处理" ? "blue" : "green"}"><h3>${escapeHtml(status)}：${escapeHtml(title)}</h3><p>${escapeHtml(answer)}</p></div>
       `).join("");
       document.getElementById("infoCards").innerHTML = confirmed || confirmedEntries.length ? `
-        <div class="card green"><h3>受影响用户</h3><p>${escapeHtml(scenario.users)}</p></div>
+        <div class="card green"><h3>相关角色</h3><p>${escapeHtml(scenario.users)}</p></div>
         <div class="card blue"><h3>推荐首期方案</h3><p>${escapeHtml(scenario.scope.slice(0, 2).join("；"))}</p></div>
         <div class="card green"><h3>成功指标</h3><p>${escapeHtml(scenario.metrics)}</p></div>
-        <div class="card blue"><h3>阶段判断</h3><p>可初步讨论；可方案对比；可写 PRD；可进入评审。系统只判断下一步是否够用，不要求一次性收齐全部信息。</p></div>
+        <div class="card blue"><h3>阶段判断</h3><p>不能执行；可预讨论；可预审；具备执行条件。系统只给推进建议，不替负责人做最终判断。</p></div>
+        ${renderLandingPack(scenario)}
         ${confirmedHtml}
         <div class="card amber"><h3>仍待确认</h3><p>${escapeHtml(remaining)}</p></div>` : `
-        <div class="card green"><h3>受影响用户</h3><p>${escapeHtml(scenario.users)}</p></div>
+        <div class="card green"><h3>相关角色</h3><p>${escapeHtml(scenario.users)}</p></div>
         <div class="card amber"><h3>待判断</h3><p>${escapeHtml(scenario.gaps)}</p></div>
-        <div class="card blue"><h3>缺口分层</h3><p>必须先确认；进入 PRD 前确认；跨角色确认。</p></div>`;
+        <div class="card blue"><h3>缺口分层</h3><p>必须先确认；进入预审前确认；跨角色确认。</p></div>`;
     }
 
     function getBusinessGoals(scenario) {
@@ -2421,6 +2533,24 @@ ORDER BY dt;</div>
           ["重复咨询量", "会员政策、流程制度类重复咨询下降 30%", "上线后 1 个月"],
           ["资料命中率", "高频问题首轮命中率达到 80%", "灰度期结束"],
           ["反馈闭环", "未命中问题 2 个工作日内有负责人处理", "试运行期间"]
+        ];
+      }
+      if (scenario.key === "label") {
+        return [
+          ["关键信息识别率", "3 秒内能说出产品名、核心卖点和使用方式", "低保真贴标验证"],
+          ["低保真修改次数", "正式打样前控制在 2 轮以内", "预审阶段"],
+          ["打样后二次修改率", "正式打样后不出现结构性大改", "打样后"],
+          ["角色确认轮次", "产品、设计、品牌、供应商在 2 轮内关闭高优问题", "执行前"],
+          ["展示一致性", "实物包装、PPT 和展示材料信息一致", "交付前"]
+        ];
+      }
+      if (scenario.key === "receipt") {
+        return [
+          ["小票上传率", "参与用户中提交小票比例达到 18%-25%", "20 家门店灰度期"],
+          ["24 小时审核完成率", "待审核小票 24 小时内处理率达到 90%", "灰度第 2 周"],
+          ["礼券核销率", "审核通过后 7 天内核销率达到 35%-45%", "灰度期结束"],
+          ["补贴 ROI", "核销用户复购或到店消费覆盖补贴成本", "上线后 1 个月"],
+          ["异常单占比", "重复上传、发券失败、核销失败和申诉合计低于 8%", "灰度期结束"]
         ];
       }
       return [
@@ -2443,6 +2573,15 @@ ORDER BY dt;</div>
     }
 
     function getFunctionalRequirements(scenario) {
+      if (scenario.key === "label") {
+        return [
+          ["信息优先级", "整理产品名、核心卖点、成分说明、使用信息和品牌表达。", "每条信息标注来源：用户输入、旧物料、系统推断或待人工确认。"],
+          ["尺寸约束", "确认标签尺寸、出血边距、安全区域和最小字号。", "未确认尺寸时不得进入正式打样。"],
+          ["低保真样张", "输出黑白样张并贴到实物包装上检查。", "必须记录可读性、遮挡和贴标偏移问题。"],
+          ["供应商确认", "记录打印材质、贴标工艺、样张标准和交付周期。", "高风险反馈进入预审待办清单。"],
+          ["展示同步", "整理 PPT、展示图和客户介绍物料。", "必须与实物包装的产品名、卖点和使用信息一致。"]
+        ];
+      }
       if (scenario.key === "receipt") {
         return [
           ["用户上传", "用户上传小票图片，填写消费金额、门店、消费时间和联系方式。", "字段缺失时不能提交；图片过大、格式错误要有明确提示。"],
@@ -2471,6 +2610,15 @@ ORDER BY dt;</div>
     }
 
     function getPermissionRules(scenario) {
+      if (scenario.key === "label") {
+        return [
+          ["产品", "确认核心卖点、必填信息、信息优先级和验收标准。", "不能单独修改供应商工艺限制。"],
+          ["设计", "确认版式层级、字号、边距、贴标位置和输出格式。", "正式打样前需要产品和供应商确认。"],
+          ["品牌", "确认品牌表达、视觉元素和对外展示一致性。", "不能绕过产品目标单独增加信息。"],
+          ["供应商", "确认打印尺寸、材质限制、贴标工艺和交付周期。", "反馈必须记录到预审材料。"],
+          ["负责人", "确认最终版本、成本、时间和返工处理方式。", "关键确认需要留痕。"]
+        ];
+      }
       if (scenario.key === "receipt") {
         return [
           ["参与用户", "上传小票、查看审核状态、领取礼券、发起申诉。", "不能修改审核结果或核销记录。"],
@@ -2497,6 +2645,15 @@ ORDER BY dt;</div>
     }
 
     function getAcceptanceCriteria(scenario) {
+      if (scenario.key === "label") {
+        return [
+          ["信息可读", "样张贴到实物后，产品名、核心卖点、成分说明和使用信息都能被快速识别。"],
+          ["尺寸合规", "标签尺寸、出血边距、安全区域和最小字号满足供应商打印要求。"],
+          ["贴标稳定", "贴标位置不遮挡关键区域，实物弧度不会造成明显偏移。"],
+          ["展示一致", "PPT、展示图和实物包装中的产品名、卖点和使用信息保持一致。"],
+          ["反馈闭环", "供应商、设计、品牌和产品的高风险反馈都有负责人和关闭状态。"]
+        ];
+      }
       if (scenario.key === "receipt") {
         return [
           ["上传链路", "用户能提交小票并看到待审核、审核通过、审核驳回或待补充状态。"],
@@ -2548,97 +2705,19 @@ ORDER BY dt;</div>
       document.getElementById("usersText").textContent = scenario.users;
       document.getElementById("goalText").textContent = scenario.goal;
       document.getElementById("scopeList").innerHTML = scenario.scope.map(item => `<li>${escapeHtml(item)}</li>`).join("");
-      document.getElementById("businessGoalSection").innerHTML = `
-        <h3 id="doc-business-goals">业务目标与成功指标</h3>
-        <table class="doc-editable">
-          <thead><tr><th>指标</th><th>目标值</th><th>观察时间</th></tr></thead>
-          <tbody>${tableRows(getBusinessGoals(scenario))}</tbody>
-        </table>
-      `;
-      document.getElementById("scopePrioritySection").innerHTML = `
-        <h3 id="doc-scope-priority">MVP 优先级</h3>
-        <table class="doc-editable">
-          <thead><tr><th>优先级</th><th>范围</th><th>原因</th></tr></thead>
-          <tbody>${tableRows(getScopePriority(scenario))}</tbody>
-        </table>
-      `;
-      document.getElementById("extraDocSection").innerHTML = confirmedEntries.length ? `
-        <h3 id="doc-confirmed">已确认结论</h3>
-        <ul class="doc-editable">
-          ${confirmedEntries.map(([title, answer, status]) => `<li><strong>${escapeHtml(status)}｜${escapeHtml(title)}：</strong>${escapeHtml(answer)}</li>`).join("")}
-        </ul>
-      ` : "";
-      const operationalSections = [];
-      if (scenario.statusFlow?.length) {
-        operationalSections.push(`
-          <h3 id="doc-status-flow">状态流转</h3>
-          <table class="doc-editable">
-            <thead><tr><th>状态</th><th>触发条件</th><th>页面/系统处理</th></tr></thead>
-            <tbody>${tableRows(scenario.statusFlow)}</tbody>
-          </table>
-        `);
-      }
-      if (scenario.ruleConfig?.length) {
-        operationalSections.push(`
-          <h3 id="doc-rule-config">规则配置</h3>
-          <table class="doc-editable">
-            <thead><tr><th>规则项</th><th>配置内容</th><th>负责人/约束</th></tr></thead>
-            <tbody>${tableRows(scenario.ruleConfig)}</tbody>
-          </table>
-        `);
-      }
-      const readinessRows = getReadinessRows(scenario);
-      const gapGroups = getGapGroups(scenario);
-      operationalSections.push(`
-        <h3 id="doc-readiness">信息成熟度判断</h3>
-        <table class="doc-editable">
-          <thead><tr><th>阶段</th><th>当前状态</th><th>判断依据</th><th>下一步</th></tr></thead>
-          <tbody>${tableRows(readinessRows)}</tbody>
-        </table>
-        <h3 id="doc-gap-groups">缺口分层</h3>
-        <table class="doc-editable">
-          <thead><tr><th>缺口层级</th><th>需要确认的内容</th></tr></thead>
-          <tbody>${tableRows(gapGroups)}</tbody>
-        </table>
-      `);
-      if (operationalSections.length) {
-        document.getElementById("extraDocSection").innerHTML += operationalSections.join("");
-      }
-      document.getElementById("requirementSection").innerHTML = `
-        <h3 id="doc-requirements">功能需求拆解</h3>
-        <table class="doc-editable">
-          <thead><tr><th>模块</th><th>需求描述</th><th>验收要点</th></tr></thead>
-          <tbody>${tableRows(getFunctionalRequirements(scenario))}</tbody>
-        </table>
-      `;
-      document.getElementById("permissionSection").innerHTML = `
-        <h3 id="doc-permissions">权限与角色</h3>
-        <table class="doc-editable">
-          <thead><tr><th>角色</th><th>可见/可操作范围</th><th>限制</th></tr></thead>
-          <tbody>${tableRows(getPermissionRules(scenario))}</tbody>
-        </table>
-      `;
       document.getElementById("flowList").innerHTML = [
         `用户提交${escapeHtml(scenario.title)}相关业务问题、会议纪要或反馈片段。`,
-        "系统识别问题类型、受影响用户、可能根因和跨部门待确认事项。",
-        "产品经理确认方案取舍后，沉淀 PRD、评审清单、数据指标和角色化材料。",
-        "评审通过后进入研发拆解、设计出图、数据埋点和上线复盘。"
+        scenario.key === "label" ? "系统识别问题类型、相关角色、信息缺口和跨角色待确认事项。" : "系统识别问题类型、受影响用户、可能根因和跨部门待确认事项。",
+        scenario.key === "label" ? "产品经理确认路径取舍后，沉淀预审清单、验收标准和角色化材料。" : "产品经理确认方案取舍后，沉淀 PRD、评审清单、数据指标和角色化材料。",
+        scenario.key === "label" ? "预审通过后进入设计排版、供应商打样、展示材料同步和复盘。" : "评审通过后进入研发拆解、设计出图、数据埋点和上线复盘。"
       ].map(item => `<li>${item}</li>`).join("");
       document.getElementById("departmentDocList").innerHTML = scenario.departments.slice(0, 3).map(item => `<li>${escapeHtml(item)}</li>`).join("");
-      document.getElementById("competitionText").textContent = scenario.competition;
-      document.getElementById("metricsText").textContent = scenario.metrics;
-      document.getElementById("sqlDocList").innerHTML = [
-        `事件表：${scenario.sqlTable}`,
-        `核心字段：${scenario.sqlFields.join("、")}`,
-        "复盘维度：日期、用户角色、渠道来源、业务状态和异常原因。",
-        "看板建议：趋势图、分层对比、异常明细和评审前后指标变化。"
-      ].map(item => `<li>${escapeHtml(item)}</li>`).join("");
       document.getElementById("riskList").innerHTML = [
         `待确认风险：${scenario.gaps}`,
-        "关键业务规则必须有明确负责人，不能只写成“上线前补齐”。",
-        "异常状态需要给用户明确提示、处理入口和内部追踪字段。",
-        "上线前需要完成权限、数据口径、验收负责人和回滚方案确认。",
-        ...acceptedFeedback.map(item => `研发反馈回写：${item.type} - ${item.text}`)
+        scenario.key === "label" ? "关键执行约束必须有明确负责人，不能只写成“打样前补齐”。" : "关键业务规则必须有明确负责人，不能只写成“上线前补齐”。",
+        scenario.key === "label" ? "高风险反馈需要明确处理入口、负责人和关闭状态。" : "异常状态需要给用户明确提示、处理入口和内部追踪字段。",
+        scenario.key === "label" ? "正式打样前需要完成尺寸、边距、贴标位置和验收负责人确认。" : "上线前需要完成权限、数据口径、验收负责人和回滚方案确认。",
+        ...acceptedFeedback.map(item => `${scenario.key === "label" ? "供应商反馈回写" : "研发反馈回写"}：${item.type} - ${item.text}`)
       ].map(item => `<li>${escapeHtml(item)}</li>`).join("");
       document.getElementById("acceptanceText").innerHTML = getAcceptanceCriteria(scenario)
         .map(([title, detail]) => `<strong>${escapeHtml(title)}：</strong>${escapeHtml(detail)}`)
@@ -2678,7 +2757,16 @@ ORDER BY dt;</div>
         ]);
         competitorBody.innerHTML = rows.map(row => `<tr><td>${escapeHtml(row[0])}</td><td>${escapeHtml(row[1])}</td><td>${escapeHtml(row[2])}</td></tr>`).join("");
       }
-      const sql = `SELECT
+      const sql = scenario.key === "label" ? `SELECT
+  version,
+  COUNT(*) AS review_item_cnt,
+  SUM(CASE WHEN status = 'blocked' THEN 1 ELSE 0 END) AS blocking_cnt,
+  AVG(confirm_rounds) AS avg_confirm_rounds,
+  SUM(CASE WHEN rework_after_sample THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS rework_rate
+FROM ${scenario.sqlTable}
+WHERE created_at >= CURRENT_DATE - INTERVAL '30 day'
+GROUP BY version
+ORDER BY version;` : `SELECT
   DATE(created_at) AS dt,
   COUNT(*) AS event_cnt,
   COUNT(DISTINCT user_id) AS user_cnt,
@@ -2688,7 +2776,8 @@ FROM ${scenario.sqlTable}
 WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
 GROUP BY DATE(created_at)
 ORDER BY dt;`;
-      document.getElementById("sqlPreview").textContent = sql;
+      const sqlPreview = document.getElementById("sqlPreview");
+      if (sqlPreview) sqlPreview.textContent = sql;
     }
 
     const exportSamples = {
@@ -2791,80 +2880,18 @@ A：用户可以查看来源原文，也可以提交反馈给管理员。
 反馈机制：
 - 用户可标记“有帮助 / 没帮助”。
 - 低置信度答案必须提供查看原文入口。
-- 每周汇总未命中问题和错误答案，进入内容治理清单。`,
-      "数据分析与 SQL": `数据分析方案
-
-核心指标：
-1. 平均查找时间：从进入搜索到查看答案来源的平均耗时。
-2. 答案采纳率：用户标记“有帮助”的问答占比。
-3. 未命中率：没有返回有效答案的问题占比。
-4. 重复咨询量：运营群、客服群中同类问题重复出现次数。
-
-埋点事件：
-- question_submit：用户提交问题。
-- answer_show：系统展示答案。
-- source_click：用户点击来源文档。
-- feedback_submit：用户提交有帮助 / 没帮助。
-- no_match_show：系统展示未命中状态。
-
-SQL 示例：
-SELECT
-  DATE(created_at) AS dt,
-  COUNT(*) AS question_cnt,
-  AVG(answer_time_seconds) AS avg_find_time,
-  SUM(CASE WHEN feedback = 'helpful' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS helpful_rate,
-  SUM(CASE WHEN answer_status = 'no_match' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS no_match_rate
-FROM knowledge_question_log
-WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
-GROUP BY DATE(created_at)
-ORDER BY dt;`,
-      "PRD 增强模块": `PRD 增强模块
-
-一、竞品分析
-- Notion：适合文档总结和问答，但不帮助团队判断是否该优先做知识库问答。
-- 飞书妙记 / 文档：适合会议沉淀，但对方案取舍和评审风险提示不足。
-- 腾讯文档：协作基础好，但需要更强的问题诊断和方案结构化输出。
-- Confluence：知识库能力强，但对轻量产品团队门槛偏高。
-
-二、差异化机会
-ClearBrief 不只整理文档，而是把“问题诊断 -> 方案取舍 -> 部门对齐 -> 数据指标 -> PRD -> 评审”串成一个产品经理工作流。
-
-三、评审 Checklist
-- 是否明确问题根因和核心场景？
-- 是否定义本期范围和非本期范围？
-- 是否有权限、异常、低置信度兜底？
-- 是否有上线后数据指标和 SQL 口径？
-- 是否给研发、设计、运营、数据分别输出了材料？`
-,
-      "能力边界说明": `能力边界说明
-
-一、适合使用的场景
-- 方案评审前的问题诊断。
-- 项目启动前的方案取舍和 MVP 收敛。
-- 将会议纪要、用户反馈或业务问题整理成 PRD 初稿。
-- 为老板、研发、设计、数据和运营整理不同视角的沟通材料。
-
-二、不适合替代的工作
-- 不替代业务负责人判断项目优先级。
-- 不替代研发评估技术方案和排期。
-- 不替代法务、财务、数据安全等专业审批。
-- 不承诺整理输出的内容可以直接进入开发，关键规则仍需要人工确认。
-
-三、上线前需要确认
-- 企业数据权限和敏感信息范围。
-- 输出内容的人工复核机制。
-- 后端分析服务成本、失败兜底和日志审计。
-- 与现有文档、协同工具、项目管理工具的连接方式。`
+- 每周汇总未命中问题和错误答案，进入内容治理清单。`
     };
 
     function buildPrdText() {
       const scenario = currentScenario || getScenario();
       const scope = scenario.scope.map(item => `- ${item}`).join("\n");
       const departments = scenario.departments.map(item => `- ${item}`).join("\n");
+      const isLabel = scenario.key === "label";
       const acceptedFeedback = devFeedbackItems
         .filter(item => item.status === "已回写")
         .map(item => `- ${item.type}：${item.text}`)
-        .join("\n") || "- 暂无已回写研发反馈。";
+        .join("\n") || (isLabel ? "- 暂无已回写供应商反馈。" : "- 暂无已回写研发反馈。");
       const confirmed = Object.entries(confirmedAnswersByKey)
         .map(([key, answer]) => {
           const question = scenario.questions.find(q => q[0] === key);
@@ -2890,7 +2917,19 @@ ClearBrief 不只整理文档，而是把“问题诊断 -> 方案取舍 -> 部�
       const ruleConfig = scenario.ruleConfig?.length
         ? `\n## 17. 规则配置\n${markdownTable(["规则项", "配置内容", "负责人/约束"], scenario.ruleConfig)}\n`
         : "";
-      return `# ${scenario.title} PRD 草稿
+      const launchGates = scenario.launchGates?.length
+        ? `\n## 18. ${isLabel ? "执行前门槛" : "排期前门槛"}\n${markdownTable(["门槛", "必须确认的内容", "负责人"], scenario.launchGates)}\n`
+        : "";
+      const exceptionQueue = scenario.exceptionQueue?.length
+        ? `\n## 19. ${isLabel ? "风险处理清单" : "异常队列"}\n${markdownTable(["异常类型", "触发条件", "处理方式"], scenario.exceptionQueue)}\n`
+        : "";
+      const eventTracking = scenario.eventTracking?.length
+        ? `\n## 20. ${isLabel ? "确认记录" : "埋点事件"}\n${markdownTable(["事件名", "触发时机", "关键字段"], scenario.eventTracking)}\n`
+        : "";
+      const rolloutPlan = scenario.rolloutPlan?.length
+        ? `\n## 21. ${isLabel ? "执行节奏" : "灰度计划"}\n${markdownTable(["阶段", "动作", "产出/判断"], scenario.rolloutPlan)}\n`
+        : "";
+      return `# ${scenario.title} ${isLabel ? "预审材料草稿" : "评审材料草稿"}
 
 ## 1. 项目背景
 ${scenario.background}
@@ -2904,109 +2943,59 @@ ${scenario.users}
 ## 4. 产品目标
 ${scenario.goal}
 
-## 5. 业务目标与成功指标
-${businessGoals}
-
-## 6. 已确认结论
+## 5. 已确认结论
 ${confirmed}
 
-## 7. 典型用户场景
-- 用户在真实工作场景中遇到问题，需要快速找到规则、状态或下一步动作。
-- 业务负责人需要在评审前确认目标、范围、指标和风险，避免需求进入开发后反复变更。
-- 产品经理需要把业务问题整理成可评审、可取舍、可验收的解决方案。
-
-## 8. MVP 范围
+## 6. ${isLabel ? "执行范围" : "MVP 范围"}
 ${scope}
 
-## 9. MVP 优先级
-${scopePriority}
-
-## 10. 方案对比与推荐
+## 7. 方案对比与推荐
 | 方案 | 价值 | 成本 | 风险 |
 | --- | --- | --- | --- |
 ${solutionRows}
 
 推荐结论：${scenario.recommendation || "先选择中低成本方案验证问题，再决定是否进入高成本系统改造。"}
 
-## 11. 非本期范围
-- 不做完整项目管理系统。
-- 不做复杂审批流。
-- 不做多人实时协作编辑。
-- 不在首期承诺完全自动决策，关键业务规则仍需人工确认。
-
-## 12. 信息成熟度判断
+## 8. 信息成熟度判断
 ${readinessBlocks.readiness}
 
-## 13. 缺口分层
+## 9. 缺口分层
 ${readinessBlocks.gaps}
 
-## 14. 功能需求拆解
-${requirements}
-
-## 15. 权限与角色
-${permissions}
-
-${statusFlow}${ruleConfig}
-## 18. 核心流程
+## 10. 核心流程
 1. 用户输入业务问题、会议纪要或反馈片段。
-2. 系统识别问题类型、受影响用户、可能根因和方案风险。
+2. 系统识别问题类型、${isLabel ? "相关角色、信息缺口和执行风险" : "受影响用户、可能根因和方案风险"}。
 3. 系统提出高优先级判断问题，产品经理逐条确认。
-4. 已确认判断进入结构化信息卡，并同步影响 PRD。
-5. 产品经理整理完整 PRD，进入评审和角色化导出。
+4. 已确认判断进入结构化信息卡，并同步影响${isLabel ? "预审材料" : "评审材料"}。
+5. 产品经理整理完整材料，进入${isLabel ? "执行前预审" : "评审前阻塞项检查"}。
 
-## 19. 跨部门对齐
+## 11. ${isLabel ? "跨角色对齐" : "跨部门对齐"}
 ${departments}
 
-## 20. 竞品分析
-${scenario.competition}
-
-| 竞品/参考对象 | 主要特点 | 对本项目的启发 |
-| --- | --- | --- |
-${competitors}
-
-## 21. 数据指标与 SQL 口径
-${scenario.metrics}
-
-建议埋点字段：
-${sqlFields}
-
-\`\`\`sql
-SELECT
-  DATE(created_at) AS dt,
-  COUNT(*) AS event_cnt,
-  COUNT(DISTINCT user_id) AS user_cnt
-FROM ${scenario.sqlTable}
-WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
-GROUP BY DATE(created_at)
-ORDER BY dt;
-\`\`\`
-
-## 22. 风险与兜底
+## 12. 风险与兜底
 - 输出内容需要区分“已确认”和“待确认”。
 - 关键规则必须有人工确认。
-- 异常和低置信度场景需要兜底入口。
-- 数据异常时必须展示更新时间、影响范围和处理状态。
-- 权限或预算相关规则需要在上线前由对应负责人确认。
+- 执行前必须确认尺寸、边距、贴标位置、样张标准和验收负责人。
+- 没有关闭阻塞项时，不建议进入正式打样或高成本制作。
 
-## 23. 研发反馈处理
+## 13. ${isLabel ? "供应商反馈处理" : "研发反馈处理"}
 ${acceptedFeedback}
 
-## 24. 里程碑
+## 14. 里程碑
 | 阶段 | 时间 | 产出 |
 | --- | --- | --- |
-| 问题诊断与方案取舍 | 第 1 周 | PRD、方案对比、数据指标口径 |
-| 原型与评审 | 第 2 周 | 核心页面原型、评审 Checklist |
-| 开发联调 | 第 3-4 周 | MVP 功能、埋点、异常状态 |
-| 灰度上线 | 第 5 周 | 灰度数据、问题清单、优化建议 |
+| 问题诊断与路径取舍 | 第 1 步 | 预审材料、路径对比、验收口径 |
+| 低保真验证 | 第 2 步 | 标签样张、贴标检查、风险清单 |
+| 正式执行 | 第 3 步 | Figma 精修、打印打样、展示材料 |
+| 复盘调整 | 第 4 步 | 打样反馈、问题清单、优化建议 |
 
-## 25. 验收标准
+## 15. 验收标准
 ${acceptanceRows}
 
-## 26. 评审 Checklist
-- 问题根因和受影响用户是否明确？
-- MVP 范围是否可以在首期落地？
-- 权限、预算、异常和人工兜底是否都有负责人？
-- 核心指标是否有埋点字段和 SQL 口径？
+## 16. ${isLabel ? "预审 Checklist" : "评审 Checklist"}
+- 问题根因和${isLabel ? "相关角色" : "受影响用户"}是否明确？
+- ${isLabel ? "执行范围是否可以在首期落地" : "MVP 范围是否可以在首期落地"}？
+- ${isLabel ? "尺寸、边距、贴标位置和验收标准" : "权限、预算、异常和人工兜底"}是否都有负责人？
 - 是否明确哪些内容不在本期范围？`;
     }
 
@@ -3079,12 +3068,12 @@ ${acceptanceRows}
         helperTitle = "当前动作：开始分析";
         helperText = "先识别问题和待判断事项。";
       } else if (current === 1) {
-        nextBtn.textContent = confirmedAnswers ? "整理 PRD 草稿" : "设为主要判断";
-        helperTitle = confirmedAnswers ? "当前动作：整理 PRD 草稿" : "当前动作：确认关键判断";
-        helperText = confirmedAnswers ? "已确认关键判断，可以沉淀到 PRD。" : "先处理最影响首期范围的判断，信息卡会同步更新。";
+        nextBtn.textContent = confirmedAnswers ? "整理预审材料" : "设为主要判断";
+        helperTitle = confirmedAnswers ? "当前动作：整理预审材料" : "当前动作：确认关键判断";
+        helperText = confirmedAnswers ? "已确认关键判断，可以沉淀到预审材料。" : "先处理最影响首期范围的判断，信息卡会同步更新。";
       } else if (current === 2) {
-        nextBtn.textContent = fullPrdReady ? "进入方案评审" : "整理完整 PRD";
-        helperTitle = fullPrdReady ? "当前动作：进入方案评审" : "当前动作：整理完整 PRD";
+        nextBtn.textContent = fullPrdReady ? "进入执行预审" : "整理完整材料";
+        helperTitle = fullPrdReady ? "当前动作：进入执行预审" : "当前动作：整理完整材料";
         helperText = fullPrdReady ? "检查推荐路径、风险和推进条件。" : "先整理完整可复制版本。";
       } else if (current === 3) {
         nextBtn.textContent = "导出材料";
@@ -3103,8 +3092,8 @@ ${acceptanceRows}
       if (flowHelperMeta) flowHelperMeta.textContent = `第 ${current + 1} / ${pages.length} 步`;
       if (generateDocHint) {
         generateDocHint.textContent = confirmedAnswers
-          ? `已确认 ${confirmedAnswers} 条关键判断，可以整理 PRD 草稿。`
-          : "先确认至少一个关键判断，才能整理 PRD 草稿。";
+          ? `已确认 ${confirmedAnswers} 条关键判断，可以整理预审材料。`
+          : "先确认至少一个关键判断，才能整理预审材料。";
       }
     }
 
@@ -3238,7 +3227,7 @@ ${acceptanceRows}
       const question = scenario.questions.find(q => q[0] === answerKey) || scenario.questions[0];
       if (!question) return;
       currentAnswerKey = question[0];
-      const answer = confirmedAnswersByKey[currentAnswerKey] || question[3] || "建议先补齐这个问题，再整理 PRD 草稿。";
+      const answer = confirmedAnswersByKey[currentAnswerKey] || question[3] || "建议先补齐这个问题，再整理预审材料。";
       document.querySelectorAll(".question").forEach(item => item.classList.remove("active"));
       const activeQuestion = [...document.querySelectorAll("[data-answer]")]
         .find(button => button.dataset.answer === currentAnswerKey)
@@ -3256,7 +3245,7 @@ ${acceptanceRows}
       maxUnlocked = 0;
       confirmedAnswers = 0;
       diagnosisStatusByKey = {};
-      activeExampleKey = "receipt";
+      activeExampleKey = "label";
       fillCaseExample(activeExampleKey);
       currentScenario = getScenario();
       unlock(0);
@@ -3265,8 +3254,8 @@ ${acceptanceRows}
       document.getElementById("analysisCards").style.display = "none";
       document.getElementById("answerBox").classList.remove("active");
       document.getElementById("generateDocBtn").disabled = true;
-      document.getElementById("prdPreview").textContent = "点击“整理完整 PRD”后，会在这里输出一份可复制的 PRD 草稿。";
-      document.getElementById("prdStatus").textContent = "尚未整理完整 PRD。整理后会默认包含风险、指标、验收标准和跨部门待确认项。";
+      document.getElementById("prdPreview").textContent = "点击“整理完整材料”后，会在这里输出一份可复制的预审材料草稿。";
+      document.getElementById("prdStatus").textContent = "尚未整理完整预审材料。整理后会默认包含风险、信源、验收标准和跨角色待确认项。";
       document.getElementById("prdStatus").classList.remove("success");
       currentPrdText = "";
       fullPrdReady = false;
@@ -3283,7 +3272,7 @@ ${acceptanceRows}
       goTo(0);
       logActivity("activity1", "等待输入业务问题");
       logActivity("activity2", "尚未形成诊断");
-      logActivity("activity3", "尚未进入评审");
+      logActivity("activity3", "尚未进入预审");
       showToast("体验已重置");
     });
 
@@ -3338,7 +3327,7 @@ ${acceptanceRows}
       const btn = document.getElementById("analyzeBtn");
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span>分析中';
-      document.getElementById("analysisEmpty").innerHTML = "<h3>正在分析</h3><p>系统正在识别问题类型、受影响用户和方案风险...</p>";
+      document.getElementById("analysisEmpty").innerHTML = "<h3>正在分析</h3><p>系统正在识别问题类型、相关角色和执行风险...</p>";
       const scenario = getScenario();
       renderAnalysis(scenario);
       renderQuestions(scenario);
@@ -3355,7 +3344,7 @@ ${acceptanceRows}
         logActivity("activity2", `已整理 ${scenario.questions.length} 个关键判断`);
         btn.disabled = false;
         btn.innerHTML = "重新分析";
-        showToast("已识别问题类型和方案风险");
+        showToast("已识别问题类型和执行风险");
         setTimeout(() => {
           goTo(1);
           selectQuestion(scenario.questions[0]?.[0]);
@@ -3389,7 +3378,7 @@ ${acceptanceRows}
         document.getElementById("generateDocBtn").disabled = false;
         unlock(2);
       }
-      logActivity("activity2", `已归档 ${confirmedAnswers} 条方案判断，可整理 PRD 草稿`);
+      logActivity("activity2", `已归档 ${confirmedAnswers} 条路径判断，可整理预审材料`);
       showToast(`已标记为：${status}`);
       updateNextButton();
     }
@@ -3413,12 +3402,12 @@ ${acceptanceRows}
       unlock(2);
       goTo(2);
       fullPrdReady = false;
-      logActivity("activity2", `已整理 ${scenario.title} PRD 草稿`);
+      logActivity("activity2", `已整理 ${scenario.title} 预审材料草稿`);
       currentPrdText = buildPrdText();
       document.getElementById("prdPreview").textContent = currentPrdText;
-      document.getElementById("prdStatus").textContent = "已整理初版 PRD，已包含风险、指标、验收标准和跨部门待确认项。";
+      document.getElementById("prdStatus").textContent = "已整理初版预审材料，已包含风险、信源、验收标准和跨角色待确认项。";
       document.getElementById("prdStatus").classList.add("success");
-      showToast("已整理 PRD 草稿");
+      showToast("已整理预审材料");
     });
 
     document.getElementById("editDocBtn").addEventListener("click", () => {
@@ -3435,8 +3424,8 @@ ${acceptanceRows}
     document.getElementById("reviewBtn").addEventListener("click", () => {
       unlock(3);
       goTo(3);
-      logActivity("activity3", "已进入方案评审：检查推荐路径、风险和推进条件");
-      showToast("已进入方案评审");
+      logActivity("activity3", "已进入执行预审：检查推荐路径、风险和推进条件");
+      showToast("已进入执行预审");
     });
 
     document.getElementById("fullPrdBtn").addEventListener("click", () => {
@@ -3445,13 +3434,13 @@ ${acceptanceRows}
       if (prdDetail) prdDetail.open = true;
       const preview = document.getElementById("prdPreview");
       preview.textContent = currentPrdText;
-      document.getElementById("prdStatus").textContent = "完整 PRD 已整理。现在可以复制、复制 Word 版或下载 Markdown。";
+      document.getElementById("prdStatus").textContent = "完整预审材料已整理。现在可以复制、复制 Word 版材料或下载 Markdown。";
       document.getElementById("prdStatus").classList.add("success");
       preview.scrollIntoView({ behavior: "smooth", block: "center" });
       fullPrdReady = true;
       unlock(3);
-      logActivity("activity2", "已整理完整 PRD：含竞品分析、部门对齐、数据指标");
-      showToast("已整理完整 PRD");
+      logActivity("activity2", "已整理完整预审材料：含参考分析、角色对齐、验收指标");
+      showToast("已整理完整预审材料");
     });
 
     document.getElementById("copyPrdBtn").addEventListener("click", async () => {
@@ -3461,7 +3450,7 @@ ${acceptanceRows}
       }
       try {
         await navigator.clipboard.writeText(currentPrdText);
-        showToast("已复制 PRD");
+        showToast("已复制预审材料");
       } catch {
         showToast("当前浏览器不支持自动复制");
       }
@@ -3486,7 +3475,7 @@ ${acceptanceRows}
         document.getElementById("prdPreview").textContent = currentPrdText;
       }
       const scenario = currentScenario || getScenario();
-      const filename = `${scenario.title.replace(/[\\/:*?"<>|]/g, "")}-PRD.md`;
+      const filename = `${scenario.title.replace(/[\\/:*?"<>|]/g, "")}-预审材料.md`;
       downloadTextFile(filename, currentPrdText, "text/markdown;charset=utf-8");
       showToast("已下载 Markdown");
     });
@@ -3608,73 +3597,73 @@ ${acceptanceRows}
       document.getElementById("closedCount").textContent = handled;
       document.getElementById("preflightDone").textContent = `${preflight.done}/${preflight.total}`;
       document.getElementById("preflightMissing").textContent = preflight.missing;
-      document.getElementById("meetingMode").textContent = preflight.missing > 2 ? "先补判断" : preflight.missing > 0 ? "先预审" : "可评审";
+      document.getElementById("meetingMode").textContent = preflight.missing > 2 ? "先补判断" : preflight.missing > 0 ? "先预审" : "可执行";
       document.getElementById("roleConfirmedCount").textContent = roles.confirmed;
       document.getElementById("roleRiskCount").textContent = roles.riskCount;
       document.getElementById("roleMeetingAdvice").textContent = roles.riskCount > 2 ? "补齐关键角色" : roles.riskCount > 0 ? "会后跟进" : "意见已对齐";
       if (preflight.missing > 2) {
-        document.getElementById("reviewDecision").textContent = "暂缓评审";
-        document.getElementById("readyState").textContent = "先补方案依据";
+        document.getElementById("reviewDecision").textContent = "建议先补齐材料";
+        document.getElementById("readyState").textContent = "先补预审依据";
         document.getElementById("nextStage").textContent = "补齐判断";
-        document.getElementById("scoreHint").textContent = "方案依据不足，建议先补齐根因、推荐理由和验证指标";
-        document.getElementById("reviewGate").textContent = "推进判断：先补方案依据，不建议拉跨部门评审";
+        document.getElementById("scoreHint").textContent = "预审依据不足，建议先补齐目标、推荐路径和验收标准";
+        document.getElementById("reviewGate").textContent = "建议依据：先补预审依据，不建议进入正式执行";
         updateDecisionExplain(
-          `当前方案评审依据仍缺 ${preflight.missing} 项，跨部门评审很可能变成现场想方案。先把根因、推荐路径和验证指标补齐，能减少评审会上的反复争论。`,
+          `当前执行前预审依据仍缺 ${preflight.missing} 项，直接推进很可能变成执行中反复补标准。先把目标、推荐路径和验收标准补齐，能减少打样后的返工。`,
           [
-            "补齐方案依据：优先补问题根因、推荐理由、MVP 边界。",
-            "先做内部预审：产品和业务负责人先确认是否值得投入。",
-            "再拉跨部门评审：方案依据完整后再邀请研发、设计、数据和运营。"
+            "补齐预审依据：优先补信息优先级、推荐理由、执行边界。",
+            "先做内部预审：产品和负责人先确认是否值得投入。",
+            "再拉跨角色确认：依据完整后再邀请设计、品牌、供应商和销售展示。"
           ]
         );
         document.getElementById("reviewAlert").classList.add("show");
-        logReviewActivity(`方案依据仍缺 ${preflight.missing} 项，建议先补齐`);
+        logReviewActivity(`预审依据仍缺 ${preflight.missing} 项，建议先补齐`);
         reviewReady = false;
       } else if (remaining === 0 && roles.riskCount === 0 && preflight.missing === 0) {
-        document.getElementById("reviewDecision").textContent = "通过";
+        document.getElementById("reviewDecision").textContent = "建议进入正式打样评估";
         document.getElementById("readyState").textContent = "可进入下一阶段";
-        document.getElementById("nextStage").textContent = "开发排期";
-        document.getElementById("scoreHint").textContent = "关键验证和角色意见已关闭，可以进入开发排期评估";
-        document.getElementById("reviewGate").textContent = "推进判断：可进入开发排期评估";
+        document.getElementById("nextStage").textContent = "正式打样";
+        document.getElementById("scoreHint").textContent = "关键验证和角色意见已关闭，可以进入正式打样评估";
+        document.getElementById("reviewGate").textContent = "建议依据：关键阻塞项已关闭";
         updateDecisionExplain(
-          "方案依据、关键角色意见和评审待办都已经关闭，当前版本具备进入开发排期评估的条件。",
+          "预审依据、关键角色意见和待办都已经关闭，当前版本具备进入正式制作和打印打样的条件。",
           [
-            "输出排期版本 PRD：冻结推荐方案、MVP 范围和非本期需求。",
-            "同步研发任务：把搜索优化、权限规则、问答试点拆成可估时任务。",
-            "建立上线复盘口径：按查找时间、采纳率、未命中率跟踪效果。"
+            "输出执行材料：冻结推荐路径、执行范围和非本期需求。",
+            "同步设计和供应商任务：把版式、尺寸、边距、贴标位置和样张标准拆成可确认项。",
+            "建立复盘口径：按确认轮次、样张修改、打样返工和展示一致性跟踪效果。"
           ]
         );
-        logReviewActivity("评审待办已关闭，可进入开发排期评估");
+        logReviewActivity("预审待办已关闭，系统建议进入正式打样评估");
         document.getElementById("reviewAlert").classList.remove("show");
         reviewReady = true;
       } else if (blocking === 0 && roles.riskCount <= 2 && preflight.missing <= 2) {
-        document.getElementById("reviewDecision").textContent = "带条件通过";
+        document.getElementById("reviewDecision").textContent = "建议带条件推进";
         document.getElementById("readyState").textContent = "可继续推进";
-        document.getElementById("nextStage").textContent = "原型细化";
-        document.getElementById("scoreHint").textContent = "阻塞项已处理，剩余问题可跟随原型和会后动作继续验证";
-        document.getElementById("reviewGate").textContent = "推进判断：可做原型细化，排期前补齐非阻塞验证项";
+        document.getElementById("nextStage").textContent = "样张细化";
+        document.getElementById("scoreHint").textContent = "阻塞项已处理，剩余问题可跟随样张和会后动作继续验证";
+        document.getElementById("reviewGate").textContent = "建议依据：可做低保真样张，正式打样前补齐非阻塞验证项";
         updateDecisionExplain(
-          `阻塞项已处理，当前还剩 ${remaining} 个非阻塞验证项、${roles.riskCount} 个角色意见需要跟进。可以继续推进原型细化，但排期前要把这些问题收口。`,
+          `阻塞项已处理，当前还剩 ${remaining} 个非阻塞验证项、${roles.riskCount} 个角色意见需要跟进。可以继续推进样张细化，但正式打样前要把这些问题收口。`,
           [
-            "继续原型细化：把搜索入口、标签、问答试点状态画清楚。",
+            "继续样张细化：把信息层级、标签尺寸、边距、贴标位置和展示材料画清楚。",
             "跟进非阻塞验证项：明确负责人和截止时间，避免会后悬空。",
-            "排期前复核一次：确认剩余问题不会影响 MVP 范围和验收标准。"
+            "打样前复核一次：确认剩余问题不会影响执行范围和验收标准。"
           ]
         );
         document.getElementById("reviewAlert").classList.remove("show");
         logReviewActivity(`仍有 ${remaining} 个非阻塞项待跟进`);
         reviewReady = true;
       } else {
-        document.getElementById("reviewDecision").textContent = "带条件通过";
+        document.getElementById("reviewDecision").textContent = "建议先做低成本验证";
         document.getElementById("readyState").textContent = "待复审";
-        document.getElementById("nextStage").textContent = "技术预研";
-        document.getElementById("scoreHint").textContent = "存在阻塞项或关键角色疑问，暂不进入开发排期";
-        document.getElementById("reviewGate").textContent = "推进判断：先验证搜索和权限方案，暂不进入开发排期";
+        document.getElementById("nextStage").textContent = "低保真验证";
+        document.getElementById("scoreHint").textContent = "存在阻塞项或关键角色疑问，暂不进入正式打样";
+        document.getElementById("reviewGate").textContent = "建议依据：先确认尺寸、边距和样张标准，暂不进入正式打样";
         updateDecisionExplain(
-          `当前仍有 ${blocking} 个阻塞项和 ${roles.riskCount} 个角色疑问，直接排期会把权限、兜底和投入产出风险带进开发阶段。`,
+          `当前仍有 ${blocking} 个阻塞项和 ${roles.riskCount} 个角色疑问，直接执行会把尺寸、贴标、样张和展示一致性风险带进打样阶段。`,
           [
-            "关闭高优先级阻塞项：低置信度兜底、文档级权限必须先有方案。",
-            "拉齐关键角色意见：研发、数据、运营需要给出投入和可行性判断。",
-            "保留技术预研：先验证搜索优化、权限过滤和 问答试点成本。"
+            "关闭高优先级阻塞项：标签尺寸、必填信息、打印边距和贴标位置必须先有方案。",
+            "拉齐关键角色意见：产品、设计、品牌和供应商需要给出投入和可行性判断。",
+            "保留低保真验证：先验证信息层级、可读性和贴标位置。"
           ]
         );
         document.getElementById("reviewAlert").classList.add("show");
@@ -3689,8 +3678,8 @@ ${acceptanceRows}
       if (!devFeedbackItems.length) {
         list.innerHTML = `
           <div class="feedback-item">
-            <div class="feedback-item-head"><strong>暂无研发反馈</strong><span class="pill">待输入</span></div>
-            <p>可以把会议、群聊或文档评论里的研发意见整理到这里，再判断是否回写进 PRD。</p>
+            <div class="feedback-item-head"><strong>暂无供应商反馈</strong><span class="pill">待输入</span></div>
+            <p>可以把会议、群聊或文档评论里的供应商意见整理到这里，再判断是否回写进预审材料。</p>
           </div>
         `;
         return;
@@ -3703,7 +3692,7 @@ ${acceptanceRows}
           </div>
           <p>${escapeHtml(item.text)}</p>
           <div class="actions">
-            <button class="btn primary" data-dev-action="accept" data-dev-id="${item.id}">回写进 PRD</button>
+            <button class="btn primary" data-dev-action="accept" data-dev-id="${item.id}">回写进材料</button>
             <button class="btn" data-dev-action="hold" data-dev-id="${item.id}">本期不处理</button>
           </div>
         </div>
@@ -3747,7 +3736,7 @@ ${acceptanceRows}
       });
       input.value = "";
       renderDevFeedbackList();
-      logActivity("activity3", "已记录研发反馈，等待产品判断是否回写 PRD");
+      logActivity("activity3", "已记录供应商反馈，等待产品判断是否回写预审材料");
       showToast("已记录反馈");
     });
 
@@ -3759,8 +3748,8 @@ ${acceptanceRows}
       item.status = btn.dataset.devAction === "accept" ? "已回写" : "本期不处理";
       renderDevFeedbackList();
       syncFeedbackToPrd();
-      logActivity("activity3", item.status === "已回写" ? "已将研发反馈回写 PRD" : "已记录本期不处理的研发反馈");
-      showToast(item.status === "已回写" ? "已回写进 PRD" : "已标记本期不处理");
+      logActivity("activity3", item.status === "已回写" ? "已将供应商反馈回写预审材料" : "已记录本期不处理的供应商反馈");
+      showToast(item.status === "已回写" ? "已回写进预审材料" : "已标记本期不处理");
     });
 
     document.getElementById("autoFixBtn").addEventListener("click", () => {
@@ -3786,7 +3775,7 @@ ${acceptanceRows}
 
     function buildExportText(type) {
       const scenario = currentScenario || getScenario();
-      if (type === "评审会议纪要") {
+      if (type === "预审会议纪要" || type === "评审会议纪要") {
         const statuses = [...document.querySelectorAll(".review-status")].map(s => s.value);
         const handled = statuses.filter(v => v === "已处理").length;
         const remaining = statuses.length - handled;
@@ -3794,51 +3783,51 @@ ${acceptanceRows}
         const nonBlocking = Math.max(0, remaining - blocking);
         const preflight = getPreflightStats();
         const roles = getRoleStats();
-        const decision = preflight.missing > 2 ? "会前待补齐" : remaining === 0 && roles.riskCount === 0 && preflight.missing === 0 ? "通过" : "带条件通过";
+        const decision = preflight.missing > 2 ? "建议会前补齐" : remaining === 0 && roles.riskCount === 0 && preflight.missing === 0 ? "建议进入正式打样评估" : "建议带条件推进";
         const nextStage = document.getElementById("nextStage").textContent;
         const roleText = roles.roles.map(item => `- ${item.role}：${item.status}`).join("\n");
         const feedback = devFeedbackItems.length
           ? devFeedbackItems.map(item => `- ${item.type}（${item.status}）：${item.text}`).join("\n")
-          : "- 暂无研发反馈回写。";
-        return `方案评审会议纪要
+          : "- 暂无供应商反馈回写。";
+        return `执行前预审会议纪要
 
 项目：${scenario.title}
 
-评审结论：
+预审结论：
 ${decision}
 
 当前判断：
-- 会前材料：${preflight.done}/${preflight.total} 已准备，${preflight.missing} 项待补齐
+- 预审材料：${preflight.done}/${preflight.total} 已准备，${preflight.missing} 项待补齐
 - 角色意见：${roles.confirmed} 个已确认，${roles.riskCount} 个仍需跟进
 - 阻塞项：${blocking} 个
 - 非阻塞项：${nonBlocking} 个
 - 已关闭：${handled} 个
 - 下一阶段：${nextStage}
 
-评审关注点：
+预审关注点：
 1. 问题价值：是否解决真实业务问题，目标用户和场景是否清楚。
-2. 方案取舍：推荐路径、不选理由和进入条件是否讲清楚。
-3. 方案严谨性：关键规则是否有边界条件，低置信度或失败场景是否有兜底。
-4. 优先级清晰度：MVP 范围是否足够收敛，哪些内容可以后置。
-5. 实现成本可控性：研发依赖、数据口径和上线风险是否提前暴露。
+2. 路径取舍：推荐路径、不选理由和进入条件是否讲清楚。
+3. 执行严谨性：尺寸、边距、贴标位置和样张标准是否有边界条件。
+4. 优先级清晰度：执行范围是否足够收敛，哪些内容可以后置。
+5. 返工风险可控性：供应商依赖、验收口径和展示一致性是否提前暴露。
 
 待办与责任人：
-- 产品 + 研发：补齐低置信度回答的来源引用、查看原文和反馈入口。
-- 研发 + 管理员：按部门、角色、文档类型细化访问边界。
-- 产品 + 数据：把效果指标收敛到查找时间、重复咨询量、答案采纳率。
+- 产品 + 品牌：补齐信息优先级、必填信息和表达边界。
+- 设计 + 供应商：确认标签尺寸、打印边距、贴标位置和样张标准。
+- 产品 + 设计：把验收指标收敛到可读性、打样返工和展示一致性。
 
 角色意见状态：
 ${roleText}
 
-研发反馈回写：
+供应商反馈回写：
 ${feedback}
 
 会议后动作：
 ${preflight.missing > 2
-  ? "- 先补齐会前材料，再组织跨部门评审。\n- 产品经理先做内部预审，避免评审会现场补文档。"
+  ? "- 先补齐预审材料，再组织跨角色确认。\n- 产品经理先做内部预审，避免执行中现场补标准。"
   : blocking > 0 || roles.riskCount > 0
-    ? "- 先关闭阻塞项和关键角色疑问，再进入开发排期评估。\n- 非阻塞问题可随原型和技术预研继续补充。"
-    : "- 可继续推进原型细化和技术预研。\n- 非阻塞问题在排期前确认负责人和完成时间。"}
+    ? "- 先关闭阻塞项和关键角色疑问，再进入正式打样评估。\n- 非阻塞问题可随样张验证继续补充。"
+    : "- 可继续推进样张细化和正式打样。\n- 非阻塞问题在打样前确认负责人和完成时间。"}
 `;
       }
       if (type === "老板摘要") {
@@ -3857,23 +3846,23 @@ ${scenario.scope.join("\n")}
 ${scenario.gaps}
 
 建议：
-可以启动 MVP，但进入开发排期前需要先确认范围、指标、权限和异常兜底。`;
+可以启动低成本验证，但进入正式执行前需要先确认范围、验收标准、角色责任和风险兜底。`;
       }
-      if (type === "研发任务清单") {
-        return `研发任务清单
+      if (type === "供应商确认单" || type === "研发任务清单") {
+        return `供应商确认单
 
 项目：${scenario.title}
 
-用户故事：
-作为目标用户，我希望在核心场景里更快完成任务，并能看到关键规则或结果来源。
+确认目标：
+在正式打样前确认尺寸、材质、边距、贴标位置和样张标准，避免执行后返工。
 
-首期功能：
+本次确认范围：
 ${scenario.scope.map(item => `- ${item}`).join("\n")}
 
 验收标准：
 - ${scenario.acceptance}
-- 异常状态需要有明确提示和兜底入口。
-- 关键数据需要能被记录和复盘。`;
+- 高风险反馈需要有明确负责人和关闭状态。
+- 样张修改原因需要能被记录和复盘。`;
       }
       if (type === "设计 Brief") {
         return `设计 Brief
@@ -3883,17 +3872,14 @@ ${scenario.scope.map(item => `- ${item}`).join("\n")}
 核心用户：
 ${scenario.users}
 
-关键页面：
-- 输入/查询入口
-- 结果页或任务页
-- 异常/未命中状态
-- 反馈或人工处理入口
+关键输出：
+- 信息优先级表
+- 低保真标签样张
+- Figma 正式制作稿
+- 展示材料同步版本
 
 设计重点：
-把系统判断、来源、状态和下一步动作讲清楚，避免用户误解。`;
-      }
-      if (type === "数据分析与 SQL") {
-        return document.getElementById("sqlPreview").textContent;
+把信息层级、来源、贴标限制和下一步动作讲清楚，避免团队把未确认内容直接带进打样。`;
       }
       return exportSamples[type] || "暂无预览内容。";
     }

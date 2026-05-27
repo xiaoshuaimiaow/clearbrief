@@ -31,7 +31,24 @@
       color: var(--ink);
       font-family: Arial, "Microsoft YaHei", sans-serif;
     }
+    :focus-visible {
+      outline: 3px solid rgba(37, 99, 235, .38);
+      outline-offset: 3px;
+    }
     a { color: inherit; }
+    .skip-link {
+      position: absolute;
+      left: 24px;
+      top: -48px;
+      z-index: 50;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .skip-link:focus { top: 16px; }
     .wrap {
       max-width: 1180px;
       margin: 0 auto;
@@ -104,7 +121,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 42px;
+      min-height: 44px;
       border-radius: 8px;
       padding: 0 18px;
       text-decoration: none;
@@ -153,6 +170,34 @@
     }
     .mock-row strong { display: block; margin-bottom: 6px; font-size: 14px; }
     .mock-row span { color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .status-ladder {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .status-step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 10px;
+      min-height: 78px;
+    }
+    .status-step strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .status-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .status-step.active {
+      border-color: #fed7aa;
+      background: var(--amber-soft);
+    }
     .proof-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -368,7 +413,7 @@
       margin-top: 16px;
     }
     @media (max-width: 980px) {
-      .hero, .grid-2, .grid-3, .flow, .preview-grid, .timeline-item, .proof-strip, .judgement-board { grid-template-columns: 1fr; }
+      .hero, .grid-2, .grid-3, .flow, .preview-grid, .timeline-item, .proof-strip, .judgement-board, .status-ladder { grid-template-columns: 1fr; }
       h1 { font-size: 40px; }
       .nav { display: none; }
       section { padding: 24px; }
@@ -376,7 +421,8 @@
   </style>
 </head>
 <body>
-  <main class="wrap">
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <main class="wrap" id="main">
     <div class="topbar">
       <div class="brand">ClearBrief 清晰启动</div>
       <nav class="nav">
@@ -386,33 +432,40 @@
         <a href="#process">过程</a>
         <a href="#demo">Demo</a>
         <a href="#review">评审</a>
+        <a href="#method">方法沉淀</a>
         <a href="#reflection">复盘</a>
       </nav>
     </div>
 
     <header class="hero">
       <div>
-        <div class="eyebrow">产品经理作品集案例 / 方案预评审工具</div>
-        <h1>把业务问题，变成可比较、可取舍、可落地的解决方案</h1>
-        <p class="lead">ClearBrief 面向 0-3 年产品经理和项目负责人，帮助他们在问题大致明确但方案尚未收敛时，诊断根因、比较方案、确定 MVP，并整理成可评审、可分工的项目材料。</p>
+        <div class="eyebrow">产品经理作品集案例 / 执行前需求预审</div>
+        <h1>先确认清楚，再进入设计、研发或打样</h1>
+        <p class="lead">ClearBrief 面向 0-3 年产品经理和临时承担项目推进的同学。它不替团队拍板，而是在正式投入执行前，先判断目标、约束、角色责任、风险和验收标准是否已经对齐。</p>
         <div class="card" style="margin:18px 0 0; padding:18px 20px">
           <span class="tag blue">30 秒看懂</span>
-          <h3>它不是单纯的 AI PRD 生成器</h3>
-          <p>ClearBrief 的核心价值是方案预评审：先判断问题该不该用系统解决，再比较低成本流程优化、工具化和 AI 改造方案，最后把取舍沉淀进 PRD 与评审材料。</p>
+          <h3>它不是单纯的 PRD 模板</h3>
+          <p>ClearBrief 的核心价值是把“能不能进入执行、先确认什么、哪些角色必须参与、哪些风险会导致返工”提前说清。确认后的判断会进入预审材料、执行清单和角色待办，但系统不会替团队做最终决策。</p>
         </div>
         <div class="actions">
-          <a class="btn primary" href="demo.html">体验可点击 Demo</a>
+          <a class="btn primary" href="demo.html">开始预评审 Demo</a>
           <a class="btn" href="prd.html">查看产品说明</a>
           <a class="btn" href="PRD.md">查看 PRD</a>
         </div>
       </div>
       <div class="hero-card">
         <div class="screen">
-          <div class="screen-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>评审工作台预览</span></div>
+          <div class="screen-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>预审工作台预览</span></div>
           <div class="screen-body">
-            <div class="mock-row"><strong>问题诊断</strong><span>判断是流程、权限、内容治理、搜索体验还是系统能力问题。</span></div>
-            <div class="mock-row"><strong>方案取舍</strong><span>对比流程优化、轻量工具、AI 改造的收益、成本、风险和依赖。</span></div>
-            <div class="mock-row"><strong>评审结论</strong><span>根据阻塞项、角色意见和方案成熟度判断是否进入下一阶段。</span></div>
+            <div class="mock-row"><strong>问题诊断</strong><span>判断是目标不清、约束缺失、角色未对齐，还是验收标准不足。</span></div>
+            <div class="mock-row"><strong>信息取舍</strong><span>对比不同执行路径的成本、返工风险、依赖和验证难度。</span></div>
+            <div class="mock-row"><strong>推进结论</strong><span>根据阻塞项、角色意见和材料成熟度判断是否进入正式执行。</span></div>
+            <div class="status-ladder" aria-label="评审推进状态">
+              <div class="status-step"><strong>不能评审</strong><span>目标、用户或根因缺失</span></div>
+              <div class="status-step active"><strong>可预讨论</strong><span>可以先讨论方向和取舍</span></div>
+              <div class="status-step"><strong>可评审</strong><span>方案、边界和风险清楚</span></div>
+              <div class="status-step"><strong>可进入执行</strong><span>标准和负责人基本明确</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -420,80 +473,93 @@
 
     <section id="overview">
       <h2>面试官速览：这个项目想证明什么</h2>
-      <p class="section-sub">如果只看 1 分钟，这个作品集案例要传达的是：我不是把 AI 当成“文档生成按钮”，而是把它放进产品经理真实的方案判断流程里，用来帮助团队从已知问题走向可落地方案。</p>
+      <p class="section-sub">如果只看 1 分钟，这个作品集案例要传达的是：我没有把它做成“文档按钮”，而是从实习里的产品信息展示物料迭代出发，把信息取舍、执行约束和跨角色对齐的问题抽象成执行前预审流程。</p>
       <div class="proof-strip">
-        <div class="proof-card"><strong>1 条主线</strong><span>问题诊断 -> 方案对比 -> MVP 收敛 -> PRD -> 评审导出。</span></div>
-        <div class="proof-card"><strong>5 个页面</strong><span>首页、在线 Demo、产品说明、启动文档、导出中心，覆盖展示和体验。</span></div>
-        <div class="proof-card"><strong>8 类场景</strong><span>知识库、活动、数据、客服、教育、社区、预约和流程审批。</span></div>
-        <div class="proof-card"><strong>6 类角色</strong><span>业务、研发、设计、测试、数据、合规共同参与评审判断。</span></div>
+        <div class="proof-card"><strong>1 条主线</strong><span>需求预检 -> 信息取舍 -> 执行路径 -> 阻塞项 -> 可执行判断。</span></div>
+        <div class="proof-card"><strong>5 个页面</strong><span>首页、在线 Demo、产品说明、评审材料、工作台，围绕会前预审展开。</span></div>
+        <div class="proof-card"><strong>1 个主案例打穿</strong><span>以足霜产品信息展示物料为主案例，补齐信息优先级、尺寸约束、角色责任和验收标准。</span></div>
+        <div class="proof-card"><strong>5 类角色</strong><span>产品、设计、品牌、供应商、销售共同参与执行前判断。</span></div>
       </div>
       <div class="judgement-board">
-        <div class="judgement-card"><span class="tag blue">关键洞察</span><strong>真实难点是方案怎么解，不是需求怎么写</strong><p>所以我把产品从“PRD 生成器”调整成“方案预评审工具”，让流程围绕根因、取舍、MVP 和评审推进展开。</p></div>
-        <div class="judgement-card"><span class="tag amber">核心取舍</span><strong>默认不把 AI 当成最终决策者</strong><p>AI 负责提供备选方案和结构化材料，产品经理负责确认推荐理由、不选理由、边界和是否进入下一阶段。</p></div>
-        <div class="judgement-card"><span class="tag green">体验策略</span><strong>区分“快速体验”和“作品集说明”</strong><p>Demo 默认精简，面试讲解时再打开说明层，既能降低使用负担，也能保留完整产品思考。</p></div>
+        <div class="judgement-card"><span class="tag blue">关键洞察</span><strong>真实难点是执行前有没有对齐</strong><p>所以我把产品从“PRD 模板工具”调整成“执行前预审工具”，让流程围绕目标、约束、角色责任和验收标准展开。</p></div>
+        <div class="judgement-card"><span class="tag amber">核心取舍</span><strong>不替产品经理做最终决定</strong><p>系统负责整理备选方案和结构化材料，产品经理负责确认推荐理由、不选理由、边界和是否进入下一阶段。</p></div>
+        <div class="judgement-card"><span class="tag green">体验策略</span><strong>从小场景抽象方法</strong><p>Demo 不把自己讲成包装工具，而是用一个真实物料协作场景证明：执行前预审能减少反复确认和后期返工。</p></div>
       </div>
     </section>
 
     <section id="problem">
-      <h2>一、项目背景：真实难点不是“需求不清楚”</h2>
-      <p class="section-sub">很多实际工作里，业务问题并不难描述：资料难找、流程太慢、客服压力大、活动转化低。真正难的是判断问题根因、选择解决路径、控制首期范围，并证明方案值得投入。</p>
+      <h2>一、项目背景：真实难点不是“会不会写需求”</h2>
+      <p class="section-sub">我在产品信息展示物料迭代里看到的问题不是“版式怎么做更好看”，而是小尺寸包装和展示材料要同时承载产品卖点、成分说明、使用信息、品牌表达和贴标位置，但不同角色对信息优先级和验收标准并不总是同步。</p>
+      <div class="quote" style="margin:18px 0 20px">
+        ClearBrief 的想法来自我在 Fabricant Ltd 产品实习中参与的产品信息展示物料迭代。这个任务表面上是包装标签和展示材料的调整，但实际推进中，我发现反复沟通的重点并不只是表达形式，而是产品信息如何取舍、哪些内容必须优先展示、打印和实物展示后如何判断是否合格。
+        <span>因此我把这个场景抽象成 ClearBrief：一个面向执行前需求预审的 AI 工具，帮助团队在进入设计、开发或物料制作前，先明确目标、约束、风险点、角色责任和验收标准。</span>
+      </div>
       <div class="grid-3">
-        <div class="card"><span class="tag red">痛点 1</span><h3>问题清楚，根因不清</h3><p>“资料难找”可能是搜索差、权限乱、内容过期、培训缺失，也可能根本不是 AI 能优先解决的问题。</p></div>
-        <div class="card"><span class="tag amber">痛点 2</span><h3>方案容易过早收敛</h3><p>团队常直接跳到“做系统”或“上 AI”，但没有比较低成本流程优化、工具化方案和高成本改造的投入产出。</p></div>
-        <div class="card"><span class="tag purple">痛点 3</span><h3>评审会缺少取舍依据</h3><p>如果没有方案对比、MVP 边界、成本风险和验证指标，评审会容易变成各部门各说各话。</p></div>
+        <div class="card"><span class="tag red">痛点 1</span><h3>信息优先级不清</h3><p>产品卖点、成分说明、使用方法和品牌表达都重要，但小包装空间有限，必须先决定哪些信息放在第一眼。</p></div>
+        <div class="card"><span class="tag amber">痛点 2</span><h3>执行约束后置暴露</h3><p>尺寸、边距、贴标位置和打印限制如果到打样后才发现问题，就会带来反复改稿和物料返工。</p></div>
+        <div class="card"><span class="tag purple">痛点 3</span><h3>角色标准不一致</h3><p>产品关注用户理解，设计关注表达效果，供应商关注工艺，销售关注展示材料。如果没有预审清单，确认会变成来回追问。</p></div>
+      </div>
+    </section>
+
+    <section id="before-after">
+      <h2>二、为什么需要预审：执行前后对比</h2>
+      <p class="section-sub">我没有把 ClearBrief 做成“自动生成答案”的工具，而是让它帮助用户把执行前必须确认的内容提前暴露出来。</p>
+      <div class="grid-2">
+        <div class="card"><span class="tag red">没有预审时</span><h3>直接进入排版和打样</h3><p>容易在打印后才发现文字过小、边距不足、贴标位置偏移、展示材料和实物包装信息不一致，后续只能反复改稿。</p></div>
+        <div class="card"><span class="tag green">使用 ClearBrief 后</span><h3>先确认信息和执行门槛</h3><p>先确认信息优先级、尺寸约束、打印边距、贴标位置和样张验收标准，再进入 Figma 精修和正式打样。</p></div>
       </div>
     </section>
 
     <section id="solution">
-      <h2>二、产品方案：先诊断，再取舍</h2>
-      <p class="section-sub">我的设计判断是：AI 不应该一上来就替用户写长文档，而应该先像有经验的产品经理一样拆问题、给方案、讲取舍，再把被选中的方案整理成可评审材料。</p>
+      <h2>三、产品方案：先预审，再执行</h2>
+      <p class="section-sub">我的设计判断是：产品不应该一上来就替用户写长文档，而应该先帮他拆目标、约束、角色和风险，再把被确认的路径整理成可执行材料。</p>
       <div class="flow">
-        <div class="flow-step"><div class="num">1</div><h3>描述问题</h3><p>录入业务问题、现状流程、影响人群和已有尝试。</p></div>
-        <div class="flow-step"><div class="num">2</div><h3>诊断根因</h3><p>判断是流程、内容、权限、体验、数据还是系统能力问题。</p></div>
-        <div class="flow-step"><div class="num">3</div><h3>对比方案</h3><p>生成低/中/高成本方案，并比较收益、成本、风险和依赖。</p></div>
-        <div class="flow-step"><div class="num">4</div><h3>收敛 MVP</h3><p>选定首期方案，明确做什么、不做什么、如何验证有效。</p></div>
-        <div class="flow-step"><div class="num">5</div><h3>评审闭环</h3><p>沉淀 PRD、评审结论、角色意见、研发反馈和会后动作。</p></div>
+        <div class="flow-step"><div class="num">1</div><h3>描述事项</h3><p>录入要推进的物料、业务目标、已知约束和预期产出。</p></div>
+        <div class="flow-step"><div class="num">2</div><h3>识别缺口</h3><p>判断信息优先级、尺寸约束、角色责任和验收标准是否缺失。</p></div>
+        <div class="flow-step"><div class="num">3</div><h3>对比路径</h3><p>比较先排版、先打样、先做低成本贴标验证等路径的风险和依赖。</p></div>
+        <div class="flow-step"><div class="num">4</div><h3>确认门槛</h3><p>明确进入 Figma 排版、打印打样或展示材料制作前必须确认什么。</p></div>
+        <div class="flow-step"><div class="num">5</div><h3>推进判断</h3><p>判断当前事项是不能执行、可预讨论、可预审，还是可进入正式执行。</p></div>
       </div>
     </section>
 
     <section>
-      <h2>三、我在项目中的产品判断</h2>
+      <h2>四、我在项目中的产品判断</h2>
       <div class="timeline">
-        <div class="timeline-item"><strong>目标用户</strong><p>优先服务 0-3 年产品经理和临时承担项目负责人的同学。重点不是替资深 PM 完成所有判断，而是帮助经验较少的人少漏关键问题。</p></div>
-        <div class="timeline-item"><strong>核心场景</strong><p>方案评审前，用户已经知道“哪里不顺”，但还不确定应该流程优化、工具化、系统改造，还是引入 AI 能力。</p></div>
-        <div class="timeline-item"><strong>MVP 取舍</strong><p>首期不做复杂多人协作和真实权限系统，而是先验证“问题诊断 -> 方案对比 -> MVP 收敛 -> 评审导出”的闭环是否成立。</p></div>
-        <div class="timeline-item"><strong>AI 位置</strong><p>AI 负责辅助拆解根因、生成备选方案和整理结构化文本；最终方案选择、范围取舍和是否进入排期仍由产品经理完成。</p></div>
+        <div class="timeline-item"><strong>目标用户</strong><p>优先服务 0-3 年产品经理和临时承担项目推进的同学。重点不是替资深 PM 完成所有判断，而是帮助经验较少的人少漏执行前必须确认的问题。</p></div>
+        <div class="timeline-item"><strong>核心场景</strong><p>正式制作、研发或打样前，用户已经知道要做什么，但还不确定目标、约束、责任人和验收标准是否足够清楚。</p></div>
+        <div class="timeline-item"><strong>MVP 取舍</strong><p>首期不做复杂多人协作和真实权限系统，而是先验证“需求预检 -> 信息缺口 -> 路径取舍 -> 阻塞项判断”的预审流程是否成立。</p></div>
+        <div class="timeline-item"><strong>系统边界</strong><p>系统负责辅助拆解缺口、整理备选路径和归档结构化文本；最终方案选择、优先级和是否进入执行仍由团队确认。</p></div>
       </div>
     </section>
 
     <section id="process">
-      <h2>四、设计过程与关键取舍</h2>
-      <p class="section-sub">这个项目的重点不是堆 AI 功能，而是把真实工作里“问题知道了，但方案怎么做还没想透”的情况拆开。我的设计过程围绕一个问题展开：怎样让产品经理在评审前拿出有取舍依据的方案，而不是只有一个想做的功能。</p>
+      <h2>五、设计过程与关键取舍</h2>
+      <p class="section-sub">这个项目的重点不是堆功能，而是把真实工作里“事情要做，但执行前还没对齐”的情况拆开。我的设计过程围绕一个问题展开：怎样让产品经理在正式执行前拿出有依据的判断，而不是只靠口头确认推进。</p>
       <div class="grid-3">
-        <div class="card"><span class="tag blue">问题收敛</span><h3>从 PRD 生成器改成方案预评审</h3><p>最初容易做成“输入一句话，生成一份 PRD”。但真实价值不在写文档，而在判断问题根因、比较方案，并说明为什么选择这个 MVP。</p></div>
-        <div class="card"><span class="tag amber">功能取舍</span><h3>先做取舍闭环，不做大而全系统</h3><p>首期不做账号、真实权限、多项目管理和多人协作，而是优先证明问题诊断、方案对比、PRD、评审、导出的流程是否能帮助新人做出更稳的产品判断。</p></div>
-        <div class="card"><span class="tag green">风险控制</span><h3>保留人工确认和可编辑出口</h3><p>AI 负责生成建议，但不替产品经理做最终判断。方案选择、研发反馈、导出材料都保留编辑和采纳动作，避免一次性生成失控。</p></div>
+        <div class="card"><span class="tag blue">问题收敛</span><h3>从 PRD 模板改成执行前预审</h3><p>最初很容易做成“输入一句话，整理一份 PRD”。但真实价值不在写文档，而在判断目标、约束、角色和验收标准是否足够支撑执行。</p></div>
+        <div class="card"><span class="tag amber">功能取舍</span><h3>先做轻量预审，不做大而全系统</h3><p>首期不做账号、真实权限、多项目管理和多人协作，而是优先证明需求预检、信息取舍、阻塞项和可执行判断是否能帮助新人做出更稳的产品判断。</p></div>
+        <div class="card"><span class="tag green">风险控制</span><h3>保留人工确认和可编辑出口</h3><p>系统只给出建议，不替产品经理做最终判断。方案选择、研发反馈、导出材料都保留编辑和采纳动作，避免材料一出来就被当成定稿。</p></div>
       </div>
     </section>
 
     <section id="demo">
-      <h2>五、可点击 Demo：覆盖完整产品流程</h2>
-      <p class="section-sub">Demo 里保留了多个业务案例，也支持输入自定义业务问题。页面会根据问题类型切换根因诊断、方案建议、PRD 内容、竞品分析、数据指标和评审风险。</p>
+      <h2>六、可点击 Demo：聚焦执行前预审</h2>
+      <p class="section-sub">Demo 默认使用“足霜产品信息展示物料迭代”案例，并把这个案例打穿到信息优先级、尺寸约束、贴标验证、打印打样、角色责任和验收标准。其他案例保留为能力迁移的补充，不抢主线。</p>
       <div class="preview-grid">
         <div class="preview-panel">
           <div class="preview-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>体验路径</span></div>
           <div class="preview-body">
             <div class="preview-line"><strong>输入</strong><span>选择案例或输入 50 字以上的业务问题。</span></div>
-            <div class="preview-line"><strong>诊断</strong><span>系统识别问题类型、受影响用户和可能根因。</span></div>
+            <div class="preview-line"><strong>诊断</strong><span>系统识别信息缺口、执行约束和待确认角色。</span></div>
             <div class="preview-line"><strong>取舍</strong><span>确认高优先级判断，右侧信息卡实时更新。</span></div>
-            <div class="preview-line"><strong>PRD</strong><span>生成可复制的完整 PRD，并提供目录定位。</span></div>
-            <div class="preview-line"><strong>评审</strong><span>处理阻塞项、角色意见和研发反馈，导出会议纪要。</span></div>
+            <div class="preview-line"><strong>材料</strong><span>整理可讨论的预审材料草稿，并保留执行清单。</span></div>
+            <div class="preview-line"><strong>预审</strong><span>处理阻塞项、角色意见和打样反馈，判断能否进入执行。</span></div>
           </div>
         </div>
         <div class="grid-2">
-          <div class="card"><span class="tag blue">案例切换</span><h3>不只一个固定案例</h3><p>覆盖内部知识库、活动、数据看板、客服分流、课程体验等不同业务场景。</p></div>
-          <div class="card"><span class="tag green">实时联动</span><h3>判断会改变后续输出</h3><p>确认方案取舍、处理评审待办、回写研发反馈后，PRD 和导出材料会同步变化。</p></div>
-          <div class="card"><span class="tag amber">可编辑导出</span><h3>不完全依赖 AI 初稿</h3><p>导出的老板摘要、研发任务、设计 brief 和会议纪要都可以继续修改。</p></div>
+        <div class="card"><span class="tag blue">真实案例</span><h3>从信息展示物料切入</h3><p>围绕足霜小尺寸包装、信息优先级、打印边距、贴标位置和展示一致性这些真实约束展开。</p></div>
+        <div class="card"><span class="tag green">实时联动</span><h3>判断会改变推进状态</h3><p>确认信息取舍、处理预审待办、回写供应商反馈后，当前事项会从不能执行逐步推进到可预审或可进入执行。</p></div>
+          <div class="card"><span class="tag amber">可编辑导出</span><h3>不把初稿当定稿</h3><p>导出的老板摘要、研发任务、设计 brief 和会议纪要都可以继续修改。</p></div>
           <div class="card"><span class="tag purple">数据意识</span><h3>包含指标与 SQL 口径</h3><p>不仅写功能，还补充上线后如何看效果、如何用数据验证。</p></div>
         </div>
       </div>
@@ -502,50 +568,80 @@
       </div>
     </section>
 
-    <section id="review">
-      <h2>六、重点模块：方案评审工作台</h2>
-      <p class="section-sub">我后续把评审模块从“简单打分”改成更接近真实工作的推进判断：材料是否齐、关键角色是否确认、阻塞项是否关闭、研发反馈是否回写，以及当前到底能不能进入下一阶段。</p>
+    <section id="label-case">
+      <h2>七、主案例打穿：足霜产品信息展示物料迭代</h2>
+      <p class="section-sub">为了避免项目停留在理想化流程，我把主案例压到正式制作和打印打样前需要确认的粒度：先确认信息优先级和尺寸约束，再做低成本贴标验证，最后进入 Figma 精修和供应商打样。</p>
       <div class="grid-3">
-        <div class="card"><span class="tag blue">会前预检</span><h3>避免评审会现场补方案</h3><p>检查问题根因、方案取舍、MVP 范围、权限边界、数据验收和依赖排期。</p></div>
-        <div class="card"><span class="tag amber">角色意见</span><h3>体现跨部门协作</h3><p>研发、设计、测试、数据、业务、合规都能记录确认状态和待跟进问题。</p></div>
-        <div class="card"><span class="tag green">会后沉淀</span><h3>形成可复制会议纪要</h3><p>导出评审结论、阻塞项、角色意见、研发反馈和下一步动作。</p></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>七、指标设计与验证方式</h2>
-      <div class="grid-3">
-        <div class="card metric"><strong>效率</strong><p>评审材料准备时长、需求补齐耗时、跨部门确认轮次。</p></div>
-        <div class="card metric"><strong>质量</strong><p>评审前发现的问题数、验收标准覆盖率、PRD 二次修改比例。</p></div>
-        <div class="card metric"><strong>协作</strong><p>角色意见关闭率、研发阻塞问题数量、评审后返工次数。</p></div>
+        <div class="card"><span class="tag blue">P0 路径</span><h3>信息优先级 + 低保真贴标验证</h3><p>先把产品名、成分、用法、品牌表达和贴标位置排出优先级，再用低成本样张验证可读性和实物位置。</p></div>
+        <div class="card"><span class="tag amber">执行门槛</span><h3>先关掉五类风险</h3><p>物料尺寸、必填信息、打印边距、贴标位置、供应商样张标准确认后，才进入正式制作和打样。</p></div>
+        <div class="card"><span class="tag green">验证标准</span><h3>用实物检查代替空想</h3><p>重点看首屏信息是否清楚、成分与用法是否可读、贴标是否居中、展示材料是否和实物一致。</p></div>
       </div>
       <div class="timeline" style="margin-top:18px">
-        <div class="timeline-item"><strong>轻量验证计划</strong><p>找 2-3 位同学或产品求职者试用，让他们输入一个真实业务问题，观察是否能理解流程、是否能做出方案取舍、是否知道下一步该做什么。</p></div>
-        <div class="timeline-item"><strong>预期观察点</strong><p>用户是否卡在问题描述、方案对比是否有帮助、PRD 是否需要大改、评审模块是否能解释“为什么暂时不能进开发”。</p></div>
+        <div class="timeline-item"><strong>第 1 步：信息预审</strong><p>确认产品卖点、必填成分、使用信息、品牌表达和包装尺寸约束，形成信息优先级表。</p></div>
+        <div class="timeline-item"><strong>第 2 步：低成本验证</strong><p>用黑白样张或低保真贴标检查可读性、边距、贴标位置和展示距离，避免直接进入高成本打样。</p></div>
+        <div class="timeline-item"><strong>第 3 步：正式执行</strong><p>进入 Figma 精修、打印打样和展示材料整理，并根据样张反馈调整文案层级和版面重点。</p></div>
+      </div>
+    </section>
+
+    <section id="review">
+      <h2>八、重点模块：执行前预审工作台</h2>
+      <p class="section-sub">我后续把评审模块从“简单打分”改成更接近真实工作的推进判断：材料是否齐、关键角色是否确认、阻塞项是否关闭、供应商反馈是否回写，以及当前到底能不能进入下一阶段。</p>
+      <div class="grid-3">
+        <div class="card"><span class="tag blue">执行前预检</span><h3>避免打样后才补标准</h3><p>检查目标、信息优先级、尺寸约束、角色责任、验收标准和外部依赖。</p></div>
+        <div class="card"><span class="tag amber">角色意见</span><h3>体现跨部门协作</h3><p>研发、设计、测试、数据、业务、合规都能记录确认状态和待跟进问题。</p></div>
+        <div class="card"><span class="tag green">执行沉淀</span><h3>形成可复制确认清单</h3><p>导出预审结论、阻塞项、角色意见、供应商反馈和下一步动作。</p></div>
       </div>
     </section>
 
     <section>
-      <h2>八、技术落地理解</h2>
-      <p class="section-sub">当前公开版本是前端可点击原型，模拟 AI 分析流程。真实接入 AI 时，需要把大模型调用放在后端，避免 API Key 暴露，并处理权限、成本、日志和人工复核。</p>
-      <div class="flow">
-        <div class="flow-step"><div class="num">1</div><h3>前端输入</h3><p>收集业务问题、会议纪要或反馈片段。</p></div>
-        <div class="flow-step"><div class="num">2</div><h3>后端接口</h3><p>负责鉴权、限流、调用成本控制和日志记录。</p></div>
-        <div class="flow-step"><div class="num">3</div><h3>AI 分析</h3><p>生成根因假设、方案对比、结构化信息卡、PRD 草稿和评审建议。</p></div>
-        <div class="flow-step"><div class="num">4</div><h3>人工确认</h3><p>用户编辑、采纳或标记本期不处理，避免一次性生成失控。</p></div>
-        <div class="flow-step"><div class="num">5</div><h3>导出沉淀</h3><p>输出 PRD、会议纪要、研发任务和跨部门材料。</p></div>
+      <h2>九、指标设计与验证方式</h2>
+      <div class="grid-3">
+        <div class="card metric"><strong>效率</strong><p>预审材料准备时长、信息补齐耗时、跨角色确认轮次。</p></div>
+        <div class="card metric"><strong>质量</strong><p>执行前发现的问题数、验收标准覆盖率、打样后二次修改比例。</p></div>
+        <div class="card metric"><strong>协作</strong><p>角色意见关闭率、供应商阻塞问题数量、执行后返工次数。</p></div>
       </div>
+      <div class="timeline" style="margin-top:18px">
+        <div class="timeline-item"><strong>轻量验证计划</strong><p>找 2-3 位同学或产品求职者试用，让他们输入一个真实推进事项，观察是否能理解流程、是否能补齐约束、是否知道下一步该确认什么。</p></div>
+        <div class="timeline-item"><strong>预期观察点</strong><p>用户是否卡在问题描述、信息缺口是否有帮助、预审材料是否需要大改、预审模块是否能解释“为什么暂时不能进入执行”。</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>十、技术落地理解</h2>
+      <p class="section-sub">当前公开版本是前端可点击原型，模拟从问题输入到预审材料沉淀的流程。真实产品化时，需要把分析服务放在后端，并处理权限、成本、日志和人工复核。</p>
+      <div class="flow">
+        <div class="flow-step"><div class="num">1</div><h3>前端输入</h3><p>收集业务问题、会议纪要、物料要求或反馈片段。</p></div>
+        <div class="flow-step"><div class="num">2</div><h3>后端接口</h3><p>负责鉴权、限流、调用成本控制和日志记录。</p></div>
+        <div class="flow-step"><div class="num">3</div><h3>结构化分析</h3><p>整理信息缺口、路径对比、结构化信息卡、预审材料草稿和阻塞项建议。</p></div>
+        <div class="flow-step"><div class="num">4</div><h3>人工确认</h3><p>用户编辑、采纳或标记本期不处理，避免系统建议被直接当成结论。</p></div>
+        <div class="flow-step"><div class="num">5</div><h3>材料沉淀</h3><p>按需要整理预审材料、执行清单、会议纪要和角色待办。</p></div>
+      </div>
+    </section>
+
+    <section id="method">
+      <h2>十一、从一个场景沉淀出的预审方法</h2>
+      <p class="section-sub">这个项目不是为了证明我会做一个 AI 页面，而是证明我能从一个具体实习场景里抽象出可迁移的方法：正式投入执行前，先把目标、约束、责任、风险和验收标准放到同一张材料里确认。</p>
+      <div class="grid-3">
+        <div class="card"><span class="tag blue">方法 1</span><h3>把“马上做”变成“先确认门槛”</h3><p>不是否定执行，而是在执行前先确认哪些信息缺失会导致返工，哪些问题可以边做边补。</p></div>
+        <div class="card"><span class="tag amber">方法 2</span><h3>把角色意见变成可关闭待办</h3><p>产品、设计、供应商、销售的关注点不同，预审材料要把问题、负责人、截止点和验收方式写清楚。</p></div>
+        <div class="card"><span class="tag green">方法 3</span><h3>把 AI 建议变成可追溯判断</h3><p>每条建议标注来自用户输入、系统推断还是待人工确认，避免把系统输出直接当成最终结论。</p></div>
+      </div>
+      <div class="timeline" style="margin-top:18px">
+        <div class="timeline-item"><strong>从包装物料开始，但不止于包装物料</strong><p>同样的预审方法可以迁移到活动需求、内部工具、数据看板和供应商协作材料，只是每个场景的门槛和角色不同。</p></div>
+        <div class="timeline-item"><strong>我会用结果而不是功能数量证明价值</strong><p>重点看预审材料准备时长、阻塞项提前暴露数、执行后二次大改率和跨角色确认轮次，而不是只看生成了多少内容。</p></div>
+      </div>
+
     </section>
 
     <section id="reflection">
-      <h2>九、项目复盘</h2>
+      <h2>十二、项目复盘</h2>
       <div class="grid-2">
-        <div class="card"><h3>我想展示的产品能力</h3><ul><li>能从真实工作痛点出发，而不是只做一个 AI 生成器。</li><li>能把目标用户收窄到 0-3 年产品经理，围绕方案预评审设计主线。</li><li>能考虑跨部门角色、数据指标、研发风险和验收边界。</li></ul></div>
-        <div class="card"><h3>下一步可优化</h3><ul><li>接入真实 AI 后端，支持用户输入后实时生成。</li><li>接入文档或会议纪要，减少手动输入成本。</li><li>增加历史项目管理和评审记录沉淀。</li></ul></div>
+        <div class="card"><h3>我想展示的产品能力</h3><ul><li>能从真实工作痛点出发，而不是只做一个文档模板。</li><li>能把目标用户收窄到 0-3 年产品经理，围绕执行前预审设计主线。</li><li>能考虑跨部门角色、验收标准、供应商约束和返工风险。</li></ul></div>
+        <div class="card"><h3>下一步可优化</h3><ul><li>P0：优化输入结构、推荐依据、推进状态和阻塞项说明。</li><li>P1：增加不选路径解释、风险复核提醒和预审材料缺口提示。</li><li>P2：拆分结构化模板，准备真实后端服务接入和失败兜底。</li></ul></div>
       </div>
       <div class="quote" style="margin-top:20px">
-        ClearBrief 的价值不是替产品经理写一份更长的文档，而是在项目早期把问题根因、方案取舍、MVP 范围、风险和验收标准讲清楚。它更像一个方案预评审工具：先诊断问题，再比较方案，最后帮助团队更高效地做决策。
-        <span>这也是我希望通过这个作品集案例展示的能力：把 AI 放进真实产品经理的判断流程，而不是停留在“生成一段文字”。</span>
+        ClearBrief 的价值不是替产品经理写一份更长的文档，而是在执行前把目标、约束、角色责任、风险和验收标准讲清楚。它更像一个轻量预审台：先识别缺口，再比较路径，最后判断这个事项现在能不能进入正式执行。
+        <span>这也是我希望通过这个作品集案例展示的能力：把工具放进真实产品经理的判断流程，而不是停留在“整理一段文字”。</span>
       </div>
     </section>
   </main>

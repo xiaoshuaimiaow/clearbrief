@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -170,7 +170,7 @@
     .input-tip { display: flex; gap: 18px; align-items: flex-start; }
     .input-tip strong { font-size: 13px; }
     .input-tip span { color: var(--muted); font-size: 12px; line-height: 1.5; }
-    .ai-panel .card {
+    .analysis-panel .card {
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 16px 18px;
@@ -227,7 +227,7 @@
   <div class="frame">
     <header class="top">
       <div class="brand">ClearBrief 清晰启动</div>
-      <div class="crumb">企业内部 AI 知识库改版 / 新建 Kickoff</div>
+      <div class="crumb">企业内部 知识库问答改版 / 新建 Kickoff</div>
       <button class="btn">保存草稿</button>
       <button class="btn primary">开始分析</button>
     </header>
@@ -241,7 +241,7 @@
       <div class="nav-item">导出中心</div>
 
       <div class="side-bottom">示例模板</div>
-      <div class="pill blue">AI 应用</div>
+      <div class="pill blue">知识管理</div>
       <div class="pill">内部工具</div>
       <div class="pill">运营活动</div>
     </aside>
@@ -252,7 +252,7 @@
         <div class="connector"></div>
         <div class="step"><div class="dot">2</div>问题诊断</div>
         <div class="connector"></div>
-        <div class="step"><div class="dot">3</div>生成文档</div>
+        <div class="step"><div class="dot">3</div>整理文档</div>
         <div class="connector"></div>
         <div class="step"><div class="dot">4</div>评审检查</div>
         <div class="connector"></div>
@@ -273,8 +273,8 @@
       <section class="main-grid">
         <div class="panel">
           <h2>业务问题</h2>
-          <div class="hint">可以先描述现状。比如“公司文档太散，不确定该先做治理、搜索优化还是 AI 知识库”。</div>
-          <div class="input-box">公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度。业务方希望提升查找效率，但还不确定应该先做文档治理、搜索优化，还是 AI 知识库助手。</div>
+          <div class="hint">可以先描述现状。比如“公司文档太散，不确定该先做治理、搜索优化还是 知识库问答”。</div>
+          <div class="input-box">公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度。业务方希望提升查找效率，但还不确定应该先做文档治理、搜索优化，还是 知识库问答助手。</div>
           <div class="count">128 字 / 建议 50-300 字</div>
           <div class="actions">
             <button class="btn primary">开始分析</button>
@@ -288,12 +288,12 @@
           </div>
         </div>
 
-        <div class="panel ai-panel">
+        <div class="panel analysis-panel">
           <h2>初步识别</h2>
           <div class="hint">根据当前输入，系统会先生成这几类判断。</div>
           <div class="card blue-card">
             <h3>项目类型</h3>
-            <p>企业知识管理 / AI 问答 / 内部协作工具</p>
+            <p>企业知识管理 / 知识库问答 / 内部协作工具</p>
           </div>
           <div class="card green-card">
             <h3>主要用户</h3>
@@ -311,7 +311,7 @@
         <div class="template-grid">
           <div class="template">
             <h3>内部知识库问题</h3>
-            <p>适合 B 端 AI / 企业协作场景</p>
+            <p>适合 B 端工具 / 企业协作场景</p>
           </div>
           <div class="template">
             <h3>会员积分活动</h3>
