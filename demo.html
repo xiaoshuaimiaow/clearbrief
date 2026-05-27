@@ -1383,11 +1383,11 @@
     </header>
 
     <aside class="sidebar">
-      <button class="nav active" data-page="intake"><span class="nav-num">1</span>描述问题</button>
-      <button class="nav" data-page="clarify" disabled><span class="nav-num">2</span>问题诊断</button>
-      <button class="nav" data-page="document" disabled><span class="nav-num">3</span>整理材料</button>
-      <button class="nav" data-page="review" disabled><span class="nav-num">4</span>预审与反馈</button>
-      <button class="nav" data-page="export" disabled><span class="nav-num">5</span>导出材料</button>
+      <button class="nav active" data-page="intake"><span class="nav-num">1</span>描述事项</button>
+      <button class="nav" data-page="clarify" disabled><span class="nav-num">2</span>执行前判断</button>
+      <button class="nav" data-page="document" disabled><span class="nav-num">3</span>确认单</button>
+      <button class="nav" data-page="review" disabled><span class="nav-num">4</span>执行前检查</button>
+      <button class="nav" data-page="export" disabled><span class="nav-num">5</span>发送材料</button>
       <div class="sidebar-note">
         体验案例：从业务问题到信息取舍、执行门槛、阻塞项和可执行判断。
       </div>
@@ -1401,11 +1401,6 @@
 
     <main id="main">
       <div class="stepbar" id="stepbar"></div>
-      <div class="guide" aria-label="体验操作引导">
-        <div class="guide-card primary"><strong>为什么先诊断</strong><span>真实项目不是缺一份 PRD，而是执行前缺少对目标、约束、角色责任和验收标准的判断。</span></div>
-        <div class="guide-card"><strong>为什么不直接写 PRD</strong><span>先比较信息优先级、低成本验证和正式打样路径，避免把没确认的想法直接带进执行。</span></div>
-        <div class="guide-card"><strong>判断会流向哪里</strong><span>每个确认动作都会影响信息卡、预审材料、阻塞项和能否进入执行的判断。</span></div>
-      </div>
       <div class="flow-helper" id="flowHelper">
         <div>
           <strong>当前建议：开始分析</strong>
@@ -1443,7 +1438,6 @@
         <div class="grid-2">
           <div class="panel">
             <h2>业务问题</h2>
-            <p class="hint portfolio-only">设计意图：把入口做成“业务问题”而不是“写 PRD”，因为真实工作里最难的是判断问题现在是否足够清楚、能不能进入执行。</p>
             <div class="source-control">
               <label for="sourceType">材料来源</label>
               <select id="sourceType">
@@ -1462,20 +1456,10 @@
               <button class="btn primary" id="analyzeBtn">开始分析</button>
               <button class="btn" id="customBtn">重写输入</button>
             </div>
-            <div class="case-picker">
-              <div class="case-picker-head">
-                <div>
-                  <strong>快速切换案例</strong>
-                  <span>每个案例都可直接分析，也可以改成你的真实项目。</span>
-                </div>
-                  <span>覆盖包装、活动、数据、客服、教育、社区、流程等场景</span>
-              </div>
-              <div class="case-grid" id="caseGrid"></div>
-            </div>
+            <div class="case-grid" id="caseGrid" hidden></div>
           </div>
           <div class="panel">
             <h2>初步识别</h2>
-            <p class="hint portfolio-only">设计意图：先给出问题类型、影响对象和待判断事项，让用户先收敛方向，再决定是否进入文档整理。</p>
             <div id="analysisEmpty" class="card">
               <h3>等待分析</h3>
               <p>当前还没有识别结果。</p>
@@ -1486,12 +1470,11 @@
       </section>
 
       <section class="page" id="page-clarify">
-        <h1>问题诊断与方案取舍</h1>
-        <p class="subtitle">确认关键判断后，推荐路径、预审材料和推进状态会同步更新。</p>
+        <h1>执行前判断</h1>
+        <p class="subtitle">先确认关键问题和低成本验证路径，再决定是否进入正式制作。</p>
         <div class="grid-2">
           <div class="panel">
             <h2>关键判断问题</h2>
-            <p class="hint portfolio-only">高优先级判断建议在整理文档前确认。</p>
             <div id="questionsList"></div>
             <div class="answer-box" id="answerBox">
               <strong>当前判断草稿</strong>
@@ -1500,17 +1483,15 @@
               <div class="decision-actions">
                 <button class="btn primary" data-diagnosis-action="main">设为主要判断</button>
                 <button class="btn" data-diagnosis-action="verify">标记待验证</button>
-                <button class="btn" data-diagnosis-action="defer">本期不处理</button>
               </div>
               <div class="decision-impact" id="diagnosisImpact">建议先把最影响首期方案的判断设为主要判断；证据不足的项可以标记待验证。</div>
             </div>
           </div>
           <div class="panel">
-            <h2>结构化信息卡</h2>
-            <p class="hint portfolio-only">已确认的问题根因、方案取舍和 MVP 边界会自动归档。</p>
+          <h2>结构化信息卡</h2>
             <div class="info-grid" id="infoCards">
-              <div class="card green"><h3>相关角色</h3><p>产品、设计、品牌、供应商、销售展示同学</p></div>
-              <div class="card amber"><h3>待补齐</h3><p>标签尺寸、必填信息、打印边距、贴标位置、验收标准</p></div>
+              <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>产品、设计、品牌、供应商、销售展示同学</p></div>
+              <div class="card amber"><h3>待补齐</h3><small>来源：系统推断</small><p>标签尺寸、必填信息、打印边距、贴标位置、验收标准</p></div>
             </div>
             <div class="actions">
               <button class="btn primary" id="generateDocBtn" disabled>整理预审材料</button>
@@ -1521,91 +1502,74 @@
         <div class="panel solution-panel">
           <span class="pill blue">方案对比</span>
           <h2 style="margin-top:10px">不要一上来就直接进正式制作</h2>
-          <p class="hint">先比较不同解决路径的收益、成本、风险和适用时机，再决定是否进入正式执行。</p>
+          <p class="hint">只保留首期真正要做的两条低成本路径；直接 Figma 精修作为暂不推荐原因说明。</p>
           <div class="solution-compare" id="solutionCompare"></div>
-          <div class="recommendation-box" id="solutionRecommendation">推荐 P0 路径：方案 A 信息优先级表 + 方案 C 低保真贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</div>
+          <div class="recommendation-box" id="solutionRecommendation">推荐 P0 路径：方案 A 信息优先级表 + 方案 B 低保真贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</div>
           <div class="decision-summary-grid" id="decisionSummary">
             <div class="decision-summary-item"><strong>推荐理由</strong><span>先把信息层级和尺寸限制对齐，再验证贴到实物上是否可读，避免正式打样后返工。</span></div>
-            <div class="decision-summary-item"><strong>暂不选择</strong><span>不建议首期直接进入高精度视觉精修，因为必填信息和贴标约束还没完全确认。</span></div>
+            <div class="decision-summary-item"><strong>暂不直接精修</strong><span>尺寸、必填信息和贴标位置未确认前，高保真稿容易返工。</span></div>
             <div class="decision-summary-item"><strong>进入条件</strong><span>标签尺寸、必填信息、打印边距、贴标位置、供应商样张标准先确认。</span></div>
           </div>
         </div>
       </section>
 
       <section class="page" id="page-document">
-        <h1>整理预审材料草稿</h1>
-        <p class="subtitle">先看结构化草稿，确认是否足够进入执行，再按需要沉淀执行清单。</p>
+        <h1>生成预审确认单</h1>
+        <p class="subtitle">把已确认判断和待确认项整理成一页轻量确认单，用来拉齐负责人、设计和供应商。</p>
         <div class="doc-layout document-workspace">
           <div class="panel toc">
-            <h2>预审材料目录</h2>
-            <a class="active" href="#doc-background">项目背景</a>
-            <a href="#doc-problem">问题定义</a>
-            <a href="#doc-users">目标用户</a>
-            <a href="#doc-goal">产品目标</a>
-            <a href="#doc-scope">MVP 范围</a>
-            <a href="#doc-flow">核心流程</a>
-            <a href="#doc-departments">跨部门对齐</a>
-            <a href="#doc-risks">风险兜底</a>
-            <a href="#doc-acceptance">验收标准</a>
+            <h2>确认单目录</h2>
+            <a class="active" href="#doc-background">当前事项</a>
+            <a href="#doc-scope">已确认判断</a>
+            <a href="#doc-risks">待确认项</a>
+            <a href="#doc-departments">角色责任</a>
+            <a href="#doc-acceptance">打样前门槛</a>
           </div>
           <article class="panel doc doc-scroll">
-          <span class="pill blue">预审 v0.3</span>
+          <span class="pill blue">确认单 v0.3</span>
             <div class="source-row" style="margin-top:14px">
               <span class="source-chip">来源：业务问题</span>
               <span class="source-chip">来源：系统推断</span>
               <span class="source-chip">待人工确认：供应商样张标准</span>
             </div>
-            <h2 id="docTitle">足霜产品信息展示物料迭代预审</h2>
-            <div class="meta">v0.1 业务问题 · v0.2 信息取舍 · v0.3 预审材料草稿 · 后续动作：执行前确认负责人</div>
-            <h3 id="doc-background">项目背景</h3>
+            <h2 id="docTitle">足霜产品信息展示物料预审确认单</h2>
+            <div class="meta">v0.1 业务问题 · v0.2 执行前判断 · v0.3 确认单 · 后续动作：负责人确认</div>
+            <h3 id="doc-background">当前事项</h3>
             <p class="doc-editable" id="backgroundText">足霜包装和展示材料需要在有限空间内同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。正式制作和打样前，需要先确认信息优先级、尺寸约束和验收标准。</p>
-            <h3 id="doc-problem">问题定义</h3>
-            <p class="doc-editable" id="problemText">当前需求的关键问题不是“缺一版设计”，而是执行前没有把信息优先级、尺寸边界、贴标位置、供应商标准和角色责任问清楚。</p>
-            <h3 id="doc-users">目标用户</h3>
-            <p class="doc-editable" id="usersText">产品、设计、品牌、供应商、销售展示同学。</p>
-            <h3 id="doc-goal">产品目标</h3>
-            <p class="doc-editable" id="goalText">用低成本预审和贴标验证先确认包装标签是否可读、可印、可贴、可展示，再进入正式 Figma 精修和打印打样。</p>
-            <h3 id="doc-scope">MVP 范围</h3>
+            <h3 id="doc-scope">已确认判断</h3>
             <ul class="doc-editable" id="scopeList">
-              <li>整理产品名、成分说明、使用信息和品牌表达的信息优先级。</li>
-              <li>确认标签尺寸、打印边距、贴标位置和供应商样张要求。</li>
-              <li>用低保真样张完成实物贴标验证，检查可读性和展示距离。</li>
-              <li>通过后进入 Figma 精修、打印打样和展示材料整理。</li>
-            </ul>
-            <h3 id="doc-flow">核心流程</h3>
-            <ol class="doc-editable" id="flowList">
-              <li>用户提交业务问题、会议纪要或反馈片段。</li>
-              <li>系统识别问题类型、受影响用户和方案风险。</li>
-              <li>产品经理确认关键取舍，整理预审材料和必要的执行清单。</li>
+              <li>先做信息优先级表，明确哪些信息必须第一眼可见。</li>
+              <li>先做低保真贴标验证，检查可读性和实物位置。</li>
+              <li>暂不直接进入 Figma 精修和正式打印打样。</li>
             </ol>
-            <h3 id="doc-departments">跨部门待确认</h3>
+            <h3 id="doc-risks">待确认项</h3>
+            <ul class="doc-editable" id="riskList">
+              <li>标签尺寸、最小字号、打印边距和安全区域。</li>
+              <li>贴标位置、实物弧度和遮挡风险。</li>
+              <li>供应商样张标准和反馈周期。</li>
+            </ul>
+            <h3 id="doc-departments">角色责任</h3>
             <ul class="doc-editable" id="departmentDocList">
               <li>产品：确认卖点、必填信息、用户理解优先级和验收标准。</li>
               <li>设计：确认版式层级、字号、边距、贴标位置和样张输出。</li>
               <li>供应商：确认打印尺寸、材质限制、贴标工艺和打样反馈。</li>
             </ul>
-            <h3 id="doc-risks">风险兜底</h3>
-            <ul class="doc-editable" id="riskList">
-              <li>信息不完整时不直接进入正式制作和打印打样。</li>
-              <li>高风险限制需要明确负责人和人工复核入口。</li>
-              <li>执行前确认尺寸、边距、贴标位置和验收负责人。</li>
-            </ul>
-            <h3 id="doc-acceptance">验收标准</h3>
+            <h3 id="doc-acceptance">打样前门槛</h3>
             <p class="doc-editable" id="acceptanceText">样张贴到实物后，产品名、核心卖点、成分说明和使用信息可读；贴标位置不遮挡关键区域；展示材料与实物包装保持一致。</p>
           </article>
           <aside class="panel workspace-actions">
             <h2>执行前动作</h2>
             <div class="suggestion-list">
-              <div class="suggestion-item"><strong>已纳入</strong><p>风险、验收标准、信源标注和跨角色待确认项。</p></div>
+              <div class="suggestion-item"><strong>确认单用途</strong><p>用于负责人、设计和供应商快速确认下一步是否能进入贴标验证。</p></div>
             </div>
             <div class="action-stack">
               <div class="action-row">
-                <button class="btn" id="editDocBtn">编辑草稿</button>
+                <button class="btn" id="editDocBtn">编辑确认单</button>
               </div>
             </div>
             <div class="action-stack">
               <div class="action-row">
-              <button class="btn primary" id="fullPrdBtn">整理完整材料</button>
+              <button class="btn primary" id="fullPrdBtn">复制确认单</button>
               </div>
             </div>
             <div class="next-action">
@@ -1614,107 +1578,63 @@
             </div>
           </aside>
         </div>
-        <details class="panel detail-panel">
-          <summary>完整预审材料可复制区</summary>
-          <div class="detail-body">
-          <div class="prd-preview" id="prdPreview">点击“整理完整材料”后，会在这里输出一份可复制的预审材料草稿。</div>
-          <div class="status-note" id="prdStatus">尚未整理完整预审材料。整理后会默认包含风险、信源、验收标准和跨角色待确认项。</div>
-          <div class="actions">
-            <button class="btn primary" id="copyPrdBtn">复制材料</button>
-            <button class="btn" id="copyWordPrdBtn">复制 Word 版材料</button>
-            <button class="btn" id="downloadMarkdownBtn">下载 Markdown</button>
-          </div>
-          </div>
-        </details>
+        <div class="prd-preview" id="prdPreview" hidden></div>
+        <div class="status-note" id="prdStatus" hidden></div>
+        <button id="copyPrdBtn" hidden type="button"></button>
+        <button id="copyWordPrdBtn" hidden type="button"></button>
+        <button id="downloadMarkdownBtn" hidden type="button"></button>
       </section>
 
       <section class="page" id="page-review">
-        <h1>执行前预审与推进决策</h1>
-        <p class="subtitle">先看建议推进状态，再展开检查项。状态基于用户勾选、角色反馈和预审检查项生成，最终仍由负责人确认。</p>
+        <h1>执行前检查</h1>
+        <p class="subtitle">根据确认单、角色反馈和待确认项，判断是否可以进入低保真贴标验证。</p>
         <div class="score-grid">
           <div class="score-main"><div>建议推进状态</div><strong id="reviewDecision">建议先做低成本验证</strong><p id="scoreHint">可进入低保真贴标验证，暂不进入正式打样</p><span id="reviewGate">建议依据：先做低成本验证</span></div>
-          <div class="panel metric red"><h2>阻塞项</h2><strong id="blockingCount">2</strong><p class="hint">处理前不进正式打样</p></div>
-          <div class="panel metric amber"><h2>非阻塞项</h2><strong id="nonBlockingCount">1</strong><p class="hint">可跟随原型继续补</p></div>
-          <div class="panel metric green"><h2>已关闭</h2><strong id="closedCount">0</strong><p class="hint">预审待办已处理</p></div>
-          <div class="panel metric blue"><h2>下一阶段</h2><strong id="nextStage">贴标验证</strong><p class="hint">低保真样张 + 实物检查</p></div>
+          <div class="panel metric red"><h2>待确认项</h2><strong id="blockingCount">2</strong><p class="hint">确认后再进正式打样</p></div>
+          <div class="panel metric blue"><h2>下一步</h2><strong id="nextStage">贴标验证</strong><p class="hint">低保真样张 + 实物检查</p></div>
         </div>
+        <span id="nonBlockingCount" hidden>1</span><span id="closedCount" hidden>0</span>
         <div class="decision-panel">
           <div class="decision-card">
             <span class="pill blue">决策解释</span>
             <h2>为什么给出这个建议</h2>
-            <p id="decisionReason">当前还有执行前材料缺口、阻塞项和关键角色疑问，因此可以继续做低保真样张和贴标验证，但暂不建议进入正式打印打样。</p>
+            <p id="decisionReason">系统根据已确认判断和待确认项给出建议。当前可以继续做低保真贴标验证，但正式打样前仍需负责人确认尺寸、边距和样张标准。</p>
           </div>
           <div class="decision-card">
             <span class="pill amber">下一步动作</span>
-            <h2>进入正式打样前必须验证</h2>
+            <h2>进入低保真验证前确认</h2>
             <div class="decision-list" id="decisionActions">
               <span>确认标签尺寸、贴标区域和打印边距。</span>
               <span>明确产品名、成分说明、使用信息和品牌表达的优先级。</span>
-              <span>拉齐产品、设计、品牌和供应商对样张验收标准的判断。</span>
+              <span>确认供应商样张标准和反馈周期。</span>
             </div>
           </div>
         </div>
         <details class="panel detail-panel primary-detail" open>
-          <summary>进入正式执行前检查</summary>
+          <summary>进入低保真验证前确认</summary>
           <div class="detail-body">
           <div class="preflight-grid">
-            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>问题根因</strong>区分信息过载、尺寸约束、贴标位置和验收标准缺失。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>推荐路径</strong>说明为什么先做信息优先级和低保真贴标验证。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>执行边界</strong>明确本期做什么、不做什么。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>角色与兜底</strong>确认产品、设计、品牌、供应商分别负责哪些确认。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>验证指标</strong>写清可读性、样张修改次数、打样返工和展示一致性。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>投入与节奏</strong>列出依赖和预计完成时间。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>信息优先级</strong>产品名、核心卖点、成分说明和使用信息已排序。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>验证路径</strong>先做信息优先级表和低保真贴标验证。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>尺寸边界</strong>标签尺寸、最小字号、打印边距和安全区域待供应商确认。</span></label>
+            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>样张标准</strong>样张通过标准和反馈周期待负责人确认。</span></label>
           </div>
           <div class="review-summary">
-            <div class="mini-stat"><strong id="preflightDone">3/6</strong><span>材料完整度</span></div>
-            <div class="mini-stat"><strong id="preflightMissing">3</strong><span>会前缺口</span></div>
-            <div class="mini-stat"><strong id="meetingMode">先预审</strong><span>会议建议</span></div>
+            <div class="mini-stat"><strong id="preflightDone">2/4</strong><span>已确认</span></div>
+            <div class="mini-stat"><strong id="preflightMissing">2</strong><span>待确认</span></div>
+            <div class="mini-stat"><strong id="meetingMode">先验证</strong><span>建议</span></div>
           </div>
           </div>
         </details>
         <details class="panel detail-panel">
-          <summary>路径检查项与结论</summary>
-          <div class="detail-body">
-        <div class="review-grid">
-          <div class="panel">
-            <h2>路径检查项</h2>
-            <p class="hint">这里不做抽象打分，而是看每一项是否会影响事项进入下一阶段。</p>
-            <div class="review-checklist">
-              <div class="review-check">
-                <div class="review-check-head"><strong>问题价值</strong><span class="pill green">基本成立</span></div>
-                <p>包装标签需要同时表达产品卖点、成分和使用信息，问题真实；还需要补齐尺寸、贴标位置和验收标准。</p>
-              </div>
-              <div class="review-check">
-                <div class="review-check-head"><strong>路径取舍</strong><span class="pill green">方向明确</span></div>
-                <p>先做信息优先级表 + 低保真贴标验证，避免首期被高精度视觉精修和打样成本拖住。</p>
-              </div>
-              <div class="review-check">
-                <div class="review-check-head"><strong>风险可控</strong><span class="pill amber">待校验</span></div>
-                <p>打印边距、材质限制、贴标位置和供应商样张标准还需要明确规则、负责人和验收标准。</p>
-              </div>
-              <div class="review-check">
-                <div class="review-check-head"><strong>范围收敛</strong><span class="pill green">已有边界</span></div>
-                <p>首期范围基本收敛：信息优先级、低保真样张、实物贴标验证和展示一致性检查；正式打样后置到 P1。</p>
-              </div>
-              <div class="review-check">
-                <div class="review-check-head"><strong>投入产出</strong><span class="pill red">需确认</span></div>
-                <p>供应商打样和材料输出需要时间成本，需要确认低保真验证是否能提前降低返工风险。</p>
-              </div>
-            </div>
-          </div>
-          <div class="panel">
-            <h2>预审结论</h2>
-            <p class="subtitle" style="margin-bottom:18px">当前推荐路径具备进入低成本验证的基础，但还不建议直接进入正式打印打样。打样前需要确认标签尺寸、打印边距、贴标位置、必填信息和供应商样张标准。</p>
-            <div class="card amber"><h3>建议：先做低成本验证</h3><p>推荐先推进“信息优先级表 + 低保真贴标验证”的 P0 组合，正式 Figma 精修和打印打样后置到 P1。</p></div>
-            <div class="card blue"><h3>参会角色</h3><p>产品讲清楚推荐理由和不选理由；设计确认版式层级和样张输出；品牌确认表达边界；供应商确认打印和贴标限制；销售确认展示材料一致性。</p></div>
-          </div>
-        </div>
-          </div>
-        </details>
-        <details class="panel detail-panel">
-          <summary>角色意见确认</summary>
+          <summary>关键角色确认</summary>
           <div class="detail-body">
           <div class="role-board">
+            <div class="role-card">
+              <div class="role-card-head"><strong>产品 / 负责人</strong><span class="pill green">最终口径</span></div>
+              <p>确认信息优先级、执行时间、返工风险和是否进入低保真验证。</p>
+              <select class="status-select role-status" data-role="产品 / 负责人"><option selected>有疑问</option><option>已确认</option><option>需会后评估</option></select>
+            </div>
             <div class="role-card">
               <div class="role-card-head"><strong>供应商</strong><span class="pill amber">关键角色</span></div>
               <p>关注打印尺寸、材质限制、贴标工艺、样张标准和交付周期。</p>
@@ -1725,43 +1645,23 @@
               <p>关注版式层级、字号、边距、贴标位置、样张输出和展示一致性。</p>
               <select class="status-select role-status" data-role="设计"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
             </div>
-            <div class="role-card">
-              <div class="role-card-head"><strong>品牌</strong><span class="pill blue">表达边界</span></div>
-              <p>关注卖点表达、品牌语气、必填信息和对外展示一致性。</p>
-              <select class="status-select role-status" data-role="品牌"><option>有疑问</option><option>已确认</option><option selected>需会后评估</option></select>
-            </div>
-            <div class="role-card">
-              <div class="role-card-head"><strong>销售展示</strong><span class="pill green">使用场景</span></div>
-              <p>关注客户介绍、展示距离、样品拍摄和后续物料一致性。</p>
-              <select class="status-select role-status" data-role="销售展示"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
-            </div>
-            <div class="role-card">
-              <div class="role-card-head"><strong>产品</strong><span class="pill green">价值判断</span></div>
-              <p>关注目标用户、信息优先级、执行时间、返工风险和验收标准。</p>
-              <select class="status-select role-status" data-role="产品"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
-            </div>
-            <div class="role-card">
-              <div class="role-card-head"><strong>负责人</strong><span class="pill red">风险边界</span></div>
-              <p>关注成本、时间、最终确认口径和出现返工时的处理方式。</p>
-              <select class="status-select role-status" data-role="负责人"><option selected>有疑问</option><option>已确认</option><option>需会后评估</option></select>
-            </div>
           </div>
           <div class="review-summary">
-            <div class="mini-stat"><strong id="roleConfirmedCount">3</strong><span>已确认角色</span></div>
-            <div class="mini-stat"><strong id="roleRiskCount">3</strong><span>仍有疑问</span></div>
+            <div class="mini-stat"><strong id="roleConfirmedCount">1</strong><span>已确认角色</span></div>
+            <div class="mini-stat"><strong id="roleRiskCount">2</strong><span>仍有疑问</span></div>
             <div class="mini-stat"><strong id="roleMeetingAdvice">补齐关键角色</strong><span>协作建议</span></div>
           </div>
           </div>
         </details>
         <details class="panel detail-panel">
-          <summary>预审待办清单</summary>
+          <summary>待确认清单</summary>
           <div class="detail-body">
           <table>
-            <thead><tr><th>优先级</th><th>问题</th><th>影响</th><th>建议动作</th><th>负责人</th><th>截止时间</th><th>状态</th></tr></thead>
+            <thead><tr><th>待确认项</th><th>为什么影响推进</th><th>负责人</th><th>状态</th></tr></thead>
             <tbody>
-              <tr><td>高</td><td>标签尺寸和打印边距未定</td><td>会影响 Figma 排版、打印打样和贴标位置</td><td>确认最终尺寸、出血边距、最小字号和安全区域</td><td>设计 + 供应商</td><td>打样前</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
-              <tr><td>高</td><td>必填信息和卖点优先级未定</td><td>可能造成信息拥挤、表达冲突或客户理解成本高</td><td>明确产品名、成分、使用信息和品牌表达的排序</td><td>产品 + 品牌</td><td>正式制作前</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
-              <tr><td>中</td><td>样张验收标准未定</td><td>无法判断打样是否通过，容易反复改稿</td><td>设置可读性、贴标位置、展示一致性和供应商反馈检查项</td><td>产品 + 设计</td><td>贴标验证前</td><td><select class="status-select review-status"><option>可优化</option><option>已处理</option></select></td></tr>
+              <tr><td>标签尺寸和打印边距</td><td>会影响 Figma 排版、打印打样和贴标位置</td><td>设计 + 供应商</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
+              <tr><td>必填信息和卖点优先级</td><td>可能造成信息拥挤、表达冲突或客户理解成本高</td><td>产品 / 负责人</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
+              <tr><td>样张通过标准</td><td>无法判断低保真验证是否通过，容易反复改稿</td><td>产品 + 设计</td><td><select class="status-select review-status"><option>可优化</option><option>已处理</option></select></td></tr>
             </tbody>
           </table>
           <div class="review-summary">
@@ -1769,16 +1669,15 @@
             <div class="mini-stat"><strong id="remainingCount">3</strong><span>待办项</span></div>
             <div class="mini-stat"><strong id="readyState">待复审</strong><span>预审状态</span></div>
           </div>
-          <div class="inline-alert" id="reviewAlert">还有高优先级问题未处理。你仍然可以导出材料，但建议先处理关键风险。</div>
+          <div class="inline-alert" id="reviewAlert">还有高优先级问题未处理。你仍然可以发送确认材料，但建议先处理关键风险。</div>
           <div class="actions">
             <button class="btn" id="autoFixBtn">模拟采纳反馈</button>
-            <button class="btn" data-export="预审会议纪要">导出会议纪要</button>
-            <button class="btn primary" id="exportBtn">导出材料</button>
+            <button class="btn primary" id="exportBtn">发送材料</button>
           </div>
           </div>
         </details>
         <details class="panel detail-panel">
-          <summary>供应商反馈回写</summary>
+          <summary>供应商反馈记录</summary>
           <div class="detail-body">
           <div class="feedback-form">
             <select id="devFeedbackType">
@@ -1798,39 +1697,37 @@
       </section>
 
       <section class="page" id="page-export">
-        <h1>产品经理工作台</h1>
-        <p class="subtitle">最后只保留对推进有用的内容：谁需要看什么、导出什么材料、AI 的边界在哪里。</p>
-        <div class="analysis-grid">
-          <div class="panel">
-            <span class="pill blue">跨角色对齐</span>
-            <h2>各角色关注点</h2>
-            <div class="department-list">
-              <div class="department-item"><strong>产品</strong><span>确认核心目标、信息优先级、必填内容、验收标准和推进节奏。</span></div>
-              <div class="department-item"><strong>设计</strong><span>确认版式层级、字号、边距、贴标位置和样张输出方式。</span></div>
-              <div class="department-item"><strong>品牌</strong><span>确认卖点表达、品牌语气、视觉元素和对外展示一致性。</span></div>
-              <div class="department-item"><strong>供应商</strong><span>确认打印尺寸、材质限制、贴标工艺、出血边距和交付周期。</span></div>
-              <div class="department-item"><strong>销售展示</strong><span>确认客户介绍场景、样品拍摄、PPT 物料和后续展示需求。</span></div>
-              <div class="department-item"><strong>负责人</strong><span>确认成本、时间、最终确认口径和返工时的处理方式。</span></div>
-            </div>
-          </div>
-          <div class="panel">
-            <span class="pill blue">产品边界</span>
-            <h2>AI 只做预审辅助</h2>
-            <ul class="insight-list">
-              <li>适合提前发现目标、约束、验收和风险缺口。</li>
-              <li>不替代产品、设计、供应商、业务负责人的最终判断。</li>
-              <li>系统输出必须保留来源标注、人工确认和编辑入口。</li>
-            </ul>
-          </div>
-        </div>
-        <h2 style="margin-top:28px">角色化导出</h2>
-        <p class="hint">首期优先支持“负责人摘要”和“供应商确认单”。设计 Brief 和会议纪要作为后续扩展，先不把协作链路做重。</p>
+        <h1>发送确认材料</h1>
+        <p class="subtitle">预审后只导出两类首期材料：给负责人确认是否推进，给供应商确认打样边界。</p>
         <div class="export-grid">
-          <div class="panel export-card"><div><span class="pill blue">P0 给负责人</span><h2>预审摘要</h2><p class="hint">当前建议状态、关键风险、是否建议进入下一步。</p></div><button class="btn primary" data-export="老板摘要">整理摘要</button></div>
-          <div class="panel export-card"><div><span class="pill green">P0 给供应商</span><h2>打样确认单</h2><p class="hint">尺寸、材质、边距、贴标位置、样张标准。</p></div><button class="btn primary" data-export="供应商确认单">整理确认单</button></div>
-          <div class="panel export-card"><div><span class="pill purple">P1 给设计</span><h2>设计 Brief</h2><p class="hint">信息层级、版式要求、贴标限制、输出规格。</p></div><button class="btn" data-export="设计 Brief">整理 Brief</button></div>
-          <div class="panel export-card"><div><span class="pill amber">P1 给团队</span><h2>预审会议纪要</h2><p class="hint">预审结论、阻塞项、角色意见、供应商反馈和会后动作。</p></div><button class="btn" data-export="预审会议纪要">生成纪要</button></div>
+          <div class="panel export-card">
+            <div>
+              <span class="pill blue">P0 给负责人</span>
+              <h2>预审摘要</h2>
+              <p class="hint">建议状态、关键风险、暂不进入正式打样的原因，以及是否同意先做低保真贴标验证。</p>
+              <ul class="insight-list">
+                <li>建议状态：先做低保真贴标验证。</li>
+                <li>暂不进入：正式 Figma 精修和打印打样。</li>
+                <li>需要确认：是否同意先用低成本样张验证。</li>
+              </ul>
+            </div>
+            <button class="btn primary" data-export="负责人摘要">复制负责人摘要</button>
+          </div>
+          <div class="panel export-card">
+            <div>
+              <span class="pill green">P0 给供应商</span>
+              <h2>打样确认单</h2>
+              <p class="hint">把尺寸、材质、边距、贴标位置、样张标准和反馈周期整理给供应商确认。</p>
+              <ul class="insight-list">
+                <li>确认标签尺寸、最小字号和打印边距。</li>
+                <li>确认贴标位置、实物弧度和遮挡风险。</li>
+                <li>确认样张标准和反馈周期。</li>
+              </ul>
+            </div>
+            <button class="btn primary" data-export="供应商确认单">复制供应商确认单</button>
+          </div>
         </div>
+        <p class="hint" style="margin-top:18px">设计 Brief 和会议纪要作为后续扩展，首期不做完整协同平台。</p>
       </section>
     </main>
     <div class="floating-helper" id="floatingHelper">
@@ -1864,8 +1761,8 @@
 
   <script>
     const pages = ["intake", "clarify", "document", "review", "export"];
-    const labels = ["描述问题", "问题诊断", "整理材料", "预审与反馈", "工作台"];
-    const actionLabels = ["开始分析", "查看问题诊断", "整理材料", "进入预审", "导出材料"];
+    const labels = ["描述事项", "执行前判断", "确认单", "执行前检查", "发送材料"];
+    const actionLabels = ["开始分析", "查看执行前判断", "生成确认单", "进入执行前检查", "发送材料"];
     let current = 0;
     let maxUnlocked = 0;
     let confirmedAnswers = 0;
@@ -2000,11 +1897,10 @@
           scope: ["整理产品名、成分说明、使用信息和品牌表达的信息优先级。", "确认标签尺寸、打印边距、贴标位置和供应商样张要求。", "用低保真样张完成实物贴标验证，检查可读性和展示距离。", "通过后进入 Figma 精修、打印打样和展示材料整理。"],
           gaps: "标签尺寸、必填信息、打印边距、贴标位置、供应商样张标准、展示材料一致性",
           questions: [
-            ["goal", "标签最先解决什么问题？", "是让用户快速理解用途、强调成分卖点，还是保证品牌表达和展示一致？", "主目标：先让用户在小尺寸包装上快速看懂产品用途和核心卖点，同时保证必填信息可读。"],
-            ["scope", "正式制作前先确认什么？", "直接 Figma 精修、先做信息优先级表，还是先做低保真贴标测试？", "首期路径：先确认信息优先级和尺寸约束，再用低保真样张验证贴标位置和可读性。"],
-            ["fallback", "样张不清楚时怎么处理？", "减少文案、调整层级、换贴标位置，还是重新定义展示材料？", "兜底方式：优先压缩低优先级文案，保留产品名、核心卖点、成分和使用信息；贴标偏移则回到供应商确认。"],
-            ["permission", "谁能确认最终口径？", "产品、品牌、设计、供应商分别负责哪些确认？", "权限规则：产品确认信息优先级，品牌确认表达，设计确认版式，供应商确认打印和贴标限制。"],
-            ["data", "执行后怎么证明预审有用？", "只看是否打样成功，还是看确认轮次、返工次数和展示一致性？", "验证口径：低保真修改次数、打样后二次修改率、角色确认轮次、展示材料一致性和样张验收通过率。"]
+            ["goal", "产品信息优先级是否已确认？", "产品名、核心卖点、成分说明、使用信息和品牌表达，哪些必须第一眼可见？", "建议先由产品和品牌确认信息优先级，避免设计阶段反复调整。"],
+            ["scope", "打印与贴标约束是否已确认？", "标签尺寸、最小字号、打印边距、安全区域和贴标位置是否有供应商限制？", "正式制作前先确认尺寸约束，再用低保真样张验证贴标位置和可读性。"],
+            ["fallback", "低保真样张不清楚时由谁处理？", "如果样张不可读，是减少文案、调整层级、换贴标位置，还是重新定义展示材料？", "优先压缩低优先级文案；如果是贴标偏移或打印限制，回到供应商确认。"],
+            ["permission", "样张最终确认人是否明确？", "产品、品牌、设计、供应商分别负责确认哪些内容，负责人是否能做最终口径判断？", "产品确认信息优先级，品牌确认表达边界，设计确认输出规格，供应商确认打印和贴标限制。"]
           ],
           departments: ["产品：确认核心卖点、必填信息、用户理解优先级和验收标准。", "设计：确认版式层级、字号、边距、贴标位置和样张输出。", "品牌：确认表达边界、视觉元素和对外展示一致性。", "供应商：确认打印尺寸、材质限制、贴标工艺和交付周期。", "销售展示：确认客户介绍、样品拍摄和 PPT 物料的一致性。"],
           competition: "对比同类护肤品小包装、药妆标签、旅行装包装和电商展示图，重点借鉴首屏卖点、成分可读性、使用信息和品牌一致性。",
@@ -2042,30 +1938,21 @@
               value: "最快对齐产品、品牌和设计对信息层级的判断。",
               benefit: "先决定哪些信息必须保留，避免版面阶段反复争论。",
               summary: "把产品名、核心卖点、成分、用法和品牌表达按优先级排序。",
-              risk: "如果没有实物验证，仍可能低估小尺寸下的可读性。"
+              risk: "需要负责人确认取舍；如果没有实物验证，仍可能低估小尺寸下的可读性。"
             },
             {
-              name: "方案 B：直接 Figma 精修",
-              tag: "P1 / 暂缓",
-              cost: "中",
-              value: "视觉完成度高，适合信息和尺寸都已确认的情况。",
-              benefit: "能快速产出漂亮稿件，便于展示。",
-              summary: "直接进入 Figma 高保真排版和视觉统一。",
-              risk: "必填信息、尺寸和贴标位置未确认时，精修稿容易返工。"
-            },
-            {
-              name: "方案 C：低保真贴标验证",
+              name: "方案 B：低保真贴标验证",
               tag: "P0 / 推荐",
               cost: "中",
               value: "能在打样前验证可读性、贴标位置和展示距离。",
               benefit: "用低成本样张提前暴露返工风险。",
               summary: "先打印黑白样张贴到实物包装上，检查字号、边距和信息遮挡。",
-              risk: "需要供应商或实物样品配合，验证节奏要提前安排。"
+              risk: "需要实物包装或旧样品配合；只能验证可读性和位置，不能替代正式打样。"
             }
           ],
-          recommendation: "推荐 P0 组合：方案 A + 方案 C。先用信息优先级表对齐判断，再用低保真贴标验证可读性和位置；正式 Figma 精修和打印打样放到 P1，等尺寸和样张标准稳定后再进入。",
+          recommendation: "推荐 P0 组合：方案 A + 方案 B。先用信息优先级表对齐判断，再用低保真贴标验证可读性和位置；暂不直接 Figma 精修，等尺寸和样张标准稳定后再进入。",
           decisionSummary: {
-            recommend: "A+C 可以最快对齐信息优先级，并在低成本样张里验证可读性、贴标位置和展示一致性。",
+            recommend: "A+B 可以最快对齐信息优先级，并在低成本样张里验证可读性、贴标位置和展示一致性。",
             notNow: "不建议首期直接做完整高保真视觉稿，因为尺寸、边距和必填信息未确认会放大返工风险。",
             entry: "当信息优先级、标签尺寸、贴标位置和供应商样张标准都确认后，再进入正式 Figma 精修和打印打样。"
           },
@@ -2422,7 +2309,7 @@
             <div class="q-title">${escapeHtml(q[1])}</div>
             <div class="q-sub">${escapeHtml(confirmedAnswersByKey[q[0]] || q[2])}</div>
           </div>
-          <button class="btn ${index === 0 ? "primary" : ""}" data-answer="${escapeHtml(q[0])}">${confirmedAnswersByKey[q[0]] ? "调整" : "查看建议"}</button>
+          <button class="btn ${index === 0 ? "primary" : ""}" data-answer="${escapeHtml(q[0])}">${confirmedAnswersByKey[q[0]] ? "调整判断" : "展开判断"}</button>
         </div>`).join("");
     }
 
@@ -2461,8 +2348,8 @@
       const compare = document.getElementById("solutionCompare");
       if (!compare) return;
       compare.innerHTML = options.map((option, index) => `
-        <article class="solution-card ${(scenario.key === "label" ? index === 0 || index === 2 : index === 1) ? "recommended" : ""}">
-          <span class="pill ${index === 0 ? "green" : index === 1 ? "blue" : "amber"}">${escapeHtml(option.tag)}</span>
+        <article class="solution-card ${(scenario.key === "label" ? true : index === 1) ? "recommended" : ""}">
+          <span class="pill ${index === 0 ? "green" : index === 1 ? "amber" : "blue"}">${escapeHtml(option.tag)}</span>
           <h3>${escapeHtml(option.name)}</h3>
           <p>${escapeHtml(option.summary)}</p>
           <div class="solution-meta">
@@ -2514,16 +2401,15 @@
         <div class="card ${status === "待验证" ? "amber" : status === "本期不处理" ? "blue" : "green"}"><h3>${escapeHtml(status)}：${escapeHtml(title)}</h3><p>${escapeHtml(answer)}</p></div>
       `).join("");
       document.getElementById("infoCards").innerHTML = confirmed || confirmedEntries.length ? `
-        <div class="card green"><h3>相关角色</h3><p>${escapeHtml(scenario.users)}</p></div>
+        <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>${escapeHtml(scenario.users)}</p></div>
         <div class="card blue"><h3>推荐首期方案</h3><p>${escapeHtml(scenario.scope.slice(0, 2).join("；"))}</p></div>
         <div class="card green"><h3>成功指标</h3><p>${escapeHtml(scenario.metrics)}</p></div>
         <div class="card blue"><h3>阶段判断</h3><p>不能执行；可预讨论；可预审；具备执行条件。系统只给推进建议，不替负责人做最终判断。</p></div>
         ${renderLandingPack(scenario)}
         ${confirmedHtml}
         <div class="card amber"><h3>仍待确认</h3><p>${escapeHtml(remaining)}</p></div>` : `
-        <div class="card green"><h3>相关角色</h3><p>${escapeHtml(scenario.users)}</p></div>
-        <div class="card amber"><h3>待判断</h3><p>${escapeHtml(scenario.gaps)}</p></div>
-        <div class="card blue"><h3>缺口分层</h3><p>必须先确认；进入预审前确认；跨角色确认。</p></div>`;
+        <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>${escapeHtml(scenario.users)}</p></div>
+        <div class="card amber"><h3>待确认项</h3><small>来源：系统推断，待人工确认</small><p>${escapeHtml(scenario.gaps)}</p></div>`;
     }
 
     function getBusinessGoals(scenario) {
@@ -2699,25 +2585,22 @@
           return question ? [question[1], answer, diagnosisStatusByKey[key] || "主要判断"] : [key, answer, diagnosisStatusByKey[key] || "主要判断"];
         });
       const acceptedFeedback = devFeedbackItems.filter(item => item.status === "已回写");
-      document.getElementById("docTitle").textContent = scenario.title;
+      document.getElementById("docTitle").textContent = scenario.key === "label" ? "足霜产品信息展示物料预审确认单" : `${scenario.title} 预审确认单`;
       document.getElementById("backgroundText").textContent = scenario.background;
-      document.getElementById("problemText").textContent = scenario.problem;
-      document.getElementById("usersText").textContent = scenario.users;
-      document.getElementById("goalText").textContent = scenario.goal;
-      document.getElementById("scopeList").innerHTML = scenario.scope.map(item => `<li>${escapeHtml(item)}</li>`).join("");
-      document.getElementById("flowList").innerHTML = [
-        `用户提交${escapeHtml(scenario.title)}相关业务问题、会议纪要或反馈片段。`,
-        scenario.key === "label" ? "系统识别问题类型、相关角色、信息缺口和跨角色待确认事项。" : "系统识别问题类型、受影响用户、可能根因和跨部门待确认事项。",
-        scenario.key === "label" ? "产品经理确认路径取舍后，沉淀预审清单、验收标准和角色化材料。" : "产品经理确认方案取舍后，沉淀 PRD、评审清单、数据指标和角色化材料。",
-        scenario.key === "label" ? "预审通过后进入设计排版、供应商打样、展示材料同步和复盘。" : "评审通过后进入研发拆解、设计出图、数据埋点和上线复盘。"
-      ].map(item => `<li>${item}</li>`).join("");
-      document.getElementById("departmentDocList").innerHTML = scenario.departments.slice(0, 3).map(item => `<li>${escapeHtml(item)}</li>`).join("");
+      const confirmedList = confirmedEntries.length
+        ? confirmedEntries.map(([title, answer, status]) => `${status}：${title} - ${answer}`)
+        : [
+            "主要判断：先做信息优先级表，明确哪些信息必须第一眼可见。",
+            "待验证：用低保真贴标样张检查可读性和实物位置。",
+            "暂不推进：正式 Figma 精修和打印打样后置。"
+          ];
+      document.getElementById("scopeList").innerHTML = confirmedList.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+      document.getElementById("departmentDocList").innerHTML = scenario.departments.slice(0, 4).map(item => `<li>${escapeHtml(item)}</li>`).join("");
       document.getElementById("riskList").innerHTML = [
-        `待确认风险：${scenario.gaps}`,
-        scenario.key === "label" ? "关键执行约束必须有明确负责人，不能只写成“打样前补齐”。" : "关键业务规则必须有明确负责人，不能只写成“上线前补齐”。",
-        scenario.key === "label" ? "高风险反馈需要明确处理入口、负责人和关闭状态。" : "异常状态需要给用户明确提示、处理入口和内部追踪字段。",
-        scenario.key === "label" ? "正式打样前需要完成尺寸、边距、贴标位置和验收负责人确认。" : "上线前需要完成权限、数据口径、验收负责人和回滚方案确认。",
-        ...acceptedFeedback.map(item => `${scenario.key === "label" ? "供应商反馈回写" : "研发反馈回写"}：${item.type} - ${item.text}`)
+        scenario.key === "label" ? "标签尺寸、最小字号、打印边距和安全区域。" : `待确认风险：${scenario.gaps}`,
+        scenario.key === "label" ? "贴标位置、实物弧度和遮挡风险。" : "关键业务规则必须有明确负责人，不能只写成“上线前补齐”。",
+        scenario.key === "label" ? "供应商样张标准、反馈周期和最终确认人。" : "异常状态需要给用户明确提示、处理入口和内部追踪字段。",
+        ...acceptedFeedback.map(item => `${scenario.key === "label" ? "供应商反馈记录" : "研发反馈记录"}：${item.type} - ${item.text}`)
       ].map(item => `<li>${escapeHtml(item)}</li>`).join("");
       document.getElementById("acceptanceText").innerHTML = getAcceptanceCriteria(scenario)
         .map(([title, detail]) => `<strong>${escapeHtml(title)}：</strong>${escapeHtml(detail)}`)
@@ -3068,17 +2951,17 @@ ${acceptanceRows}
         helperTitle = "当前动作：开始分析";
         helperText = "先识别问题和待判断事项。";
       } else if (current === 1) {
-        nextBtn.textContent = confirmedAnswers ? "整理预审材料" : "设为主要判断";
-        helperTitle = confirmedAnswers ? "当前动作：整理预审材料" : "当前动作：确认关键判断";
-        helperText = confirmedAnswers ? "已确认关键判断，可以沉淀到预审材料。" : "先处理最影响首期范围的判断，信息卡会同步更新。";
+        nextBtn.textContent = confirmedAnswers ? "生成确认单" : "设为主要判断";
+        helperTitle = confirmedAnswers ? "当前动作：生成确认单" : "当前动作：确认关键判断";
+        helperText = confirmedAnswers ? "已确认关键判断，可以整理成轻量预审确认单。" : "先处理最影响首期范围的判断，信息卡会同步更新。";
       } else if (current === 2) {
-        nextBtn.textContent = fullPrdReady ? "进入执行预审" : "整理完整材料";
-        helperTitle = fullPrdReady ? "当前动作：进入执行预审" : "当前动作：整理完整材料";
-        helperText = fullPrdReady ? "检查推荐路径、风险和推进条件。" : "先整理完整可复制版本。";
+        nextBtn.textContent = "进入执行预审";
+        helperTitle = "当前动作：进入执行预审";
+        helperText = "确认单已生成，继续检查推荐路径、风险和推进条件。";
       } else if (current === 3) {
-        nextBtn.textContent = "导出材料";
-        helperTitle = reviewReady ? "当前动作：导出材料" : "当前动作：带风险导出";
-        helperText = reviewReady ? "可以进入工作台整理材料。" : "当前仍有风险，Demo 允许继续导出。";
+        nextBtn.textContent = "发送材料";
+        helperTitle = reviewReady ? "当前动作：发送材料" : "当前动作：带风险发送";
+        helperText = reviewReady ? "可以发送负责人摘要和供应商确认单。" : "当前仍有风险，Demo 允许继续发送确认材料。";
       } else {
         nextBtn.textContent = "继续";
       }
@@ -3254,8 +3137,8 @@ ${acceptanceRows}
       document.getElementById("analysisCards").style.display = "none";
       document.getElementById("answerBox").classList.remove("active");
       document.getElementById("generateDocBtn").disabled = true;
-      document.getElementById("prdPreview").textContent = "点击“整理完整材料”后，会在这里输出一份可复制的预审材料草稿。";
-      document.getElementById("prdStatus").textContent = "尚未整理完整预审材料。整理后会默认包含风险、信源、验收标准和跨角色待确认项。";
+      document.getElementById("prdPreview").textContent = "预审确认单会在页面中直接展示。";
+      document.getElementById("prdStatus").textContent = "尚未复制确认单。";
       document.getElementById("prdStatus").classList.remove("success");
       currentPrdText = "";
       fullPrdReady = false;
@@ -3430,17 +3313,15 @@ ${acceptanceRows}
 
     document.getElementById("fullPrdBtn").addEventListener("click", () => {
       currentPrdText = buildPrdText();
-      const prdDetail = document.querySelector("#page-document details.detail-panel");
-      if (prdDetail) prdDetail.open = true;
       const preview = document.getElementById("prdPreview");
       preview.textContent = currentPrdText;
-      document.getElementById("prdStatus").textContent = "完整预审材料已整理。现在可以复制、复制 Word 版材料或下载 Markdown。";
+      document.getElementById("prdStatus").textContent = "确认单已复制，可发给负责人或供应商继续确认。";
       document.getElementById("prdStatus").classList.add("success");
-      preview.scrollIntoView({ behavior: "smooth", block: "center" });
       fullPrdReady = true;
       unlock(3);
-      logActivity("activity2", "已整理完整预审材料：含参考分析、角色对齐、验收指标");
-      showToast("已整理完整预审材料");
+      navigator.clipboard?.writeText(currentPrdText).catch(() => {});
+      logActivity("activity2", "已生成轻量预审确认单");
+      showToast("已复制确认单");
     });
 
     document.getElementById("copyPrdBtn").addEventListener("click", async () => {
@@ -3748,7 +3629,7 @@ ${acceptanceRows}
       item.status = btn.dataset.devAction === "accept" ? "已回写" : "本期不处理";
       renderDevFeedbackList();
       syncFeedbackToPrd();
-      logActivity("activity3", item.status === "已回写" ? "已将供应商反馈回写预审材料" : "已记录本期不处理的供应商反馈");
+        logActivity("activity3", item.status === "已回写" ? "已记录供应商反馈" : "已记录本期不处理的供应商反馈");
       showToast(item.status === "已回写" ? "已回写进预审材料" : "已标记本期不处理");
     });
 
@@ -3788,7 +3669,7 @@ ${acceptanceRows}
         const roleText = roles.roles.map(item => `- ${item.role}：${item.status}`).join("\n");
         const feedback = devFeedbackItems.length
           ? devFeedbackItems.map(item => `- ${item.type}（${item.status}）：${item.text}`).join("\n")
-          : "- 暂无供应商反馈回写。";
+          : "- 暂无供应商反馈记录。";
         return `执行前预审会议纪要
 
 项目：${scenario.title}
@@ -3800,8 +3681,7 @@ ${decision}
 - 预审材料：${preflight.done}/${preflight.total} 已准备，${preflight.missing} 项待补齐
 - 角色意见：${roles.confirmed} 个已确认，${roles.riskCount} 个仍需跟进
 - 阻塞项：${blocking} 个
-- 非阻塞项：${nonBlocking} 个
-- 已关闭：${handled} 个
+- 已处理：${handled} 个
 - 下一阶段：${nextStage}
 
 预审关注点：
@@ -3819,7 +3699,7 @@ ${decision}
 角色意见状态：
 ${roleText}
 
-供应商反馈回写：
+供应商反馈记录：
 ${feedback}
 
 会议后动作：
@@ -3830,23 +3710,27 @@ ${preflight.missing > 2
     : "- 可继续推进样张细化和正式打样。\n- 非阻塞问题在打样前确认负责人和完成时间。"}
 `;
       }
-      if (type === "老板摘要") {
-        return `项目：${scenario.title}
+      if (type === "负责人摘要" || type === "老板摘要") {
+        return `负责人预审摘要
 
-目标：
-${scenario.goal}
+项目：${scenario.title}
 
-为什么现在做：
+建议状态：
+先做低保真贴标验证，暂不进入正式 Figma 精修和打印打样。
+
+为什么：
 ${scenario.problem}
 
-首期范围：
-${scenario.scope.join("\n")}
+当前建议路径：
+- 先做信息优先级表，确认产品名、核心卖点、成分说明和使用信息的优先级。
+- 再做低保真贴标验证，检查可读性、贴标位置和展示距离。
+- 等尺寸、边距和样张标准稳定后，再进入正式制作。
 
-主要风险：
+关键风险：
 ${scenario.gaps}
 
-建议：
-可以启动低成本验证，但进入正式执行前需要先确认范围、验收标准、角色责任和风险兜底。`;
+需要负责人确认：
+是否同意先用低成本样张验证，而不是直接进入正式打样。`;
       }
       if (type === "供应商确认单" || type === "研发任务清单") {
         return `供应商确认单
