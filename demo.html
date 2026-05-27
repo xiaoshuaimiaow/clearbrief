@@ -24,6 +24,7 @@
       --purple-soft: #f2edff;
     }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html, body {
       min-height: 100%;
       overflow-x: hidden;
@@ -349,7 +350,6 @@
     body.compact-mode .portfolio-only,
     body.compact-mode .guide,
     body.compact-mode .flow-helper,
-    body.compact-mode .source-row,
     body.compact-mode .source-control,
     body.compact-mode .case-picker,
     body.compact-mode .sidebar-note,
@@ -1411,11 +1411,11 @@
 
       <section class="page active" id="page-intake">
         <h1>先判断这个事项能不能进入执行</h1>
-        <p class="subtitle">输入一个业务问题，先看能不能执行、先确认什么、哪些问题会卡住推进，再整理成预审材料。</p>
+        <p class="subtitle">当前已预填一个信息展示物料案例，可以直接开始分析；也可以清空后换成自己的业务事项。</p>
         <div class="source-row">
-          <span class="source-chip" id="scenarioChip">当前案例：信息展示物料预审</span>
-          <span class="source-chip">支持会议纪要、聊天记录、业务规则、旧文档片段</span>
-          <span class="source-chip">模拟样例：基于实习观察抽象，不代表企业内部真实数据</span>
+          <span class="source-chip" id="scenarioChip">已预填案例：信息展示物料预审</span>
+          <span class="source-chip">点击“开始分析”进入执行前判断</span>
+          <span class="source-chip">样例基于实习观察抽象，不代表企业内部真实数据</span>
         </div>
         <div class="readiness-strip" aria-label="评审推进状态">
           <div class="readiness-step">
@@ -1453,10 +1453,10 @@
             <p class="hint" id="countHint">126 字 / 建议 50-300 字</p>
             <div class="inline-alert" id="intakeAlert">输入信息太少。请至少说明“谁遇到问题”“现状卡在哪里”和“尝试过什么”，再开始分析。</div>
             <div class="actions">
-              <button class="btn primary" id="analyzeBtn">开始分析</button>
-              <button class="btn" id="customBtn">重写输入</button>
+              <button class="btn primary" id="analyzeBtn">开始分析当前事项</button>
+              <button class="btn" id="customBtn">清空重写</button>
             </div>
-            <div class="case-grid" id="caseGrid" hidden></div>
+            <div class="case-grid" id="caseGrid" hidden style="display:none"></div>
           </div>
           <div class="panel">
             <h2>初步识别</h2>
@@ -1541,7 +1541,7 @@
               <li>先做信息优先级表，明确哪些信息必须第一眼可见。</li>
               <li>先做低保真贴标验证，检查可读性和实物位置。</li>
               <li>暂不直接进入 Figma 精修和正式打印打样。</li>
-            </ol>
+            </ul>
             <h3 id="doc-risks">待确认项</h3>
             <ul class="doc-editable" id="riskList">
               <li>标签尺寸、最小字号、打印边距和安全区域。</li>
@@ -2999,7 +2999,8 @@ ${acceptanceRows}
       renderStepbar();
       updateNextButton();
       if (index === 3) updateReviewScore();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
     }
 
     function unlock(index) {
@@ -3144,7 +3145,7 @@ ${acceptanceRows}
       fullPrdReady = false;
       document.getElementById("intakeAlert").classList.remove("show");
       document.getElementById("reviewAlert").classList.remove("show");
-      document.getElementById("analyzeBtn").innerHTML = "开始分析";
+      document.getElementById("analyzeBtn").innerHTML = "开始分析当前事项";
       document.getElementById("analyzeBtn").disabled = false;
       reviewReady = false;
       renderInfoCards(currentScenario, false);
@@ -3231,8 +3232,8 @@ ${acceptanceRows}
         setTimeout(() => {
           goTo(1);
           selectQuestion(scenario.questions[0]?.[0]);
-        }, 350);
-      }, 900);
+        }, 150);
+      }, 350);
     });
 
     document.getElementById("questionsList").addEventListener("click", event => {
@@ -3392,7 +3393,7 @@ ${acceptanceRows}
           setTimeout(() => { window.scrollTo(0, windowScrollTop); }, 360);
           setTimeout(() => { manualTocLock = false; }, 420);
         } else {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          target.scrollIntoView?.({ behavior: "smooth", block: "start" });
           setTimeout(() => { manualTocLock = false; }, 420);
         }
       });
@@ -3407,7 +3408,7 @@ ${acceptanceRows}
           const active = link.getAttribute("href") === `#${headingId}`;
           link.classList.toggle("active", active);
           if (active) {
-            link.scrollIntoView({ block: "nearest" });
+            link.scrollIntoView?.({ block: "nearest" });
           }
         });
       }
