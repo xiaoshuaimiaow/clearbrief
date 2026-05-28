@@ -1371,9 +1371,9 @@
   <div class="app">
     <header class="top">
       <div class="brand">ClearBrief 清晰启动</div>
-      <div class="tagline">评审前方案预审台</div>
+      <div class="tagline">执行前确认台</div>
       <div class="top-actions">
-        <div class="mode-switcher" aria-label="体验模式切换">
+        <div class="mode-switcher" aria-label="体验模式切换" hidden>
           <span class="mode-caption">模式</span>
           <button class="mode-option active" type="button" data-detail-mode="compact">精简体验</button>
           <button class="mode-option" type="button" data-detail-mode="showcase">展示说明</button>
@@ -1394,7 +1394,7 @@
       <div class="activity-log">
         <strong>活动记录</strong>
         <div id="activity1">等待输入业务问题</div>
-        <div id="activity2">尚未形成诊断</div>
+        <div id="activity2">尚未形成判断</div>
         <div id="activity3">尚未进入预审</div>
       </div>
     </aside>
@@ -1403,18 +1403,18 @@
       <div class="stepbar" id="stepbar"></div>
       <div class="flow-helper" id="flowHelper">
         <div>
-          <strong>当前建议：开始分析</strong>
-          <span>先识别问题和待判断事项，再进入方案取舍。</span>
+          <strong>当前动作：梳理事项</strong>
+          <span>先把目标、约束和待确认项摆出来，再决定下一步。</span>
         </div>
         <span id="flowHelperMeta">第 1 / 5 步</span>
       </div>
 
       <section class="page active" id="page-intake">
         <h1>先判断这个事项能不能进入执行</h1>
-        <p class="subtitle">当前已预填一个信息展示物料案例，可以直接开始分析；也可以清空后换成自己的业务事项。</p>
+        <p class="subtitle">当前已预填一个信息展示物料案例，可以直接梳理；也可以清空后换成自己的业务事项。</p>
         <div class="source-row">
           <span class="source-chip" id="scenarioChip">已预填案例：信息展示物料预审</span>
-          <span class="source-chip">点击“开始分析”进入执行前判断</span>
+          <span class="source-chip">点击“梳理当前事项”进入执行前判断</span>
           <span class="source-chip">样例基于实习观察抽象，不代表企业内部真实数据</span>
         </div>
         <div class="readiness-strip" aria-label="评审推进状态">
@@ -1451,18 +1451,18 @@
             </div>
             <textarea id="ideaInput">足霜标签需要在小尺寸包装上同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。包装空间有限，设计、品牌、供应商、打样和展示材料之间需要反复确认。团队希望在正式 Figma 排版和打印打样前，先确认信息优先级、尺寸约束、风险点、角色责任和验收标准。</textarea>
             <p class="hint" id="countHint">126 字 / 建议 50-300 字</p>
-            <div class="inline-alert" id="intakeAlert">输入信息太少。请至少说明“谁遇到问题”“现状卡在哪里”和“尝试过什么”，再开始分析。</div>
+            <div class="inline-alert" id="intakeAlert">输入信息太少。请至少说明“谁遇到问题”“现状卡在哪里”和“尝试过什么”，再开始梳理。</div>
             <div class="actions">
-              <button class="btn primary" id="analyzeBtn">开始分析当前事项</button>
+              <button class="btn primary" id="analyzeBtn">梳理当前事项</button>
               <button class="btn" id="customBtn">清空重写</button>
             </div>
             <div class="case-grid" id="caseGrid" hidden style="display:none"></div>
           </div>
           <div class="panel">
-            <h2>初步识别</h2>
+            <h2>初步梳理</h2>
             <div id="analysisEmpty" class="card">
-              <h3>等待分析</h3>
-              <p>当前还没有识别结果。</p>
+              <h3>等待梳理</h3>
+              <p>当前还没有形成判断。</p>
             </div>
             <div id="analysisCards" style="display:none"></div>
           </div>
@@ -1479,7 +1479,7 @@
             <div class="answer-box" id="answerBox">
               <strong>当前判断草稿</strong>
               <p id="answerText">主判断：先确认信息优先级和尺寸约束，再做低成本贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</p>
-              <div class="answer-meta" id="currentDecisionMeta">选择一个处理方式，路径推荐、信息卡和预审材料会同步更新。</div>
+              <div class="answer-meta" id="currentDecisionMeta">选择一个处理方式，后面的确认单会同步更新。</div>
               <div class="decision-actions">
                 <button class="btn primary" data-diagnosis-action="main">设为主要判断</button>
                 <button class="btn" data-diagnosis-action="verify">标记待验证</button>
@@ -1491,7 +1491,7 @@
           <h2>结构化信息卡</h2>
             <div class="info-grid" id="infoCards">
               <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>产品、设计、品牌、供应商、销售展示同学</p></div>
-              <div class="card amber"><h3>待补齐</h3><small>来源：系统推断</small><p>标签尺寸、必填信息、打印边距、贴标位置、验收标准</p></div>
+              <div class="card amber"><h3>待补齐</h3><small>待人工确认</small><p>标签尺寸、必填信息、打印边距、贴标位置、验收标准</p></div>
             </div>
             <div class="actions">
               <button class="btn primary" id="generateDocBtn" disabled>整理预审材料</button>
@@ -1504,9 +1504,9 @@
           <h2 style="margin-top:10px">不要一上来就直接进正式制作</h2>
           <p class="hint">只保留首期真正要做的两条低成本路径；直接 Figma 精修作为暂不推荐原因说明。</p>
           <div class="solution-compare" id="solutionCompare"></div>
-          <div class="recommendation-box" id="solutionRecommendation">推荐 P0 路径：方案 A 信息优先级表 + 方案 B 低保真贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</div>
+          <div class="recommendation-box" id="solutionRecommendation">建议 P0 路径：方案 A 信息优先级表 + 方案 B 低保真贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</div>
           <div class="decision-summary-grid" id="decisionSummary">
-            <div class="decision-summary-item"><strong>推荐理由</strong><span>先把信息层级和尺寸限制对齐，再验证贴到实物上是否可读，避免正式打样后返工。</span></div>
+            <div class="decision-summary-item"><strong>判断依据</strong><span>先把信息层级和尺寸限制对齐，再验证贴到实物上是否可读，避免正式打样后返工。</span></div>
             <div class="decision-summary-item"><strong>暂不直接精修</strong><span>尺寸、必填信息和贴标位置未确认前，高保真稿容易返工。</span></div>
             <div class="decision-summary-item"><strong>进入条件</strong><span>标签尺寸、必填信息、打印边距、贴标位置、供应商样张标准先确认。</span></div>
           </div>
@@ -1514,7 +1514,7 @@
       </section>
 
       <section class="page" id="page-document">
-        <h1>生成预审确认单</h1>
+        <h1>整理预审确认单</h1>
         <p class="subtitle">把已确认判断和待确认项整理成一页轻量确认单，用来拉齐负责人、设计和供应商。</p>
         <div class="doc-layout document-workspace">
           <div class="panel toc">
@@ -1529,7 +1529,7 @@
           <span class="pill blue">确认单 v0.3</span>
             <div class="source-row" style="margin-top:14px">
               <span class="source-chip">来源：业务问题</span>
-              <span class="source-chip">来源：系统推断</span>
+              <span class="source-chip">待人工确认项</span>
               <span class="source-chip">待人工确认：供应商样张标准</span>
             </div>
             <h2 id="docTitle">足霜产品信息展示物料预审确认单</h2>
@@ -1573,8 +1573,8 @@
               </div>
             </div>
             <div class="next-action">
-              <button class="btn primary" id="reviewBtn">进入执行预审</button>
-              <p>检查推荐路径、风险和推进条件。</p>
+              <button class="btn primary" id="reviewBtn">进入执行检查</button>
+              <p>检查验证路径、风险和推进条件。</p>
             </div>
           </aside>
         </div>
@@ -1598,7 +1598,7 @@
           <div class="decision-card">
             <span class="pill blue">决策解释</span>
             <h2>为什么给出这个建议</h2>
-            <p id="decisionReason">系统根据已确认判断和待确认项给出建议。当前可以继续做低保真贴标验证，但正式打样前仍需负责人确认尺寸、边距和样张标准。</p>
+            <p id="decisionReason">根据已确认判断和待确认项，当前可以继续做低保真贴标验证；正式打样前仍需负责人确认尺寸、边距和样张标准。</p>
           </div>
           <div class="decision-card">
             <span class="pill amber">下一步动作</span>
@@ -1731,10 +1731,10 @@
       </section>
     </main>
     <div class="floating-helper" id="floatingHelper">
-      <strong>当前动作：开始分析</strong>
-      <span>先识别问题类型、影响对象和执行风险。</span>
+      <strong>当前动作：梳理事项</strong>
+      <span>先把目标、约束和待确认项摆出来。</span>
     </div>
-    <button class="btn primary floating-next" id="nextTopBtn">开始分析</button>
+    <button class="btn primary floating-next" id="nextTopBtn">梳理事项</button>
   </div>
 
   <div class="toast" id="toast">已完成</div>
@@ -1748,7 +1748,7 @@
         <button class="close" id="closeModal" aria-label="关闭">×</button>
       </div>
       <div class="modal-body">
-        <p class="modal-hint">这是系统整理的初稿。你可以在这里调整措辞、删减内容或补充业务细节，再复制给对应角色。</p>
+        <p class="modal-hint">这是待确认初稿。你可以在这里调整措辞、删减内容或补充业务细节，再复制给对应角色。</p>
         <textarea class="export-preview" id="modalContent"></textarea>
         <div class="actions">
           <button class="btn" id="restoreExportBtn">恢复初稿</button>
@@ -1762,7 +1762,7 @@
   <script>
     const pages = ["intake", "clarify", "document", "review", "export"];
     const labels = ["描述事项", "执行前判断", "确认单", "执行前检查", "发送材料"];
-    const actionLabels = ["开始分析", "查看执行前判断", "生成确认单", "进入执行前检查", "发送材料"];
+    const actionLabels = ["梳理事项", "查看执行前判断", "整理确认单", "进入执行前检查", "发送材料"];
     let current = 0;
     let maxUnlocked = 0;
     let confirmedAnswers = 0;
@@ -1950,7 +1950,7 @@
               risk: "需要实物包装或旧样品配合；只能验证可读性和位置，不能替代正式打样。"
             }
           ],
-          recommendation: "推荐 P0 组合：方案 A + 方案 B。先用信息优先级表对齐判断，再用低保真贴标验证可读性和位置；暂不直接 Figma 精修，等尺寸和样张标准稳定后再进入。",
+          recommendation: "建议 P0 组合：方案 A + 方案 B。先用信息优先级表对齐判断，再用低保真贴标验证可读性和位置；暂不直接 Figma 精修，等尺寸和样张标准稳定后再进入。",
           decisionSummary: {
             recommend: "A+B 可以最快对齐信息优先级，并在低成本样张里验证可读性、贴标位置和展示一致性。",
             notNow: "不建议首期直接做完整高保真视觉稿，因为尺寸、边距和必填信息未确认会放大返工风险。",
@@ -2212,7 +2212,7 @@
           ["permission", "不同角色可以访问哪些文档？", "是否需要部门、角色、文档类型三层权限？", "权限规则：首期按部门和文档类型控制访问，敏感内容不进入问答范围。"]
         ],
         departments: ["研发：来源引用、权限过滤和低置信度兜底的实现方案。", "设计：答案页、未命中页、反馈入口和来源展示的关键状态。", "数据：查找时间、重复咨询量、答案采纳率和未命中率的埋点口径。", "运营：首期文档清单、内容负责人和反馈收集方式。"],
-        competition: "对比 Notion、飞书文档、腾讯文档和 Confluence，明确 ClearBrief 的差异化是“问题诊断与方案预评审工作流”，而不是单纯文档生成。",
+        competition: "对比 Notion、飞书文档、腾讯文档和 Confluence，明确 ClearBrief 的差异化是“执行前判断与方案预评审工作流”，而不是单纯文档生成。",
         metrics: "核心指标包括平均查找时间、答案采纳率、未命中率、重复咨询量和反馈处理时长。",
         acceptance: "用户可以在 3 步内完成提问并查看答案来源；低置信度回答必须提供查看原文和提交反馈入口。",
         sqlTable: "knowledge_question_log",
@@ -2262,12 +2262,12 @@
         <div class="card blue"><h3>问题类型</h3><p>${escapeHtml(scenario.type)}</p></div>
         <div class="card green"><h3>受影响用户</h3><p>${escapeHtml(scenario.users)}</p></div>
         <div class="card amber"><h3>待判断</h3><p>${escapeHtml(scenario.gaps)}</p></div>
-        <div class="card blue"><h3>信息成熟度</h3><p>不能执行：缺少目标和约束；可预讨论：已具备业务问题；可预审：需要确认执行门槛；具备执行条件：需要跨角色确认。</p></div>`;
+        <div class="card blue"><h3>当前状态</h3><p>不能执行：缺少目标和约束；可预讨论：已具备业务问题；可预审：需要确认执行门槛；具备执行条件：需要跨角色确认。</p></div>`;
     }
 
     function getReadinessRows(scenario) {
       const baseRows = [
-        ["不能执行", "已避开", "业务问题、受影响角色和大致目标已出现。", "可以进入问题诊断，不需要一次性填完整材料。"],
+        ["不能执行", "已避开", "业务问题、受影响角色和大致目标已出现。", "可以进入执行前判断，不需要一次性填完整材料。"],
         ["可预讨论", "已具备", "可以先讨论问题根因和首期目标。", "先确认目标，再比较低/中/高成本方案。"],
         ["可预审", confirmedAnswers >= 2 ? "基本具备" : "待补充", "需要补齐核心流程、规则配置和验收标准。", "未确认内容进入预审待确认项。"],
         ["具备执行条件", confirmedAnswers >= 3 ? "带条件具备" : "暂不建议", "需要产品、设计、品牌、供应商等角色确认风险和口径。", "生成跨角色确认清单，不假装已全部确定。"]
@@ -2361,17 +2361,17 @@
       `).join("");
       const recommendation = document.getElementById("solutionRecommendation");
       if (recommendation) {
-        recommendation.textContent = scenario.recommendation || "推荐先选择中低成本方案验证问题，再决定是否进入高成本系统改造。";
+        recommendation.textContent = scenario.recommendation || "建议先选择中低成本方案验证问题，再决定是否进入高成本系统改造。";
       }
       const summary = scenario.decisionSummary || {
-        recommend: "推荐先用可控投入验证主要问题，避免直接进入复杂系统建设。",
+        recommend: "建议先用可控投入验证主要问题，避免直接进入复杂系统建设。",
         notNow: "暂不建议一上来做高成本系统方案，因为规则、数据和风险还没有跑通。",
         entry: "当核心流程、责任人、数据口径和风险兜底都清楚后，再扩大系统化投入。"
       };
       const summaryEl = document.getElementById("decisionSummary");
       if (summaryEl) {
         summaryEl.innerHTML = `
-          <div class="decision-summary-item"><strong>推荐理由</strong><span>${escapeHtml(summary.recommend)}</span></div>
+          <div class="decision-summary-item"><strong>判断依据</strong><span>${escapeHtml(summary.recommend)}</span></div>
           <div class="decision-summary-item"><strong>暂不选择</strong><span>${escapeHtml(summary.notNow)}</span></div>
           <div class="decision-summary-item"><strong>进入条件</strong><span>${escapeHtml(summary.entry)}</span></div>
         `;
@@ -2402,14 +2402,14 @@
       `).join("");
       document.getElementById("infoCards").innerHTML = confirmed || confirmedEntries.length ? `
         <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>${escapeHtml(scenario.users)}</p></div>
-        <div class="card blue"><h3>推荐首期方案</h3><p>${escapeHtml(scenario.scope.slice(0, 2).join("；"))}</p></div>
+        <div class="card blue"><h3>首期处理方式</h3><p>${escapeHtml(scenario.scope.slice(0, 2).join("；"))}</p></div>
         <div class="card green"><h3>成功指标</h3><p>${escapeHtml(scenario.metrics)}</p></div>
-        <div class="card blue"><h3>阶段判断</h3><p>不能执行；可预讨论；可预审；具备执行条件。系统只给推进建议，不替负责人做最终判断。</p></div>
+        <div class="card blue"><h3>阶段判断</h3><p>不能执行；可预讨论；可预审；具备执行条件。这里只做预审判断，最终仍由负责人确认。</p></div>
         ${renderLandingPack(scenario)}
         ${confirmedHtml}
         <div class="card amber"><h3>仍待确认</h3><p>${escapeHtml(remaining)}</p></div>` : `
         <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>${escapeHtml(scenario.users)}</p></div>
-        <div class="card amber"><h3>待确认项</h3><small>来源：系统推断，待人工确认</small><p>${escapeHtml(scenario.gaps)}</p></div>`;
+        <div class="card amber"><h3>待确认项</h3><small>待人工确认</small><p>${escapeHtml(scenario.gaps)}</p></div>`;
     }
 
     function getBusinessGoals(scenario) {
@@ -2461,7 +2461,7 @@
     function getFunctionalRequirements(scenario) {
       if (scenario.key === "label") {
         return [
-          ["信息优先级", "整理产品名、核心卖点、成分说明、使用信息和品牌表达。", "每条信息标注来源：用户输入、旧物料、系统推断或待人工确认。"],
+          ["信息优先级", "整理产品名、核心卖点、成分说明、使用信息和品牌表达。", "每条信息标注来源：用户输入、旧物料或待人工确认。"],
           ["尺寸约束", "确认标签尺寸、出血边距、安全区域和最小字号。", "未确认尺寸时不得进入正式打样。"],
           ["低保真样张", "输出黑白样张并贴到实物包装上检查。", "必须记录可读性、遮挡和贴标偏移问题。"],
           ["供应商确认", "记录打印材质、贴标工艺、样张标准和交付周期。", "高风险反馈进入预审待办清单。"],
@@ -2472,7 +2472,7 @@
         return [
           ["用户上传", "用户上传小票图片，填写消费金额、门店、消费时间和联系方式。", "字段缺失时不能提交；图片过大、格式错误要有明确提示。"],
           ["审核工作台", "运营查看待审核小票，处理通过、驳回、待补充和疑似重复。", "每次审核必须记录原因、操作人和处理时间。"],
-          ["重复上传拦截", "系统根据图片哈希、门店、金额、消费时间和用户信息标记疑似重复。", "高风险记录进入人工复核，不直接发券。"],
+          ["重复上传拦截", "根据图片哈希、门店、金额、消费时间和用户信息标记疑似重复。", "高风险记录进入人工复核，不直接发券。"],
           ["发券与库存", "审核通过后发放积分或礼券，并扣减券库存。", "库存不足、发放失败和重复发放必须进入异常队列。"],
           ["门店核销", "店员扫码核销礼券，系统回写核销门店、时间和操作人。", "无效券、过期券和已核销券必须拦截。"],
           ["申诉处理", "用户可对驳回或核销失败提交申诉，客服处理并回写结果。", "申诉中状态对用户可见，内部有负责人和 SLA。"]
@@ -2847,8 +2847,8 @@ ${readinessBlocks.gaps}
 
 ## 10. 核心流程
 1. 用户输入业务问题、会议纪要或反馈片段。
-2. 系统识别问题类型、${isLabel ? "相关角色、信息缺口和执行风险" : "受影响用户、可能根因和方案风险"}。
-3. 系统提出高优先级判断问题，产品经理逐条确认。
+2. 页面梳理问题类型、${isLabel ? "相关角色、信息缺口和执行风险" : "受影响用户、可能根因和方案风险"}。
+3. 页面整理高优先级判断问题，产品经理逐条确认。
 4. 已确认判断进入结构化信息卡，并同步影响${isLabel ? "预审材料" : "评审材料"}。
 5. 产品经理整理完整材料，进入${isLabel ? "执行前预审" : "评审前阻塞项检查"}。
 
@@ -2867,7 +2867,7 @@ ${acceptedFeedback}
 ## 14. 里程碑
 | 阶段 | 时间 | 产出 |
 | --- | --- | --- |
-| 问题诊断与路径取舍 | 第 1 步 | 预审材料、路径对比、验收口径 |
+| 执行前判断与路径取舍 | 第 1 步 | 预审材料、路径对比、验收口径 |
 | 低保真验证 | 第 2 步 | 标签样张、贴标检查、风险清单 |
 | 正式执行 | 第 3 步 | Figma 精修、打印打样、展示材料 |
 | 复盘调整 | 第 4 步 | 打样反馈、问题清单、优化建议 |
@@ -2947,17 +2947,17 @@ ${acceptanceRows}
         helperTitle = `已完成：${labels[current]}`;
         helperText = `继续处理“${labels[current + 1]}”。`;
       } else if (current === 0) {
-        nextBtn.textContent = "开始分析";
-        helperTitle = "当前动作：开始分析";
-        helperText = "先识别问题和待判断事项。";
+        nextBtn.textContent = "梳理事项";
+        helperTitle = "当前动作：梳理事项";
+        helperText = "先把目标、约束和待确认项摆出来。";
       } else if (current === 1) {
-        nextBtn.textContent = confirmedAnswers ? "生成确认单" : "设为主要判断";
-        helperTitle = confirmedAnswers ? "当前动作：生成确认单" : "当前动作：确认关键判断";
+        nextBtn.textContent = confirmedAnswers ? "整理确认单" : "设为主要判断";
+        helperTitle = confirmedAnswers ? "当前动作：整理确认单" : "当前动作：确认关键判断";
         helperText = confirmedAnswers ? "已确认关键判断，可以整理成轻量预审确认单。" : "先处理最影响首期范围的判断，信息卡会同步更新。";
       } else if (current === 2) {
-        nextBtn.textContent = "进入执行预审";
-        helperTitle = "当前动作：进入执行预审";
-        helperText = "确认单已生成，继续检查推荐路径、风险和推进条件。";
+        nextBtn.textContent = "进入执行检查";
+        helperTitle = "当前动作：进入执行检查";
+        helperText = "确认单已整理，继续检查验证路径、风险和推进条件。";
       } else if (current === 3) {
         nextBtn.textContent = "发送材料";
         helperTitle = reviewReady ? "当前动作：发送材料" : "当前动作：带风险发送";
@@ -2969,7 +2969,7 @@ ${acceptanceRows}
       if (flowHelper) {
         const title = flowHelper.querySelector("strong");
         const text = flowHelper.querySelector("span");
-        if (title) title.textContent = helperTitle.replace("当前动作：", "当前建议：");
+        if (title) title.textContent = helperTitle;
         if (text) text.textContent = helperText;
       }
       if (flowHelperMeta) flowHelperMeta.textContent = `第 ${current + 1} / ${pages.length} 步`;
@@ -3134,7 +3134,7 @@ ${acceptanceRows}
       currentScenario = getScenario();
       unlock(0);
       document.getElementById("analysisEmpty").style.display = "block";
-      document.getElementById("analysisEmpty").innerHTML = "<h3>等待分析</h3><p>当前还没有识别结果。</p>";
+      document.getElementById("analysisEmpty").innerHTML = "<h3>等待梳理</h3><p>当前还没有形成判断。</p>";
       document.getElementById("analysisCards").style.display = "none";
       document.getElementById("answerBox").classList.remove("active");
       document.getElementById("generateDocBtn").disabled = true;
@@ -3145,7 +3145,7 @@ ${acceptanceRows}
       fullPrdReady = false;
       document.getElementById("intakeAlert").classList.remove("show");
       document.getElementById("reviewAlert").classList.remove("show");
-      document.getElementById("analyzeBtn").innerHTML = "开始分析当前事项";
+      document.getElementById("analyzeBtn").innerHTML = "梳理当前事项";
       document.getElementById("analyzeBtn").disabled = false;
       reviewReady = false;
       renderInfoCards(currentScenario, false);
@@ -3155,7 +3155,7 @@ ${acceptanceRows}
       renderSolutionCompare(currentScenario);
       goTo(0);
       logActivity("activity1", "等待输入业务问题");
-      logActivity("activity2", "尚未形成诊断");
+      logActivity("activity2", "尚未形成判断");
       logActivity("activity3", "尚未进入预审");
       showToast("体验已重置");
     });
@@ -3210,8 +3210,8 @@ ${acceptanceRows}
       devFeedbackItems = [];
       const btn = document.getElementById("analyzeBtn");
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span>分析中';
-      document.getElementById("analysisEmpty").innerHTML = "<h3>正在分析</h3><p>系统正在识别问题类型、相关角色和执行风险...</p>";
+      btn.innerHTML = '<span class="spinner"></span>梳理中';
+      document.getElementById("analysisEmpty").innerHTML = "<h3>正在梳理</h3><p>正在整理问题类型、相关角色和执行风险...</p>";
       const scenario = getScenario();
       renderAnalysis(scenario);
       renderQuestions(scenario);
@@ -3224,11 +3224,11 @@ ${acceptanceRows}
         document.getElementById("analysisEmpty").style.display = "none";
         document.getElementById("analysisCards").style.display = "block";
         unlock(1);
-        logActivity("activity1", `已识别：${scenario.type} · 来源：${document.getElementById("sourceType").value}`);
+        logActivity("activity1", `已梳理：${scenario.type} · 来源：${document.getElementById("sourceType").value}`);
         logActivity("activity2", `已整理 ${scenario.questions.length} 个关键判断`);
         btn.disabled = false;
-        btn.innerHTML = "重新分析";
-        showToast("已识别问题类型和执行风险");
+        btn.innerHTML = "重新梳理";
+        showToast("已整理问题类型和执行风险");
         setTimeout(() => {
           goTo(1);
           selectQuestion(scenario.questions[0]?.[0]);
@@ -3308,7 +3308,7 @@ ${acceptanceRows}
     document.getElementById("reviewBtn").addEventListener("click", () => {
       unlock(3);
       goTo(3);
-      logActivity("activity3", "已进入执行预审：检查推荐路径、风险和推进条件");
+      logActivity("activity3", "已进入执行预审：检查建议路径、风险和推进条件");
       showToast("已进入执行预审");
     });
 
@@ -3487,12 +3487,12 @@ ${acceptanceRows}
         document.getElementById("reviewDecision").textContent = "建议先补齐材料";
         document.getElementById("readyState").textContent = "先补预审依据";
         document.getElementById("nextStage").textContent = "补齐判断";
-        document.getElementById("scoreHint").textContent = "预审依据不足，建议先补齐目标、推荐路径和验收标准";
+        document.getElementById("scoreHint").textContent = "预审依据不足，建议先补齐目标、判断依据和验收标准";
         document.getElementById("reviewGate").textContent = "建议依据：先补预审依据，不建议进入正式执行";
         updateDecisionExplain(
-          `当前执行前预审依据仍缺 ${preflight.missing} 项，直接推进很可能变成执行中反复补标准。先把目标、推荐路径和验收标准补齐，能减少打样后的返工。`,
+          `当前执行前预审依据仍缺 ${preflight.missing} 项，直接推进很可能变成执行中反复补标准。先把目标、判断依据和验收标准补齐，能减少打样后的返工。`,
           [
-            "补齐预审依据：优先补信息优先级、推荐理由、执行边界。",
+            "补齐预审依据：优先补信息优先级、判断依据、执行边界。",
             "先做内部预审：产品和负责人先确认是否值得投入。",
             "再拉跨角色确认：依据完整后再邀请设计、品牌、供应商和销售展示。"
           ]
@@ -3514,7 +3514,7 @@ ${acceptanceRows}
             "建立复盘口径：按确认轮次、样张修改、打样返工和展示一致性跟踪效果。"
           ]
         );
-        logReviewActivity("预审待办已关闭，系统建议进入正式打样评估");
+        logReviewActivity("预审待办已关闭，建议进入正式打样评估");
         document.getElementById("reviewAlert").classList.remove("show");
         reviewReady = true;
       } else if (blocking === 0 && roles.riskCount <= 2 && preflight.missing <= 2) {
@@ -3687,7 +3687,7 @@ ${decision}
 
 预审关注点：
 1. 问题价值：是否解决真实业务问题，目标用户和场景是否清楚。
-2. 路径取舍：推荐路径、不选理由和进入条件是否讲清楚。
+2. 路径取舍：建议路径、不选理由和进入条件是否讲清楚。
 3. 执行严谨性：尺寸、边距、贴标位置和样张标准是否有边界条件。
 4. 优先级清晰度：执行范围是否足够收敛，哪些内容可以后置。
 5. 返工风险可控性：供应商依赖、验收口径和展示一致性是否提前暴露。
@@ -3722,7 +3722,7 @@ ${preflight.missing > 2
 为什么：
 ${scenario.problem}
 
-当前建议路径：
+当前处理路径：
 - 先做信息优先级表，确认产品名、核心卖点、成分说明和使用信息的优先级。
 - 再做低保真贴标验证，检查可读性、贴标位置和展示距离。
 - 等尺寸、边距和样张标准稳定后，再进入正式制作。
