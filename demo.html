@@ -174,7 +174,7 @@
         </div>
         <div class="panel">
           <h2>当前案例说明</h2>
-          <p class="muted">切换案例不是为了展示更多功能，而是为了说明“执行前预审”可以迁移到不同协作场景。</p>
+          <p class="muted">不同事项的执行门槛不同。切换案例后，阻塞项、责任角色和执行结论会按场景更新。</p>
           <div class="case-purpose">
             <b>示</b>
             <div>
@@ -219,15 +219,15 @@
             </div>
           </div>
           <div class="stat"><span>高风险未关闭</span><strong id="highCount">0</strong></div>
-          <div class="stat"><span>阻塞项关闭率</span><strong id="closeRate">0%</strong></div>
+          <div class="stat"><span>阻塞项确认率</span><strong id="closeRate">0%</strong></div>
           <div class="stat"><span>关键角色</span><strong id="roleCount">0</strong></div>
         </div>
 
         <div class="grid">
           <div class="panel" id="blockers">
             <h2>阻塞项检查</h2>
-            <p class="muted">执行门槛规则：只要存在高风险阻塞项未关闭，系统就不会建议进入正式执行。你可以点击左侧方框标记已完成，成熟度和结论会实时变化。</p>
-            <div class="mini-rule" id="blockerRule">高风险未关闭时，不建议进入正式执行；关闭阻塞项后，状态会重新计算。</div>
+            <p class="muted">执行门槛规则：只要存在高风险阻塞项未关闭，系统就不会建议进入正式执行。你可以点击左侧方框标记为已确认，成熟度和结论会实时变化。</p>
+            <div class="mini-rule" id="blockerRule">高风险未确认时，不建议进入正式执行；确认阻塞项后，状态会重新计算。</div>
             <div class="blockers" id="blockerList" style="margin-top:14px"></div>
           </div>
           <div class="panel">
@@ -251,7 +251,7 @@
             <div class="btn-row" style="margin-top:12px">
               <button class="btn primary" id="copyBtn">复制预审摘要</button>
             </div>
-            <p class="small-note">当前为前端规则化原型，用于展示产品流程和判断逻辑，不代表真实模型结果。</p>
+            <p class="small-note">当前结果来自规则化检查，仅用于执行前提醒；最终是否推进仍需责任角色确认。</p>
           </div>
         </div>
       </section>
@@ -262,7 +262,7 @@
     const templates = {
       package: {
         name: '足霜产品信息展示物料迭代',
-        purpose: '展示供应商、设计、品牌之间的信息边界如何影响打样决策。',
+        purpose: '检查足霜包装物料在打样前是否已经确认文案、尺寸、贴标和供应商规范。',
         sample: '我想推进足霜包装展示物料打样，担心成分文案、贴标位置和供应商打印边距还没确认。',
         keywords: ['包装','足霜','物料','标签','打样','供应商','成分','贴标','打印'],
         blockedTitle: '当前不可进入打样阶段',
@@ -270,17 +270,17 @@
         readyTitle: '可进入打样前确认',
         baseScore: 46,
         roles: [
-          ['产品负责人','确认信息优先级和最终文案','待确认'],
-          ['设计师','确认版面可行性和视觉层级','待确认'],
-          ['品牌负责人','确认品牌表达和不可改动项','待确认'],
-          ['供应商','确认尺寸、边距、工艺和样张标准','待反馈'],
-          ['销售/展示负责人','确认实际展示场景','已确认']
+          ['产品负责人','锁定最终成分文案，并标注不可删减字段','待确认'],
+          ['设计师','确认贴标位置、最小字号和 1:1 样张可读性','待验证'],
+          ['品牌负责人','确认品牌表达、卖点层级和不可改动项','待确认'],
+          ['供应商','反馈出血边距、最小字号、贴标偏移范围和样张要求','待反馈'],
+          ['销售/展示负责人','确认陈列距离、展示角度和用户可读场景','已确认']
         ],
         blockers: [
-          {title:'成分说明未确认最终版本',risk:'高',role:'产品负责人',advice:'先锁定最终文案，再进入打样。'},
-          {title:'供应商打印边距规范缺失',risk:'高',role:'供应商',advice:'获取样张规范和可打印边界。'},
-          {title:'贴标位置未验证',risk:'中',role:'设计师',advice:'先做低保真贴标测试。'},
-          {title:'最小字号可读性未知',risk:'中',role:'设计师',advice:'打印 1:1 样张检查。'}
+          {title:'成分说明未确认最终版本',risk:'高',role:'产品负责人',advice:'让产品负责人锁定最终成分文案，并标注包装上不可删减的字段。'},
+          {title:'供应商打印边距规范缺失',risk:'高',role:'供应商',advice:'让供应商回传最小字号、出血边距、贴标偏移范围和样张要求。'},
+          {title:'贴标位置未验证',risk:'中',role:'设计师',advice:'先打印 1:1 黑白低保真样张，贴到实物包装上检查遮挡和距离。'},
+          {title:'展示距离下最小字号可读性未知',risk:'中',role:'设计师',advice:'按实际陈列距离拍照检查，确认成分、卖点和品牌信息是否可读。'}
         ]
       },
       campaign: {
@@ -504,7 +504,7 @@
             <div class="blocker-meta">
               <span class="tag ${riskClass(b.risk)}">${b.risk}风险</span>
               <span class="tag">责任角色：${b.role}</span>
-              <span class="tag">${b.done ? '已完成' : '待处理'}</span>
+              <span class="tag">${b.done ? '已确认' : '待确认'}</span>
             </div>
           </div>
         </div>
