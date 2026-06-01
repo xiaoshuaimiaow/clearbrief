@@ -5,3818 +5,627 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ClearBrief 清晰启动 - 在线体验</title>
   <style>
-    :root {
-      --bg: #f4f7fc;
-      --panel: #ffffff;
-      --ink: #121722;
-      --muted: #667085;
-      --line: #d9e0ea;
-      --soft: #f8fafc;
-      --blue: #2563eb;
-      --blue-soft: #e8f0ff;
-      --green: #0f766e;
-      --green-soft: #ecfdf3;
-      --amber: #b45309;
-      --amber-soft: #fff7ed;
-      --red: #b42318;
-      --red-soft: #fff1f1;
-      --purple: #5f3dc4;
-      --purple-soft: #f2edff;
-    }
-    * { box-sizing: border-box; }
-    [hidden] { display: none !important; }
-    html, body {
-      min-height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: Arial, "Microsoft YaHei", sans-serif;
-    }
-    :focus-visible {
-      outline: 3px solid rgba(37, 99, 235, .38);
-      outline-offset: 3px;
-    }
-    button, textarea { font: inherit; }
-    .skip-link {
-      position: absolute;
-      left: 20px;
-      top: -48px;
-      z-index: 80;
-      background: var(--ink);
-      color: #fff;
-      border-radius: 8px;
-      padding: 10px 14px;
-      text-decoration: none;
-      font-weight: 700;
-    }
-    .skip-link:focus { top: 16px; }
-    .app {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 248px 1fr;
-      grid-template-rows: 72px auto;
-    }
-    .top {
-      grid-column: 1 / 3;
-      background: var(--panel);
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      padding: 0 32px 0 40px;
-    }
-    .brand {
-      width: 280px;
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .tagline {
-      color: var(--muted);
-      font-size: 13px;
-      flex: 1;
-    }
-    .top-actions { display: flex; gap: 12px; align-items: center; }
-    .mode-switcher {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      height: 46px;
-      border: 1px solid #b8c7dc;
-      border-radius: 12px;
-      background: #eef4ff;
-      padding: 4px 6px 4px 12px;
-      box-shadow: 0 8px 22px rgba(37, 99, 235, .10);
-    }
-    .mode-caption {
-      color: #344054;
-      font-size: 12px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-    .mode-option {
-      min-height: 38px;
-      border: 0;
-      border-radius: 8px;
-      background: transparent;
-      padding: 0 12px;
-      color: #475467;
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .mode-option.active {
-      background: var(--blue);
-      color: white;
-      box-shadow: 0 6px 14px rgba(37, 99, 235, .24);
-    }
-    .mode-option:not(.active):hover { background: rgba(255, 255, 255, .72); color: var(--blue); }
-    .floating-next {
-      position: fixed;
-      left: min(calc(100vw - 220px), calc(248px + 48px + 1120px - 190px));
-      right: auto;
-      bottom: 24px;
-      z-index: 20;
-      width: 190px;
-      box-shadow: 0 16px 36px rgba(37, 99, 235, .28);
-    }
-    .floating-helper { display: none; }
-    .floating-helper strong {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 4px;
-    }
-    .floating-helper span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .sidebar {
-      background: var(--panel);
-      border-right: 1px solid var(--line);
-      padding: 28px 20px;
-    }
-    .nav {
-      width: 100%;
-      min-height: 44px;
-      border: 0;
-      border-radius: 8px;
-      background: transparent;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 16px;
-      cursor: pointer;
-      margin-bottom: 8px;
-      text-align: left;
-    }
-    .nav.active {
-      background: var(--blue-soft);
-      color: var(--blue);
-      font-weight: 700;
-    }
-    .nav:disabled {
-      cursor: not-allowed;
-      opacity: .48;
-    }
-    .nav-num {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 1px solid currentColor;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      flex: 0 0 auto;
-    }
-    .sidebar-note {
-      margin-top: 280px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 14px;
-      background: var(--soft);
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .activity-log {
-      margin-top: 16px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 14px;
-      background: var(--panel);
-      font-size: 12px;
-    }
-    .activity-log strong {
-      display: block;
-      margin-bottom: 10px;
-      color: var(--ink);
-    }
-    .activity-log div {
-      color: var(--muted);
-      line-height: 1.45;
-      margin-top: 8px;
-    }
-    main {
-      padding: 32px 42px 140px 48px;
-      overflow: visible;
-    }
-    .stepbar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 30px;
-      max-width: 1040px;
-    }
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    .dot {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      font-weight: 700;
-      font-size: 12px;
-    }
-    .step.active, .step.done { color: var(--ink); font-weight: 700; }
-    .step.active .dot, .step.done .dot { background: var(--blue); color: white; border-color: var(--blue); }
-    .bar { height: 2px; flex: 1; background: var(--line); min-width: 22px; }
-    .bar.done { background: var(--blue); }
-    .page {
-      display: none;
-      max-width: 1120px;
-      min-height: calc(100vh - 180px);
-      padding-bottom: 90px;
-    }
-    .page.active { display: block; }
-    h1 { margin: 0; font-size: 30px; letter-spacing: 0; }
-    .subtitle {
-      margin: 12px 0 28px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.55;
-      max-width: 820px;
-    }
-    .guide {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin: 0 0 24px;
-      max-width: 1120px;
-    }
-    .guide-card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--panel);
-      padding: 14px;
-      min-height: 94px;
-      box-shadow: 0 8px 20px rgba(18, 23, 34, .04);
-    }
-    .guide-card.primary {
-      background: var(--blue-soft);
-      border-color: #bad0ff;
-    }
-    .guide-card strong {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 13px;
-      color: var(--ink);
-    }
-    .guide-card span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .flow-helper {
-      max-width: 1120px;
-      margin: -8px 0 22px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--panel);
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-    .flow-helper strong {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-    .flow-helper span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .grid-2 { display: grid; grid-template-columns: 1.6fr .85fr; gap: 28px; align-items: start; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      box-shadow: 0 10px 26px rgba(18, 23, 34, .05);
-      padding: 28px;
-    }
-    .panel h2 { margin: 0 0 8px; font-size: 18px; }
-    .hint { color: var(--muted); font-size: 12px; line-height: 1.45; margin-bottom: 18px; }
-    .readiness-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin: -8px 0 22px;
-    }
-    .readiness-step {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--panel);
-      padding: 12px;
-      min-height: 88px;
-    }
-    .readiness-step strong {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 7px;
-    }
-    .readiness-step span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.42;
-    }
-    .readiness-step.current {
-      border-color: #fed7aa;
-      background: var(--amber-soft);
-    }
-    body.compact-mode .portfolio-only,
-    body.compact-mode .guide,
-    body.compact-mode .flow-helper,
-    body.compact-mode .source-control,
-    body.compact-mode .case-picker,
-    body.compact-mode .sidebar-note,
-    body.compact-mode .activity-log,
-    body.compact-mode .solution-compare .solution-card:not(.recommended),
-    body.compact-mode #decisionSummary,
-    body.compact-mode #page-review .detail-panel:not(.primary-detail),
-    body.compact-mode #page-export .analysis-grid,
-    body.compact-mode #page-export .tool-grid {
-      display: none;
-    }
-    body.compact-mode main {
-      padding-top: 24px;
-    }
-    body.compact-mode .subtitle {
-      margin-bottom: 18px;
-      max-width: 640px;
-    }
-    body.compact-mode .panel {
-      padding: 24px;
-    }
-    body.compact-mode .solution-compare {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    body.compact-mode .solution-card.recommended {
-      min-height: 0;
-    }
-    body.compact-mode .review-summary {
-      margin-top: 12px;
-    }
-    textarea {
-      width: 100%;
-      min-height: 186px;
-      resize: vertical;
-      border: 1px solid var(--line);
-      background: var(--soft);
-      border-radius: 10px;
-      padding: 22px;
-      color: var(--ink);
-      font-size: 17px;
-      line-height: 1.55;
-      outline: none;
-    }
-    textarea:focus { border-color: #9bb9ff; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); }
-    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
-    .action-stack {
-      display: grid;
-      gap: 8px;
-      margin-top: 18px;
-    }
-    .action-row {
-      display: grid;
-      gap: 6px;
-    }
-    .action-row .btn {
-      width: 100%;
-      justify-content: center;
-    }
-    .action-row p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .btn {
-      min-height: 44px;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      padding: 0 18px;
-      color: var(--ink);
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .btn.primary { background: var(--blue); border-color: var(--blue); color: white; }
-    .btn:disabled { opacity: .48; cursor: not-allowed; }
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 16px 18px;
-      background: var(--panel);
-    }
-    .card + .card { margin-top: 14px; }
-    .card h3 { margin: 0 0 8px; font-size: 13px; }
-    .card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.48; }
-    .blue { background: var(--blue-soft); border-color: #bad0ff; }
-    .blue h3, .pill.blue { color: var(--blue); }
-    .green { background: var(--green-soft); border-color: #a5d8cf; }
-    .green h3, .pill.green { color: var(--green); }
-    .amber { background: var(--amber-soft); border-color: #fed7aa; }
-    .amber h3, .pill.amber { color: var(--amber); }
-    .red { background: var(--red-soft); border-color: #ffc9c9; }
-    .red h3, .pill.red { color: var(--red); }
-    .purple { background: var(--purple-soft); border-color: #d5c7ff; }
-    .purple h3, .pill.purple { color: var(--purple); }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      height: 28px;
-      border-radius: 999px;
-      padding: 0 12px;
-      font-size: 12px;
-      font-weight: 700;
-      background: var(--soft);
-      color: var(--muted);
-    }
-    .source-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin: 0 0 18px;
-    }
-    .source-chip {
-      border: 1px solid var(--line);
-      background: var(--panel);
-      border-radius: 999px;
-      height: 30px;
-      display: inline-flex;
-      align-items: center;
-      padding: 0 12px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .source-control {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .source-control label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .source-control select {
-      width: 100%;
-      height: 42px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--soft);
-      color: var(--ink);
-      padding: 0 12px;
-      outline: none;
-      font-family: inherit;
-    }
-    .structured-input {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin: 0 0 14px;
-    }
-    .field-card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--soft);
-      padding: 10px 12px;
-      min-height: 86px;
-    }
-    .field-card strong {
-      display: block;
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .field-card span {
-      display: block;
-      color: var(--ink);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .source-tags {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-top: 8px;
-    }
-    .source-tag {
-      display: inline-flex;
-      align-items: center;
-      height: 22px;
-      border-radius: 999px;
-      padding: 0 8px;
-      font-size: 11px;
-      font-weight: 700;
-      background: #fff;
-      border: 1px solid var(--line);
-      color: var(--muted);
-    }
-    .source-tag.high { color: var(--red); border-color: #ffc9c9; background: var(--red-soft); }
-    .source-tag.infer { color: var(--blue); border-color: #bad0ff; background: var(--blue-soft); }
-    .source-tag.confirm { color: var(--amber); border-color: #fed7aa; background: var(--amber-soft); }
-    .case-picker {
-      margin-top: 24px;
-      border-top: 1px solid var(--line);
-      padding-top: 20px;
-    }
-    .case-picker-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: flex-end;
-      margin-bottom: 14px;
-    }
-    .case-picker-head strong {
-      display: block;
-      font-size: 15px;
-    }
-    .case-picker-head span {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
-    }
-    .case-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .case-card {
-      min-height: 88px;
-      text-align: left;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--panel);
-      padding: 13px 14px;
-      cursor: pointer;
-      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
-    }
-    .case-card:hover {
-      border-color: #9bb9ff;
-      box-shadow: 0 10px 24px rgba(37, 99, 235, .10);
-      transform: translateY(-1px);
-    }
-    .case-card.active {
-      border-color: var(--blue);
-      background: var(--blue-soft);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
-    }
-    .case-card strong {
-      display: block;
-      color: var(--ink);
-      font-size: 13px;
-      margin-bottom: 7px;
-    }
-    .case-card span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.35;
-    }
-    .question {
-      display: grid;
-      grid-template-columns: 58px 1fr 92px;
-      gap: 14px;
-      align-items: center;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 12px;
-      background: var(--panel);
-      cursor: pointer;
-      transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
-    }
-    .question:hover {
-      border-color: #9bb9ff;
-      box-shadow: 0 10px 24px rgba(37, 99, 235, .08);
-      transform: translateY(-1px);
-    }
-    .question.active { background: var(--red-soft); border-color: #ffc9c9; }
-    .question.done { background: var(--green-soft); border-color: #a5d8cf; }
-    .question.verify { background: var(--amber-soft); border-color: #fed7aa; }
-    .question.deferred { background: #f8fafc; border-color: #cbd5e1; }
-    .q-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-    .q-sub { color: var(--muted); font-size: 12px; line-height: 1.35; }
-    .answer-box {
-      display: none;
-      margin-top: 18px;
-      background: var(--blue-soft);
-      border: 1px solid #bad0ff;
-      border-radius: 10px;
-      padding: 18px;
-    }
-    .answer-box.active { display: block; }
-    .answer-meta {
-      margin-top: 8px;
-      color: #244272;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .decision-actions {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-    }
-    .decision-actions .btn {
-      min-height: 38px;
-      padding: 0 10px;
-      font-size: 12px;
-      white-space: normal;
-      line-height: 1.25;
-    }
-    .decision-impact {
-      margin-top: 12px;
-      border-top: 1px solid #bad0ff;
-      padding-top: 12px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .action-hint {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .solution-panel {
-      margin-top: 22px;
-    }
-    .solution-compare {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 16px;
-    }
-    .solution-card {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--panel);
-      padding: 16px;
-      min-height: 188px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .solution-card.recommended {
-      border-color: #9bb9ff;
-      background: var(--blue-soft);
-      box-shadow: 0 12px 28px rgba(37, 99, 235, .10);
-    }
-    .solution-card h3 {
-      margin: 0;
-      font-size: 15px;
-    }
-    .solution-card p {
-      margin: 0;
-      color: #344054;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .solution-meta {
-      display: grid;
-      gap: 7px;
-      margin-top: auto;
-    }
-    .solution-meta span {
-      display: block;
-      border-top: 1px solid rgba(217, 224, 234, .8);
-      padding-top: 7px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
-    }
-    .recommendation-box {
-      margin-top: 14px;
-      border: 1px solid #a5d8cf;
-      border-radius: 12px;
-      background: var(--green-soft);
-      padding: 14px 16px;
-      color: var(--green);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-    .decision-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-    .decision-summary-item {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--soft);
-      padding: 13px 14px;
-    }
-    .decision-summary-item strong {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 13px;
-    }
-    .decision-summary-item span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .info-grid { display: grid; gap: 14px; }
-    .doc-layout { display: grid; grid-template-columns: 170px 1fr 240px; gap: 18px; }
-    .doc-layout.document-workspace {
-      align-items: start;
-    }
-    .document-workspace .doc {
-      max-height: 760px;
-      overflow: auto;
-    }
-    .workspace-actions {
-      position: sticky;
-      top: 18px;
-      display: grid;
-      gap: 12px;
-      max-height: calc(100vh - 48px);
-      overflow: auto;
-    }
-    .workspace-actions h2 {
-      margin-bottom: 2px;
-    }
-    .workspace-actions .hint,
-    .document-workspace .source-row {
-      display: none;
-    }
-    .suggestion-list {
-      display: grid;
-      gap: 10px;
-    }
-    .suggestion-item {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--soft);
-      padding: 12px;
-    }
-    .suggestion-item strong {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 13px;
-    }
-    .suggestion-item p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .next-action {
-      position: sticky;
-      bottom: 0;
-      border-top: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.82), var(--panel) 28%);
-      padding-top: 14px;
-      margin-top: 2px;
-    }
-    .next-action .btn {
-      width: 100%;
-      justify-content: center;
-    }
-    .next-action p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    /*
-      Kept for small screens where the document page becomes a single column.
-      The main document still flows naturally instead of being clipped.
-    */
-    .doc-layout.document-workspace.compact {
-      align-items: stretch;
-    }
-    .document-workspace .toc {
-      position: sticky;
-      top: 18px;
-      height: fit-content;
-      max-height: calc(100vh - 120px);
-      overflow: auto;
-      align-self: start;
-    }
-    .toc a {
-      display: block;
-      min-height: 32px;
-      border-radius: 8px;
-      padding: 7px 10px;
-      color: var(--muted);
-      font-size: 12px;
-      text-decoration: none;
-      margin-bottom: 4px;
-    }
-    .toc a.active { background: var(--blue-soft); color: var(--blue); font-weight: 700; }
-    .doc h2 { font-size: 26px; margin: 0 0 8px; }
-    .doc .meta { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
-    .doc h3 { font-size: 17px; margin: 20px 0 8px; scroll-margin-top: 88px; }
-    .doc p, .doc li { font-size: 14px; color: #344054; line-height: 1.62; }
-    .doc ul { padding-left: 20px; margin: 0; }
-    .doc-editable {
-      border: 1px solid transparent;
-      border-radius: 8px;
-      padding: 4px 8px;
-      margin-left: -8px;
-      transition: .16s ease;
-    }
-    .doc-editable.editing {
-      border-color: #9bb9ff;
-      background: var(--soft);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
-    }
-    .status-note {
-      margin-top: 12px;
-      border: 1px solid #bad0ff;
-      background: var(--blue-soft);
-      color: #244272;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .status-note.success {
-      border-color: #a5d8cf;
-      background: var(--green-soft);
-      color: var(--green);
-    }
-    .score-grid { display: grid; grid-template-columns: minmax(230px, 1.2fr) repeat(4, minmax(120px, .7fr)); gap: 12px; margin-bottom: 18px; }
-    .score-main {
-      background: var(--green-soft);
-      border: 1px solid #a5d8cf;
-      border-radius: 12px;
-      padding: 20px;
-      color: var(--green);
-    }
-    .score-main strong { font-size: 30px; display: block; margin: 12px 0 8px; color: var(--ink); line-height: 1.2; }
-    .score-main em { font-style: normal; font-weight: 700; }
-    .metric { padding: 18px; }
-    .metric strong { display: block; font-size: 24px; margin-top: 8px; }
-    .decision-panel {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-    .decision-card {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--panel);
-      padding: 18px;
-    }
-    .decision-card h2 {
-      margin-bottom: 10px;
-    }
-    .decision-card p {
-      margin: 0;
-      color: #344054;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    .decision-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .decision-list span {
-      display: block;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      background: var(--soft);
-      padding: 10px 12px;
-      color: #344054;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
-    .detail-panel {
-      margin-top: 14px;
-      padding: 0;
-      overflow: hidden;
-    }
-    .detail-panel summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 18px 22px;
-      font-size: 16px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .detail-panel summary::-webkit-details-marker { display: none; }
-    .detail-panel summary::after {
-      content: "+";
-      color: var(--blue);
-      font-size: 20px;
-      line-height: 1;
-    }
-    .detail-panel[open] summary::after { content: "-"; }
-    .detail-body {
-      border-top: 1px solid var(--line);
-      padding: 20px 22px 22px;
-    }
-    .review-checklist {
-      display: grid;
-      gap: 12px;
-    }
-    .review-check {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--soft);
-      padding: 13px 14px;
-    }
-    .review-check-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 7px;
-    }
-    .review-check strong {
-      font-size: 14px;
-    }
-    .review-check p {
-      margin: 0;
-      color: #344054;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .preflight-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .check-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--soft);
-      padding: 13px 14px;
-      color: #344054;
-      font-size: 13px;
-      line-height: 1.45;
-      cursor: pointer;
-    }
-    .check-row input {
-      width: 16px;
-      height: 16px;
-      margin-top: 2px;
-      accent-color: var(--blue);
-      flex: 0 0 auto;
-    }
-    .check-row strong {
-      display: block;
-      color: var(--ink);
-      margin-bottom: 3px;
-    }
-    .role-board {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .role-card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--panel);
-      padding: 14px;
-    }
-    .role-card-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .role-card strong { font-size: 14px; }
-    .role-card p {
-      margin: 0 0 12px;
-      color: #344054;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-    th {
-      text-align: left;
-      color: var(--muted);
-      font-weight: 700;
-      padding: 10px 8px;
-      border-bottom: 1px solid var(--line);
-    }
-    td {
-      padding: 12px 8px;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
-      line-height: 1.42;
-    }
-    tr:last-child td { border-bottom: 0; }
-    .status-select {
-      height: 30px;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      color: var(--ink);
-      font-size: 12px;
-      padding: 0 8px;
-      outline: none;
-    }
-    .review-summary {
-      margin-top: 16px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .mini-stat {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 14px;
-      background: var(--soft);
-    }
-    .mini-stat strong {
-      display: block;
-      font-size: 20px;
-      margin-bottom: 4px;
-    }
-    .mini-stat span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .export-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .export-card {
-      min-height: 174px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .tool-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 22px; }
-    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .insight-list {
-      display: grid;
-      gap: 10px;
-      margin: 14px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-    .insight-list li {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--soft);
-      padding: 12px 14px;
-      color: #344054;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .prd-preview {
-      min-height: 260px;
-      max-height: 420px;
-      overflow: auto;
-      background: #0f172a;
-      color: #e5e7eb;
-      border-radius: 12px;
-      padding: 18px;
-      white-space: pre-wrap;
-      font-size: 13px;
-      line-height: 1.62;
-      border: 1px solid #1e293b;
-    }
-    .sql-box {
-      background: #111827;
-      color: #d1fae5;
-      border-radius: 10px;
-      border: 1px solid #243044;
-      padding: 16px;
-      font-size: 12px;
-      line-height: 1.55;
-      overflow: auto;
-      white-space: pre;
-      margin-top: 12px;
-    }
-    .department-list { display: grid; gap: 12px; margin-top: 16px; }
-    .department-item {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--panel);
-      padding: 14px;
-    }
-    .department-item strong { display: block; margin-bottom: 6px; }
-    .department-item span { color: var(--muted); font-size: 12px; line-height: 1.45; display: block; }
-    .feedback-form {
-      display: grid;
-      grid-template-columns: 160px 1fr 130px;
-      gap: 12px;
-      align-items: start;
-      margin-top: 16px;
-    }
-    .feedback-form select,
-    .feedback-form textarea {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--soft);
-      color: var(--ink);
-      font-family: inherit;
-      font-size: 13px;
-      outline: none;
-    }
-    .feedback-form select { height: 42px; padding: 0 12px; }
-    .feedback-form textarea { min-height: 92px; padding: 12px; resize: vertical; line-height: 1.5; }
-    .feedback-list { display: grid; gap: 12px; margin-top: 16px; }
-    .feedback-item {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 14px;
-      background: var(--panel);
-    }
-    .feedback-item-head {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-    .feedback-item p { margin: 0; color: #344054; font-size: 13px; line-height: 1.55; }
-    .feedback-item .actions { margin-top: 12px; }
-    .download-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-    .toast {
-      position: fixed;
-      right: 28px;
-      bottom: 28px;
-      background: var(--ink);
-      color: white;
-      border-radius: 10px;
-      padding: 14px 18px;
-      font-size: 13px;
-      box-shadow: 0 14px 36px rgba(18, 23, 34, .22);
-      opacity: 0;
-      transform: translateY(12px);
-      pointer-events: none;
-      transition: .18s ease;
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    .inline-alert {
-      display: none;
-      margin-top: 14px;
-      border-radius: 10px;
-      padding: 13px 14px;
-      font-size: 12px;
-      line-height: 1.45;
-      border: 1px solid #fed7aa;
-      background: var(--amber-soft);
-      color: var(--amber);
-    }
-    .inline-alert.show { display: block; }
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,.45);
-      border-top-color: #fff;
-      border-radius: 50%;
-      display: inline-block;
-      vertical-align: -3px;
-      margin-right: 8px;
-      animation: spin .8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(18, 23, 34, .38);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-      z-index: 20;
-    }
-    .modal-backdrop.show { display: flex; }
-    .modal {
-      width: min(760px, 100%);
-      max-height: 86vh;
-      overflow: auto;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      box-shadow: 0 24px 70px rgba(18, 23, 34, .28);
-    }
-    .modal-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 22px 26px;
-      border-bottom: 1px solid var(--line);
-    }
-    .modal-head h2 {
-      margin: 0;
-      font-size: 20px;
-    }
-    .modal-body {
-      padding: 24px 26px 28px;
-    }
-    .export-preview {
-      background: var(--soft);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 20px;
-      line-height: 1.58;
-      font-size: 14px;
-      color: #344054;
-      white-space: pre-wrap;
-      width: 100%;
-      min-height: 360px;
-      resize: vertical;
-      font-family: inherit;
-      outline: none;
-      box-sizing: border-box;
-    }
-    .export-preview:focus {
-      border-color: #9bb9ff;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
-      background: #fff;
-    }
-    .modal-hint {
-      margin: 0 0 12px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .close {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      cursor: pointer;
-      font-weight: 700;
-    }
-    @media (max-width: 1100px) {
-      .app { grid-template-columns: 1fr; grid-template-rows: 72px auto 1fr; }
-      .top { grid-column: 1; padding: 0 18px; gap: 14px; }
-      .brand { width: auto; min-width: max-content; }
-      .tagline { display: none; }
-      .sidebar { display: flex; gap: 8px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 12px; }
-      .nav { width: max-content; margin-bottom: 0; }
-      .sidebar-note { display: none; }
-      .grid-2, .doc-layout, .review-grid, .score-grid, .export-grid, .guide, .tool-grid, .analysis-grid, .decision-panel, .solution-compare, .decision-summary-grid { grid-template-columns: 1fr; }
-      .feedback-form { grid-template-columns: 1fr; }
-      .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .case-picker-head { display: block; }
-      .doc-layout.document-workspace { height: auto; min-height: 0; }
-      .document-workspace > .panel,
-      .document-workspace .doc,
-      .document-workspace .toc,
-      .document-workspace aside,
-      .workspace-actions,
-      .next-action { height: auto; max-height: none; overflow: visible; position: static; }
-    }
-    @media (max-width: 620px) {
-      .top {
-        height: auto;
-        min-height: 72px;
-        flex-wrap: wrap;
-        padding: 12px 14px;
-      }
-      .top-actions {
-        width: 100%;
-        justify-content: space-between;
-      }
-      .mode-switcher {
-        flex: 1;
-        min-width: 0;
-      }
-      .mode-option {
-        flex: 1;
-        padding: 0 8px;
-      }
-      .case-grid { grid-template-columns: 1fr; }
-      .readiness-strip { grid-template-columns: 1fr; }
-      main {
-        padding: 18px 14px 116px;
-      }
-      .page,
-      .panel,
-      .readiness-strip,
-      .solution-compare,
-      .doc-layout,
-      .review-grid,
-      .score-grid,
-      .export-grid,
-      .analysis-grid,
-      .tool-grid {
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-      }
-      .readiness-step,
-      .solution-card,
-      .card,
-      .panel {
-        min-width: 0;
-      }
-      table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-      }
-      .floating-next {
-        left: 16px;
-        right: 16px;
-        bottom: 16px;
-        width: auto;
-      }
-      .flow-helper { display: block; }
+    :root{
+      --bg:#f4f7fb;--panel:#fff;--ink:#111827;--muted:#667085;--line:#d9e2ef;
+      --blue:#2563eb;--blue-soft:#eaf1ff;--red:#b42318;--red-soft:#fff1f0;
+      --amber:#b45309;--amber-soft:#fff7ed;--green:#047857;--green-soft:#ecfdf5;
+      --shadow:0 18px 48px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft YaHei",Arial,sans-serif;line-height:1.55}
+    button,input,textarea{font:inherit}
+    .app{min-height:100vh;display:grid;grid-template-columns:236px 1fr}
+    .side{background:#fff;border-right:1px solid var(--line);padding:16px 14px;position:sticky;top:0;height:100vh}
+    .brand{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+    .brand strong{font-size:16px}
+    .brand a{color:var(--blue);text-decoration:none;font-weight:900;font-size:13px}
+    .side-label{font-size:12px;color:var(--muted);font-weight:900;margin:14px 0 7px}
+    .case-btn,.nav-step{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;text-align:left;padding:9px 10px;margin-bottom:7px;cursor:pointer;transition:.16s ease}
+    .case-btn:hover,.nav-step:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(15,23,42,.06)}
+    .case-btn.active,.nav-step.active{background:var(--blue-soft);border-color:#bdd0ff;color:var(--blue);font-weight:900}
+    .case-btn span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+    .nav-step{display:flex;align-items:center;gap:10px;color:#475467}
+    .nav-step b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#eef2f7;color:#667085;font-size:12px}
+    .nav-step.active b{background:var(--blue);color:#fff}
+    .main{width:min(100%,1360px);margin:0 auto;padding:16px 22px 54px}
+    .topbar{height:48px;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:6}
+    .topbar a{text-decoration:none;color:#475467;font-weight:800;font-size:14px}
+    .status-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 9px;color:#475467;font-size:12px;font-weight:900}
+    .hero{display:grid;grid-template-columns:minmax(620px,1fr) 430px;gap:12px;margin-top:14px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 10px 28px rgba(15,23,42,.055)}
+    .muted{color:var(--muted)}
+    h1{font-size:26px;line-height:1.22;margin:0 0 6px}
+    h2{font-size:18px;margin:0 0 9px}
+    h3{font-size:15px;margin:0 0 8px}
+    p{margin:0}
+    .input-box{display:grid;gap:10px;margin-top:12px}
+    textarea{width:100%;min-height:92px;border:1px solid var(--line);border-radius:12px;padding:12px 13px;resize:vertical;background:#fbfdff;color:var(--ink);outline:none}
+    textarea:focus{border-color:#9db8ff;box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{border:1px solid var(--line);background:#fff;border-radius:10px;min-height:36px;padding:0 13px;font-weight:900;cursor:pointer}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 12px 24px rgba(37,99,235,.18)}
+    .btn:disabled{opacity:.65;cursor:not-allowed}
+    .input-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--muted);font-size:12px}
+    .match-note{margin-top:10px;border:1px solid var(--line);background:#fbfdff;border-radius:12px;padding:9px 11px;color:#475467;font-size:13px}
+    .match-note strong{color:var(--ink)}
+    .hint{border:1px solid #bfd2ff;background:#f8fbff;border-radius:12px;padding:11px 12px;color:#40506b;font-size:13px}
+    .case-purpose{display:flex;gap:9px;align-items:flex-start;margin-top:10px;border:1px solid var(--line);border-radius:12px;background:#fbfdff;padding:10px}
+    .case-purpose b{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--blue-soft);color:var(--blue)}
+    .flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+    .flow-card{border:1px solid var(--line);border-radius:11px;background:#fff;padding:10px;min-height:78px}
+    .flow-card.active{background:var(--blue-soft);border-color:#bdd0ff}
+    .flow-card b{display:block;color:var(--blue);font-size:13px;margin-bottom:6px}
+    .flow-card strong{display:block;margin-bottom:3px}
+    .loading{display:none;margin-top:12px;border:1px solid var(--line);border-radius:13px;background:#fbfdff;padding:13px}
+    .loading.active{display:block}
+    .load-line{display:flex;align-items:center;gap:10px;color:#475467;font-weight:800}
+    .spinner{width:18px;height:18px;border:3px solid #dbe6ff;border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .skeleton{height:10px;border-radius:999px;background:linear-gradient(90deg,#eef2f7,#dfe8f6,#eef2f7);background-size:200% 100%;animation:shine 1.2s infinite;margin-top:12px}
+    @keyframes shine{to{background-position:-200% 0}}
+    .results{display:none;margin-top:12px}
+    .results.show{display:block}
+    .result-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:13px;padding:10px 12px;margin-bottom:10px}
+    .result-toolbar p{color:var(--muted);font-size:13px}
+    .mini-rule{border:1px solid #fed7aa;background:var(--amber-soft);color:#7c3f0a;border-radius:12px;padding:9px 11px;font-size:13px;margin-bottom:10px}
+    .dashboard{display:grid;grid-template-columns:220px repeat(3,minmax(160px,1fr));gap:10px;margin:10px 0 12px}
+    .stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px;box-shadow:0 8px 20px rgba(15,23,42,.035)}
+    .stat span{display:block;color:var(--muted);font-size:13px;font-weight:800;margin-bottom:8px}
+    .stat strong{font-size:22px}
+    .ring-card{display:grid;grid-template-columns:74px 1fr;gap:12px;align-items:center}
+    .ring{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--blue) 0 var(--score),#e8eef7 var(--score) 100%);position:relative}
+    .ring:after{content:"";position:absolute;inset:8px;background:#fff;border-radius:50%}
+    .ring b{position:relative;z-index:1;font-size:18px}
+    .status-card{border-radius:14px;padding:15px;border:1px solid #fecaca;background:var(--red-soft);margin-bottom:10px}
+    .status-card.review{border-color:#fed7aa;background:var(--amber-soft)}
+    .status-card.ready{border-color:#bbf7d0;background:var(--green-soft)}
+    .status-card h2{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+    .status-card ul{margin:12px 0 0;padding-left:20px}
+    .status-reason{margin-top:8px;color:#475467;font-size:13px}
+    .grid{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:10px;align-items:start}
+    .blockers{display:grid;gap:8px}
+    .blocker{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;border:1px solid var(--line);border-radius:12px;background:#fff;padding:11px;transition:.16s ease}
+    .blocker:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(15,23,42,.06)}
+    .blocker.done{opacity:.68;background:#f8fafc}
+    .check{width:24px;height:24px;border-radius:7px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;display:grid;place-items:center;color:#fff;font-weight:900}
+    .blocker.done .check{background:var(--green);border-color:var(--green)}
+    .blocker-title{font-weight:900;margin-bottom:4px}
+    .blocker-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+    .tag{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:900;background:#f1f5f9;color:#475467}
+    .risk-high{background:var(--red-soft);color:var(--red)}
+    .risk-mid{background:var(--amber-soft);color:var(--amber)}
+    .risk-low{background:var(--green-soft);color:var(--green)}
+    .roles{display:grid;gap:8px}
+    .role{display:grid;grid-template-columns:32px 1fr;gap:9px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:9px;background:#fff}
+    .avatar{width:32px;height:32px;border-radius:10px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-weight:900}
+    .role small{display:block;color:var(--muted)}
+    .progress{height:9px;background:#e8eef7;border-radius:999px;overflow:hidden;margin-top:8px}
+    .progress i{display:block;height:100%;background:var(--blue);width:0;transition:.25s ease}
+    .summary{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:10px;margin-top:10px}
+    .list{margin:0;padding-left:19px;color:#475467}
+    .list li{margin:6px 0}
+    .copybox{white-space:pre-wrap;border:1px dashed #bdd0ff;background:#f8fbff;border-radius:14px;padding:14px;color:#314158}
+    .small-note{font-size:13px;color:var(--muted);margin-top:9px}
+    @media(min-width:1680px){
+      .main{width:1320px}
+    }
+    @media(max-width:1100px){
+      .app{grid-template-columns:1fr}
+      .side{height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}
+      .case-stack,.nav-stack{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+      .case-btn,.nav-step{margin-bottom:0}
+      .hero,.grid,.summary{grid-template-columns:1fr}
+      .dashboard{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:680px){
+      .main,.topbar{padding-left:14px;padding-right:14px}
+      .dashboard,.flow,.case-stack,.nav-stack{grid-template-columns:1fr}
+      .panel{padding:18px}
+      h1{font-size:24px}
+      .blocker{grid-template-columns:auto 1fr}
+      .blocker .tag:last-child{grid-column:2}
     }
   </style>
 </head>
-<body class="compact-mode">
-  <a class="skip-link" href="#main">跳到主要内容</a>
+<body>
+  <div class="topbar">
+    <a href="index.html">ClearBrief 清晰启动</a>
+    <span class="status-pill" id="topStatus">等待预审</span>
+  </div>
   <div class="app">
-    <header class="top">
-      <div class="brand">ClearBrief 清晰启动</div>
-      <div class="tagline">执行前确认台</div>
-      <div class="top-actions">
-        <div class="mode-switcher" aria-label="体验模式切换" hidden>
-          <span class="mode-caption">模式</span>
-          <button class="mode-option active" type="button" data-detail-mode="compact">精简体验</button>
-          <button class="mode-option" type="button" data-detail-mode="showcase">展示说明</button>
-        </div>
-        <button class="btn" id="resetBtn">重置体验</button>
+    <aside class="side">
+      <div class="brand">
+        <strong>在线体验</strong>
+        <a href="prd.html">产品文档</a>
       </div>
-    </header>
-
-    <aside class="sidebar">
-      <button class="nav active" data-page="intake"><span class="nav-num">1</span>描述事项</button>
-      <button class="nav" data-page="clarify" disabled><span class="nav-num">2</span>执行前判断</button>
-      <button class="nav" data-page="document" disabled><span class="nav-num">3</span>确认单</button>
-      <button class="nav" data-page="review" disabled><span class="nav-num">4</span>执行前检查</button>
-      <button class="nav" data-page="export" disabled><span class="nav-num">5</span>发送材料</button>
-      <div class="sidebar-note">
-        体验案例：从业务问题到信息取舍、执行门槛、阻塞项和可执行判断。
-      </div>
-      <div class="activity-log">
-        <strong>活动记录</strong>
-        <div id="activity1">等待输入业务问题</div>
-        <div id="activity2">尚未形成判断</div>
-        <div id="activity3">尚未进入预审</div>
+      <div class="side-label">快速案例</div>
+      <div class="case-stack" id="caseButtons"></div>
+      <div class="side-label">检查流程</div>
+      <div class="nav-stack">
+        <button class="nav-step active" data-step="input"><b>1</b>事项输入</button>
+        <button class="nav-step" data-step="analysis"><b>2</b>预审分析</button>
+        <button class="nav-step" data-step="blockers"><b>3</b>阻塞检查</button>
+        <button class="nav-step" data-step="result"><b>4</b>执行结论</button>
       </div>
     </aside>
 
-    <main id="main">
-      <div class="stepbar" id="stepbar"></div>
-      <div class="flow-helper" id="flowHelper">
-        <div>
-          <strong>当前动作：梳理事项</strong>
-          <span>先把目标、约束和待确认项摆出来，再决定下一步。</span>
-        </div>
-        <span id="flowHelperMeta">第 1 / 5 步</span>
-      </div>
-
-      <section class="page active" id="page-intake">
-        <h1>先判断这个事项能不能进入执行</h1>
-        <p class="subtitle">当前已预填一个信息展示物料案例，可以直接梳理；也可以清空后换成自己的业务事项。</p>
-        <div class="source-row">
-          <span class="source-chip" id="scenarioChip">已预填案例：信息展示物料预审</span>
-          <span class="source-chip">点击“梳理当前事项”进入执行前判断</span>
-          <span class="source-chip">样例基于实习观察抽象，不代表企业内部真实数据</span>
-        </div>
-        <div class="readiness-strip" aria-label="评审推进状态">
-          <div class="readiness-step">
-            <strong>不能执行</strong>
-            <span>目标、约束或验收标准缺失，不建议进入正式执行。</span>
+    <main class="main">
+      <section class="hero" id="input">
+        <div class="panel">
+          <span class="status-pill">规则化交互原型</span>
+          <h1 style="margin-top:10px">用一句话开始执行前预审</h1>
+          <p class="muted">不用写复杂 PRD。输入准备推进的事项，ClearBrief 会根据关键词匹配案例模板，生成阻塞项、关键角色、成熟度和下一步建议。</p>
+          <div class="input-box">
+            <textarea id="briefInput" placeholder="例如：我想推进足霜包装展示物料打样，担心成分文案和供应商打印边距还没确认。"></textarea>
+            <div class="input-toolbar">
+              <span id="inputCount">0 字</span>
+              <span>建议写清楚：事项 + 想进入的阶段 + 当前担心点</span>
+            </div>
+            <div class="btn-row">
+              <button class="btn primary" id="startBtn">开始预审</button>
+              <button class="btn" id="resetBtn">恢复默认案例</button>
+            </div>
           </div>
-          <div class="readiness-step current">
-            <strong>可预讨论</strong>
-            <span>可以先讨论方向、约束和方案取舍。</span>
-          </div>
-          <div class="readiness-step">
-            <strong>可预审</strong>
-            <span>路径、边界和主要风险已经清楚。</span>
-          </div>
-          <div class="readiness-step">
-            <strong>具备执行条件</strong>
-            <span>标准、验收和负责人基本明确，仍需人工确认。</span>
+          <div class="loading" id="loadingBox">
+            <div class="load-line"><span class="spinner"></span><span id="loadingText">识别事项类型...</span></div>
+            <div class="skeleton" style="width:92%"></div>
+            <div class="skeleton" style="width:70%"></div>
           </div>
         </div>
-        <div class="grid-2">
-          <div class="panel">
-            <h2>业务问题</h2>
-            <div class="source-control">
-              <label for="sourceType">材料来源</label>
-              <select id="sourceType">
-                <option value="业务方描述">业务方描述</option>
-                <option value="会议纪要">会议纪要</option>
-                <option value="群聊记录">群聊记录</option>
-                <option value="旧文档片段">旧文档片段</option>
-                <option value="用户反馈">用户反馈</option>
-                <option value="自定义业务问题" selected>自定义业务问题</option>
-              </select>
-            </div>
-            <textarea id="ideaInput">足霜标签需要在小尺寸包装上同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。包装空间有限，设计、品牌、供应商、打样和展示材料之间需要反复确认。团队希望在正式 Figma 排版和打印打样前，先确认信息优先级、尺寸约束、风险点、角色责任和验收标准。</textarea>
-            <p class="hint" id="countHint">126 字 / 建议 50-300 字</p>
-            <div class="inline-alert" id="intakeAlert">输入信息太少。请至少说明“谁遇到问题”“现状卡在哪里”和“尝试过什么”，再开始梳理。</div>
-            <div class="actions">
-              <button class="btn primary" id="analyzeBtn">梳理当前事项</button>
-              <button class="btn" id="customBtn">清空重写</button>
-            </div>
-            <div class="case-grid" id="caseGrid" hidden style="display:none"></div>
-          </div>
-          <div class="panel">
-            <h2>初步梳理</h2>
-            <div id="analysisEmpty" class="card">
-              <h3>等待梳理</h3>
-              <p>当前还没有形成判断。</p>
-            </div>
-            <div id="analysisCards" style="display:none"></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="page" id="page-clarify">
-        <h1>执行前判断</h1>
-        <p class="subtitle">先确认关键问题和低成本验证路径，再决定是否进入正式制作。</p>
-        <div class="grid-2">
-          <div class="panel">
-            <h2>关键判断问题</h2>
-            <div id="questionsList"></div>
-            <div class="answer-box" id="answerBox">
-              <strong>当前判断草稿</strong>
-              <p id="answerText">主判断：先确认信息优先级和尺寸约束，再做低成本贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</p>
-              <div class="answer-meta" id="currentDecisionMeta">选择一个处理方式，后面的确认单会同步更新。</div>
-              <div class="decision-actions">
-                <button class="btn primary" data-diagnosis-action="main">设为主要判断</button>
-                <button class="btn" data-diagnosis-action="verify">标记待验证</button>
-              </div>
-              <div class="decision-impact" id="diagnosisImpact">建议先把最影响首期方案的判断设为主要判断；证据不足的项可以标记待验证。</div>
-            </div>
-          </div>
-          <div class="panel">
-          <h2>结构化信息卡</h2>
-            <div class="info-grid" id="infoCards">
-              <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>产品、设计、品牌、供应商、销售展示同学</p></div>
-              <div class="card amber"><h3>待补齐</h3><small>待人工确认</small><p>标签尺寸、必填信息、打印边距、贴标位置、验收标准</p></div>
-            </div>
-            <div class="actions">
-              <button class="btn primary" id="generateDocBtn" disabled>整理预审材料</button>
-            </div>
-            <p class="action-hint" id="generateDocHint">先确认至少一个关键判断，才能整理预审材料。</p>
-          </div>
-        </div>
-        <div class="panel solution-panel">
-          <span class="pill blue">方案对比</span>
-          <h2 style="margin-top:10px">不要一上来就直接进正式制作</h2>
-          <p class="hint">只保留首期真正要做的两条低成本路径；直接 Figma 精修作为暂不推荐原因说明。</p>
-          <div class="solution-compare" id="solutionCompare"></div>
-          <div class="recommendation-box" id="solutionRecommendation">建议 P0 路径：方案 A 信息优先级表 + 方案 B 低保真贴标验证；正式 Figma 精修和打印打样后置到确认通过后。</div>
-          <div class="decision-summary-grid" id="decisionSummary">
-            <div class="decision-summary-item"><strong>判断依据</strong><span>先把信息层级和尺寸限制对齐，再验证贴到实物上是否可读，避免正式打样后返工。</span></div>
-            <div class="decision-summary-item"><strong>暂不直接精修</strong><span>尺寸、必填信息和贴标位置未确认前，高保真稿容易返工。</span></div>
-            <div class="decision-summary-item"><strong>进入条件</strong><span>标签尺寸、必填信息、打印边距、贴标位置、供应商样张标准先确认。</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="page" id="page-document">
-        <h1>整理预审确认单</h1>
-        <p class="subtitle">把已确认判断和待确认项整理成一页轻量确认单，用来拉齐负责人、设计和供应商。</p>
-        <div class="doc-layout document-workspace">
-          <div class="panel toc">
-            <h2>确认单目录</h2>
-            <a class="active" href="#doc-background">当前事项</a>
-            <a href="#doc-scope">已确认判断</a>
-            <a href="#doc-risks">待确认项</a>
-            <a href="#doc-departments">角色责任</a>
-            <a href="#doc-acceptance">打样前门槛</a>
-          </div>
-          <article class="panel doc doc-scroll">
-          <span class="pill blue">确认单 v0.3</span>
-            <div class="source-row" style="margin-top:14px">
-              <span class="source-chip">来源：业务问题</span>
-              <span class="source-chip">待人工确认项</span>
-              <span class="source-chip">待人工确认：供应商样张标准</span>
-            </div>
-            <h2 id="docTitle">足霜产品信息展示物料预审确认单</h2>
-            <div class="meta">v0.1 业务问题 · v0.2 执行前判断 · v0.3 确认单 · 后续动作：负责人确认</div>
-            <h3 id="doc-background">当前事项</h3>
-            <p class="doc-editable" id="backgroundText">足霜包装和展示材料需要在有限空间内同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。正式制作和打样前，需要先确认信息优先级、尺寸约束和验收标准。</p>
-            <h3 id="doc-scope">已确认判断</h3>
-            <ul class="doc-editable" id="scopeList">
-              <li>先做信息优先级表，明确哪些信息必须第一眼可见。</li>
-              <li>先做低保真贴标验证，检查可读性和实物位置。</li>
-              <li>暂不直接进入 Figma 精修和正式打印打样。</li>
-            </ul>
-            <h3 id="doc-risks">待确认项</h3>
-            <ul class="doc-editable" id="riskList">
-              <li>标签尺寸、最小字号、打印边距和安全区域。</li>
-              <li>贴标位置、实物弧度和遮挡风险。</li>
-              <li>供应商样张标准和反馈周期。</li>
-            </ul>
-            <h3 id="doc-departments">角色责任</h3>
-            <ul class="doc-editable" id="departmentDocList">
-              <li>产品：确认卖点、必填信息、用户理解优先级和验收标准。</li>
-              <li>设计：确认版式层级、字号、边距、贴标位置和样张输出。</li>
-              <li>供应商：确认打印尺寸、材质限制、贴标工艺和打样反馈。</li>
-            </ul>
-            <h3 id="doc-acceptance">打样前门槛</h3>
-            <p class="doc-editable" id="acceptanceText">样张贴到实物后，产品名、核心卖点、成分说明和使用信息可读；贴标位置不遮挡关键区域；展示材料与实物包装保持一致。</p>
-          </article>
-          <aside class="panel workspace-actions">
-            <h2>执行前动作</h2>
-            <div class="suggestion-list">
-              <div class="suggestion-item"><strong>确认单用途</strong><p>用于负责人、设计和供应商快速确认下一步是否能进入贴标验证。</p></div>
-            </div>
-            <div class="action-stack">
-              <div class="action-row">
-                <button class="btn" id="editDocBtn">编辑确认单</button>
-              </div>
-            </div>
-            <div class="action-stack">
-              <div class="action-row">
-              <button class="btn primary" id="fullPrdBtn">复制确认单</button>
-              </div>
-            </div>
-            <div class="next-action">
-              <button class="btn primary" id="reviewBtn">进入执行检查</button>
-              <p>检查验证路径、风险和推进条件。</p>
-            </div>
-          </aside>
-        </div>
-        <div class="prd-preview" id="prdPreview" hidden></div>
-        <div class="status-note" id="prdStatus" hidden></div>
-        <button id="copyPrdBtn" hidden type="button"></button>
-        <button id="copyWordPrdBtn" hidden type="button"></button>
-        <button id="downloadMarkdownBtn" hidden type="button"></button>
-      </section>
-
-      <section class="page" id="page-review">
-        <h1>执行前检查</h1>
-        <p class="subtitle">根据确认单、角色反馈和待确认项，判断是否可以进入低保真贴标验证。</p>
-        <div class="score-grid">
-          <div class="score-main"><div>建议推进状态</div><strong id="reviewDecision">建议先做低成本验证</strong><p id="scoreHint">可进入低保真贴标验证，暂不进入正式打样</p><span id="reviewGate">建议依据：先做低成本验证</span></div>
-          <div class="panel metric red"><h2>待确认项</h2><strong id="blockingCount">2</strong><p class="hint">确认后再进正式打样</p></div>
-          <div class="panel metric blue"><h2>下一步</h2><strong id="nextStage">贴标验证</strong><p class="hint">低保真样张 + 实物检查</p></div>
-        </div>
-        <span id="nonBlockingCount" hidden>1</span><span id="closedCount" hidden>0</span>
-        <div class="decision-panel">
-          <div class="decision-card">
-            <span class="pill blue">决策解释</span>
-            <h2>为什么给出这个建议</h2>
-            <p id="decisionReason">根据已确认判断和待确认项，当前可以继续做低保真贴标验证；正式打样前仍需负责人确认尺寸、边距和样张标准。</p>
-          </div>
-          <div class="decision-card">
-            <span class="pill amber">下一步动作</span>
-            <h2>进入低保真验证前确认</h2>
-            <div class="decision-list" id="decisionActions">
-              <span>确认标签尺寸、贴标区域和打印边距。</span>
-              <span>明确产品名、成分说明、使用信息和品牌表达的优先级。</span>
-              <span>确认供应商样张标准和反馈周期。</span>
-            </div>
-          </div>
-        </div>
-        <details class="panel detail-panel primary-detail" open>
-          <summary>进入低保真验证前确认</summary>
-          <div class="detail-body">
-          <div class="preflight-grid">
-            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>信息优先级</strong>产品名、核心卖点、成分说明和使用信息已排序。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox" checked><span><strong>验证路径</strong>先做信息优先级表和低保真贴标验证。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>尺寸边界</strong>标签尺寸、最小字号、打印边距和安全区域待供应商确认。</span></label>
-            <label class="check-row"><input class="preflight-check" type="checkbox"><span><strong>样张标准</strong>样张通过标准和反馈周期待负责人确认。</span></label>
-          </div>
-          <div class="review-summary">
-            <div class="mini-stat"><strong id="preflightDone">2/4</strong><span>已确认</span></div>
-            <div class="mini-stat"><strong id="preflightMissing">2</strong><span>待确认</span></div>
-            <div class="mini-stat"><strong id="meetingMode">先验证</strong><span>建议</span></div>
-          </div>
-          </div>
-        </details>
-        <details class="panel detail-panel">
-          <summary>关键角色确认</summary>
-          <div class="detail-body">
-          <div class="role-board">
-            <div class="role-card">
-              <div class="role-card-head"><strong>产品 / 负责人</strong><span class="pill green">最终口径</span></div>
-              <p>确认信息优先级、执行时间、返工风险和是否进入低保真验证。</p>
-              <select class="status-select role-status" data-role="产品 / 负责人"><option selected>有疑问</option><option>已确认</option><option>需会后评估</option></select>
-            </div>
-            <div class="role-card">
-              <div class="role-card-head"><strong>供应商</strong><span class="pill amber">关键角色</span></div>
-              <p>关注打印尺寸、材质限制、贴标工艺、样张标准和交付周期。</p>
-              <select class="status-select role-status" data-role="供应商"><option>有疑问</option><option>已确认</option><option>需会后评估</option></select>
-            </div>
-            <div class="role-card">
-              <div class="role-card-head"><strong>设计</strong><span class="pill blue">视觉执行</span></div>
-              <p>关注版式层级、字号、边距、贴标位置、样张输出和展示一致性。</p>
-              <select class="status-select role-status" data-role="设计"><option>有疑问</option><option selected>已确认</option><option>需会后评估</option></select>
-            </div>
-          </div>
-          <div class="review-summary">
-            <div class="mini-stat"><strong id="roleConfirmedCount">1</strong><span>已确认角色</span></div>
-            <div class="mini-stat"><strong id="roleRiskCount">2</strong><span>仍有疑问</span></div>
-            <div class="mini-stat"><strong id="roleMeetingAdvice">补齐关键角色</strong><span>协作建议</span></div>
-          </div>
-          </div>
-        </details>
-        <details class="panel detail-panel">
-          <summary>待确认清单</summary>
-          <div class="detail-body">
-          <table>
-            <thead><tr><th>待确认项</th><th>为什么影响推进</th><th>负责人</th><th>状态</th></tr></thead>
-            <tbody>
-              <tr><td>标签尺寸和打印边距</td><td>会影响 Figma 排版、打印打样和贴标位置</td><td>设计 + 供应商</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
-              <tr><td>必填信息和卖点优先级</td><td>可能造成信息拥挤、表达冲突或客户理解成本高</td><td>产品 / 负责人</td><td><select class="status-select review-status"><option>待补充</option><option>已处理</option></select></td></tr>
-              <tr><td>样张通过标准</td><td>无法判断低保真验证是否通过，容易反复改稿</td><td>产品 + 设计</td><td><select class="status-select review-status"><option>可优化</option><option>已处理</option></select></td></tr>
-            </tbody>
-          </table>
-          <div class="review-summary">
-            <div class="mini-stat"><strong id="handledCount">0</strong><span>已关闭</span></div>
-            <div class="mini-stat"><strong id="remainingCount">3</strong><span>待办项</span></div>
-            <div class="mini-stat"><strong id="readyState">待复审</strong><span>预审状态</span></div>
-          </div>
-          <div class="inline-alert" id="reviewAlert">还有高优先级问题未处理。你仍然可以发送确认材料，但建议先处理关键风险。</div>
-          <div class="actions">
-            <button class="btn" id="autoFixBtn">模拟采纳反馈</button>
-            <button class="btn primary" id="exportBtn">发送材料</button>
-          </div>
-          </div>
-        </details>
-        <details class="panel detail-panel">
-          <summary>供应商反馈记录</summary>
-          <div class="detail-body">
-          <div class="feedback-form">
-            <select id="devFeedbackType">
-              <option>打样风险</option>
-              <option>范围疑问</option>
-              <option>尺寸依赖</option>
-              <option>验收口径</option>
-              <option>贴标流程</option>
-              <option>周期风险</option>
-            </select>
-            <textarea id="devFeedbackInput">标签尺寸、最小字号和贴标安全区域需要先定清楚，否则打样时容易出现文字过小、边距不足或贴标位置偏移。</textarea>
-            <button class="btn primary" id="addDevFeedbackBtn">记录反馈</button>
-          </div>
-          <div class="feedback-list" id="devFeedbackList"></div>
-          </div>
-        </details>
-      </section>
-
-      <section class="page" id="page-export">
-        <h1>发送确认材料</h1>
-        <p class="subtitle">预审后只导出两类首期材料：给负责人确认是否推进，给供应商确认打样边界。</p>
-        <div class="export-grid">
-          <div class="panel export-card">
+        <div class="panel">
+          <h2>当前案例说明</h2>
+          <p class="muted">切换案例不是为了展示更多功能，而是为了说明“执行前预审”可以迁移到不同协作场景。</p>
+          <div class="case-purpose">
+            <b>示</b>
             <div>
-              <span class="pill blue">P0 给负责人</span>
-              <h2>预审摘要</h2>
-              <p class="hint">建议状态、关键风险、暂不进入正式打样的原因，以及是否同意先做低保真贴标验证。</p>
-              <ul class="insight-list">
-                <li>建议状态：先做低保真贴标验证。</li>
-                <li>暂不进入：正式 Figma 精修和打印打样。</li>
-                <li>需要确认：是否同意先用低成本样张验证。</li>
-              </ul>
+              <strong id="caseTitle">足霜产品信息展示物料迭代</strong>
+              <p class="muted" id="casePurpose">展示供应商、设计、品牌之间的信息边界如何影响打样决策。</p>
             </div>
-            <button class="btn primary" data-export="负责人摘要">复制负责人摘要</button>
           </div>
-          <div class="panel export-card">
+          <div class="match-note" id="matchNote"><strong>当前未开始预审。</strong> 选择案例或输入事项后，点击开始预审。</div>
+        </div>
+      </section>
+
+      <section class="flow" aria-label="执行前检查流程">
+        <div class="flow-card active"><b>1. 事项输入</b><strong>明确要推进什么</strong><p class="muted">输入事项、阶段和担心点。</p></div>
+        <div class="flow-card"><b>2. 预审分析</b><strong>识别缺口和成熟度</strong><p class="muted">先判断是否具备执行条件。</p></div>
+        <div class="flow-card"><b>3. 阻塞检查</b><strong>找出不能开始的原因</strong><p class="muted">高风险未关闭就不建议执行。</p></div>
+        <div class="flow-card"><b>4. 执行结论</b><strong>输出下一步动作</strong><p class="muted">不替拍板，只暴露问题。</p></div>
+      </section>
+
+      <section class="results" id="results">
+        <div class="result-toolbar">
+          <div>
+            <strong id="matchedCase">待匹配事项类型</strong>
+            <p id="matchedReason">系统会根据输入关键词选择最接近的预审模板。</p>
+          </div>
+          <span class="status-pill" id="confidencePill">匹配度待计算</span>
+        </div>
+
+        <div class="status-card" id="whyCard">
+          <h2 id="whyTitle">为什么现在不能开始</h2>
+          <p>真正的价值不是告诉你怎么做，而是提醒你现在为什么还不能开始。</p>
+          <div class="status-reason" id="statusReason"></div>
+          <ul id="whyList"></ul>
+        </div>
+
+        <div class="dashboard" id="analysis">
+          <div class="stat ring-card">
+            <div class="ring" id="scoreRing"><b id="scoreText">0%</b></div>
             <div>
-              <span class="pill green">P0 给供应商</span>
-              <h2>打样确认单</h2>
-              <p class="hint">把尺寸、材质、边距、贴标位置、样张标准和反馈周期整理给供应商确认。</p>
-              <ul class="insight-list">
-                <li>确认标签尺寸、最小字号和打印边距。</li>
-                <li>确认贴标位置、实物弧度和遮挡风险。</li>
-                <li>确认样张标准和反馈周期。</li>
-              </ul>
+              <span>执行成熟度</span>
+              <strong id="statusText" style="font-size:18px">等待预审</strong>
+              <div class="small-note">评分由阻塞项关闭情况实时计算。</div>
             </div>
-            <button class="btn primary" data-export="供应商确认单">复制供应商确认单</button>
+          </div>
+          <div class="stat"><span>高风险未关闭</span><strong id="highCount">0</strong></div>
+          <div class="stat"><span>阻塞项关闭率</span><strong id="closeRate">0%</strong></div>
+          <div class="stat"><span>关键角色</span><strong id="roleCount">0</strong></div>
+        </div>
+
+        <div class="grid">
+          <div class="panel" id="blockers">
+            <h2>阻塞项检查</h2>
+            <p class="muted">执行门槛规则：只要存在高风险阻塞项未关闭，系统就不会建议进入正式执行。你可以点击左侧方框标记已完成，成熟度和结论会实时变化。</p>
+            <div class="mini-rule" id="blockerRule">高风险未关闭时，不建议进入正式执行；关闭阻塞项后，状态会重新计算。</div>
+            <div class="blockers" id="blockerList" style="margin-top:14px"></div>
+          </div>
+          <div class="panel">
+            <h2>关键角色</h2>
+            <p class="muted">这些角色不是被系统“指挥”，而是需要人工确认的责任链路。</p>
+            <div class="progress"><i id="roleProgress"></i></div>
+            <div class="roles" id="roleList" style="margin-top:14px"></div>
           </div>
         </div>
-        <p class="hint" style="margin-top:18px">设计 Brief 和会议纪要作为后续扩展，首期不做完整协同平台。</p>
+
+        <div class="summary" id="result">
+          <div class="panel">
+            <h2>执行结论</h2>
+            <p id="judgement" style="font-weight:900;margin-bottom:12px"></p>
+            <h3>下一步行动建议</h3>
+            <ul class="list" id="nextList"></ul>
+          </div>
+          <div class="panel">
+            <h2>预审摘要</h2>
+            <div class="copybox" id="summaryText"></div>
+            <div class="btn-row" style="margin-top:12px">
+              <button class="btn primary" id="copyBtn">复制预审摘要</button>
+            </div>
+            <p class="small-note">当前为前端规则化原型，用于展示产品流程和判断逻辑，不代表真实模型结果。</p>
+          </div>
+        </div>
       </section>
     </main>
-    <div class="floating-helper" id="floatingHelper">
-      <strong>当前动作：梳理事项</strong>
-      <span>先把目标、约束和待确认项摆出来。</span>
-    </div>
-    <button class="btn primary floating-next" id="nextTopBtn">梳理事项</button>
-  </div>
-
-  <div class="toast" id="toast">已完成</div>
-  <div class="modal-backdrop" id="exportModal">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal-head">
-        <div>
-          <span class="pill blue">可编辑导出</span>
-          <h2 id="modalTitle">导出内容</h2>
-        </div>
-        <button class="close" id="closeModal" aria-label="关闭">×</button>
-      </div>
-      <div class="modal-body">
-        <p class="modal-hint">这是待确认初稿。你可以在这里调整措辞、删减内容或补充业务细节，再复制给对应角色。</p>
-        <textarea class="export-preview" id="modalContent"></textarea>
-        <div class="actions">
-          <button class="btn" id="restoreExportBtn">恢复初稿</button>
-          <button class="btn primary" id="copyExportBtn">复制内容</button>
-          <button class="btn" id="closeModalBottom">关闭</button>
-        </div>
-      </div>
-    </div>
   </div>
 
   <script>
-    const pages = ["intake", "clarify", "document", "review", "export"];
-    const labels = ["描述事项", "执行前判断", "确认单", "执行前检查", "发送材料"];
-    const actionLabels = ["梳理事项", "查看执行前判断", "整理确认单", "进入执行前检查", "发送材料"];
-    let current = 0;
-    let maxUnlocked = 0;
-    let confirmedAnswers = 0;
-
-    const stepbar = document.getElementById("stepbar");
-    const toast = document.getElementById("toast");
-    const navButtons = [...document.querySelectorAll(".nav")];
-    const modeOptions = [...document.querySelectorAll("[data-detail-mode]")];
-    const exportModal = document.getElementById("exportModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalContent = document.getElementById("modalContent");
-    let currentExportText = "";
-    let originalExportText = "";
-    let reviewReady = false;
-    let currentPrdText = "";
-    let fullPrdReady = false;
-    let currentScenario = null;
-    let currentAnswerKey = "goal";
-    let activeExampleKey = "label";
-    let confirmedAnswersByKey = {};
-    let diagnosisStatusByKey = {};
-    let devFeedbackItems = [];
-    let detailMode = false;
-
-    function setDetailMode(enabled) {
-      detailMode = enabled;
-      document.body.classList.toggle("compact-mode", !enabled);
-      modeOptions.forEach(option => {
-        const active = enabled ? option.dataset.detailMode === "showcase" : option.dataset.detailMode === "compact";
-        option.classList.toggle("active", active);
-        option.setAttribute("aria-pressed", String(active));
-      });
-      document.querySelectorAll("#page-review details.detail-panel").forEach(detail => {
-        detail.open = enabled && detail.classList.contains("primary-detail");
-      });
-    }
-
-    const caseExamples = [
-      {
-        key: "label",
-        label: "信息展示物料预审",
-        tag: "足霜标签 / 打印打样",
-        text: "足霜标签需要在小尺寸包装上同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。包装空间有限，设计、品牌、供应商、打样和展示材料之间需要反复确认。团队希望在正式 Figma 排版和打印打样前，先确认信息优先级、尺寸约束、风险点、角色责任和验收标准。"
-      },
-      {
-        key: "knowledge",
-        label: "内部知识库",
-        tag: "文档检索 / 新人上手",
-        text: "公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度，想做知识库问答试点，提高信息查找效率。"
-      },
-      {
-        key: "travel",
-        label: "感恩节旅行活动",
-        tag: "节日营销 / 用户互动",
-        text: "我们同程旅行想做一个感恩节活动，希望借助“感恩陪伴”“一起出发”等情绪主题，提升用户参与感和品牌温度。现在很多用户旅行后缺少分享和互动场景，我们想通过年度旅行回忆、感谢同行人、好友互动、旅行盲盒等玩法，让用户愿意主动参与和传播。活动会结合机票、酒店、高铁等业务场景，打造一个既有节日氛围，又能带动拉新转化的营销活动。"
-      },
-      {
-        key: "data",
-        label: "经营数据看板",
-        tag: "数据产品 / 指标体系",
-        text: "运营和管理层想做一个经营数据看板，集中查看 GMV、转化率、留存、渠道 ROI 和活动效果。但现在指标口径不统一，数据更新不稳定，业务同事经常临时找数据同学取数，希望先做一个可复用的数据分析工作台。"
-      },
-      {
-        key: "growth",
-        label: "会员积分活动",
-        tag: "增长活动 / 权益核销",
-        text: "市场团队想优化会员积分活动，希望通过积分任务、优惠券兑换和会员权益提升老用户复购。现在活动规则、用户分层、积分发放、核销失败处理和补贴成本都还没说清楚，需要先把首期范围和效果指标定下来。"
-      },
-      {
-        key: "support",
-        label: "客服工单分流",
-        tag: "客服效率 / 服务质检",
-        text: "客服团队每天收到大量咨询、退款和投诉工单，人工分流慢，主管也很难及时发现高风险问题。团队希望做一个工单自动分流和质检工具，提高首次响应速度，减少重复处理，并沉淀服务质量数据。"
-      },
-      {
-        key: "education",
-        label: "课程学习体验",
-        tag: "教育产品 / 完课提升",
-        text: "在线课程团队想提升学生完课率和作业反馈效率。现在课程路径、课后任务、老师点评和家长反馈比较分散，学生不知道下一步该学什么，老师也很难快速发现掉队用户，希望做一个学习路径和反馈工作台。"
-      },
-      {
-        key: "community",
-        label: "内容社区互动",
-        tag: "社区增长 / 创作者激励",
-        text: "内容社区最近互动下降，创作者发帖动力不足，运营也很难判断哪些话题值得继续推。团队希望优化发布、评论、收藏、分享和话题运营流程，同时建立内容审核和创作者激励机制。"
-      },
-      {
-        key: "booking",
-        label: "门店预约流程",
-        tag: "本地服务 / 履约效率",
-        text: "本地服务团队想优化门店预约流程，用户经常遇到可约时间不清楚、临时改约、到店等待和爽约问题。门店也希望更好地管理服务人员排班、预约确认和异常处理，提高到店率和资源利用率。"
-      },
-      {
-        key: "workflow",
-        label: "审批流程优化",
-        tag: "企业协同 / 流程追踪",
-        text: "公司内部报销、采购和合同审批流程比较慢，员工不知道应该提交哪些材料，也不清楚卡在哪个审批节点。团队希望做一个统一的审批工作台，支持流程配置、状态追踪、超时提醒和数据复盘。"
-      }
-    ];
-
-    const escapeHtml = text => String(text || "").replace(/[&<>"']/g, ch => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    }[ch]));
-
-    function inferScenario(rawIdea) {
-      const idea = rawIdea.trim();
-      const lower = idea.toLowerCase();
-      const isTravelCampaign = /旅行|旅游|出行|机票|酒店|高铁|火车|航班|景区|攻略|感恩节|春节|国庆|节日|盲盒|陪伴|同行/.test(idea);
-      const isEducation = /课程|学习|教育|培训|作业|考试|题库|老师|学生|家长|教培|课堂|训练营/.test(idea);
-      const isContentCommunity = /社区|内容|帖子|评论|创作者|ugc|发布|种草|笔记|话题|互动|分享|直播/.test(lower + idea);
-      const isBookingService = /预约|预订|排队|门店|到店|医生|挂号|美容|健身|维修|上门|本地生活|服务/.test(idea);
-      const isWorkflow = /审批|流程|报销|采购|合同|入职|离职|oa|工单流转|协同|权限申请/.test(lower + idea);
-      const isKnowledge = /知识库|文档|资料|制度|政策|sop|查找|搜索|检索|新人|新员工/.test(lower + idea);
-      const isData = /数据|看板|报表|指标|埋点|sql|分析|经营|bi|dashboard/.test(lower + idea);
-      const isSupport = /客服|工单|售后|投诉|咨询|满意度|响应/.test(idea);
-      const isLabel = /包装|标签|足霜|贴标|打样|样张|figma|排版|印刷|打印|成分|品牌表达|供应商|物料/.test(lower + idea);
-      const isReceipt = !isTravelCampaign && /小票|消费凭证|发票|收据|ocr|识别小票|上传凭证|门店核销|扫码核销|券库存/.test(lower + idea);
-      const isGrowth = !isKnowledge && !isTravelCampaign && !isEducation && !isContentCommunity && !isBookingService && !isWorkflow && !isSupport && /会员|积分|复购|活动|增长|优惠券|转化|留存|营销|商城|电商/.test(idea);
-      if (isLabel || isReceipt) {
-        return {
-          key: "label",
-          title: "足霜产品信息展示物料迭代预审",
-          type: "包装物料 / 信息架构 / 打印打样预审",
-          users: "产品、设计、品牌、供应商、销售展示同学",
-          background: idea || "足霜标签需要在小尺寸包装上同时承载产品名、成分说明、使用信息、品牌表达和贴标位置。包装空间有限，设计、品牌、供应商、打样和展示材料之间需要反复确认。",
-          problem: "当前问题不是缺一版设计，而是执行前没有把信息优先级、尺寸边界、贴标位置、供应商样张标准和角色责任问清楚。",
-          goal: "用低成本预审和贴标验证先确认包装标签是否可读、可印、可贴、可展示，再进入正式 Figma 精修和打印打样。",
-          scope: ["整理产品名、成分说明、使用信息和品牌表达的信息优先级。", "确认标签尺寸、打印边距、贴标位置和供应商样张要求。", "用低保真样张完成实物贴标验证，检查可读性和展示距离。", "通过后进入 Figma 精修、打印打样和展示材料整理。"],
-          gaps: "标签尺寸、必填信息、打印边距、贴标位置、供应商样张标准、展示材料一致性",
-          questions: [
-            ["goal", "产品信息优先级是否已确认？", "产品名、核心卖点、成分说明、使用信息和品牌表达，哪些必须第一眼可见？", "建议先由产品和品牌确认信息优先级，避免设计阶段反复调整。"],
-            ["scope", "打印与贴标约束是否已确认？", "标签尺寸、最小字号、打印边距、安全区域和贴标位置是否有供应商限制？", "正式制作前先确认尺寸约束，再用低保真样张验证贴标位置和可读性。"],
-            ["fallback", "低保真样张不清楚时由谁处理？", "如果样张不可读，是减少文案、调整层级、换贴标位置，还是重新定义展示材料？", "优先压缩低优先级文案；如果是贴标偏移或打印限制，回到供应商确认。"],
-            ["permission", "样张最终确认人是否明确？", "产品、品牌、设计、供应商分别负责确认哪些内容，负责人是否能做最终口径判断？", "产品确认信息优先级，品牌确认表达边界，设计确认输出规格，供应商确认打印和贴标限制。"]
-          ],
-          departments: ["产品：确认核心卖点、必填信息、用户理解优先级和验收标准。", "设计：确认版式层级、字号、边距、贴标位置和样张输出。", "品牌：确认表达边界、视觉元素和对外展示一致性。", "供应商：确认打印尺寸、材质限制、贴标工艺和交付周期。", "销售展示：确认客户介绍、样品拍摄和 PPT 物料的一致性。"],
-          competition: "对比同类护肤品小包装、药妆标签、旅行装包装和电商展示图，重点借鉴首屏卖点、成分可读性、使用信息和品牌一致性。",
-          metrics: "核心指标包括关键信息识别率、低保真样张修改次数、打样后二次修改率、角色确认轮次和展示材料一致性。",
-          acceptance: "样张贴到实物后，产品名、核心卖点、成分说明和使用信息可读；贴标位置不遮挡关键区域；展示材料与实物包装保持一致。",
-          sqlTable: "label_review_checklist",
-          sqlFields: ["label_id", "version", "info_priority", "print_size", "margin_status", "supplier_feedback", "confirm_rounds", "rework_after_sample"],
-          statusFlow: [
-            ["信息收集", "收集产品名、成分、用法、品牌表达和贴标要求", "标注来源：用户输入 / 旧物料 / 供应商要求"],
-            ["优先级确认", "决定哪些信息必须第一眼可见", "产品和品牌确认，不确定项标记待复核"],
-            ["低保真样张", "用黑白样张检查空间和可读性", "先验证版面，不进入高成本精修"],
-            ["贴标验证", "贴到实物包装上检查位置和展示距离", "记录偏移、遮挡和阅读困难"],
-            ["正式制作", "进入 Figma 精修和视觉统一", "设计输出可打印文件"],
-            ["打印打样", "供应商输出样张", "按验收清单检查尺寸、边距和材质效果"],
-            ["展示同步", "整理 PPT、展示图和客户介绍物料", "确保信息与实物包装一致"]
-          ],
-          ruleConfig: [
-            ["信息规则", "产品名、核心卖点、成分说明、使用信息、品牌表达", "产品和品牌确认优先级"],
-            ["尺寸规则", "标签尺寸、出血边距、安全区域、最小字号", "设计和供应商共同确认"],
-            ["贴标规则", "贴标位置、对齐方式、遮挡风险、实物弧度", "低保真样张先验证"],
-            ["输出规则", "Figma 文件、打印格式、颜色模式、样张编号", "设计输出，供应商复核"],
-            ["验收规则", "可读性、位置偏移、展示一致性、返工处理", "负责人确认通过标准"]
-          ],
-          competitors: [
-            ["同类护肤品小包装", "产品名和核心卖点优先", "借鉴首屏信息层级"],
-            ["药妆包装标签", "成分、用法和注意事项清晰分区", "借鉴必填信息布局"],
-            ["旅行装/小样包装", "小尺寸下控制字号和边距", "借鉴可读性和空间压缩"],
-            ["电商展示图", "实物包装与展示物料一致", "借鉴卖点露出和拍摄适配"]
-          ],
-          solutionOptions: [
-            {
-              name: "方案 A：信息优先级表",
-              tag: "P0 / 推荐",
-              cost: "低",
-              value: "最快对齐产品、品牌和设计对信息层级的判断。",
-              benefit: "先决定哪些信息必须保留，避免版面阶段反复争论。",
-              summary: "把产品名、核心卖点、成分、用法和品牌表达按优先级排序。",
-              risk: "需要负责人确认取舍；如果没有实物验证，仍可能低估小尺寸下的可读性。"
-            },
-            {
-              name: "方案 B：低保真贴标验证",
-              tag: "P0 / 推荐",
-              cost: "中",
-              value: "能在打样前验证可读性、贴标位置和展示距离。",
-              benefit: "用低成本样张提前暴露返工风险。",
-              summary: "先打印黑白样张贴到实物包装上，检查字号、边距和信息遮挡。",
-              risk: "需要实物包装或旧样品配合；只能验证可读性和位置，不能替代正式打样。"
-            }
-          ],
-          recommendation: "建议 P0 组合：方案 A + 方案 B。先用信息优先级表对齐判断，再用低保真贴标验证可读性和位置；暂不直接 Figma 精修，等尺寸和样张标准稳定后再进入。",
-          decisionSummary: {
-            recommend: "A+B 可以最快对齐信息优先级，并在低成本样张里验证可读性、贴标位置和展示一致性。",
-            notNow: "不建议首期直接做完整高保真视觉稿，因为尺寸、边距和必填信息未确认会放大返工风险。",
-            entry: "当信息优先级、标签尺寸、贴标位置和供应商样张标准都确认后，再进入正式 Figma 精修和打印打样。"
-          },
-          launchGates: [
-            ["信息门槛", "产品名、核心卖点、成分说明和使用信息的优先级已确认", "产品 + 品牌"],
-            ["尺寸门槛", "标签尺寸、出血边距、安全区域和最小字号已确认", "设计 + 供应商"],
-            ["贴标门槛", "贴标位置、对齐方式、遮挡风险和实物弧度已验证", "设计 + 供应商"],
-            ["样张门槛", "低保真样张和正式打样的验收标准已确认", "产品 + 设计"],
-            ["展示门槛", "PPT、展示图和实物包装的信息一致性已检查", "销售展示"]
-          ],
-          exceptionQueue: [
-            ["信息过载", "必填信息和卖点都想保留，版面拥挤", "压缩低优先级内容，保留第一眼信息"],
-            ["文字过小", "小尺寸标签导致成分或用法不可读", "调整层级或拆分展示材料"],
-            ["贴标偏移", "实物弧度或贴标位置导致视觉不居中", "回到供应商确认贴标工艺"],
-            ["打印边距不足", "出血和安全区域不满足供应商要求", "修改版式后重新出样"],
-            ["展示不一致", "PPT 或展示图与实物包装信息不一致", "统一文案版本和素材来源"]
-          ],
-          eventTracking: [
-            ["label_info_prioritized", "确认信息优先级", "label_id、version、owner_role、priority_level"],
-            ["label_sample_printed", "输出低保真样张", "label_id、version、print_size、margin_status"],
-            ["label_fit_checked", "完成贴标验证", "label_id、position_status、readability_score、issue_count"],
-            ["supplier_feedback_logged", "记录供应商反馈", "feedback_type、owner_role、blocking_flag"],
-            ["label_revision_closed", "关闭修改项", "version、closed_count、confirm_rounds"]
-          ],
-          rolloutPlan: [
-            ["第 1 步", "确认信息优先级、标签尺寸、打印边距和贴标位置", "形成可预审材料"],
-            ["第 2 步", "输出低保真样张并贴到实物包装检查", "P0 验证可读性和位置"],
-            ["第 3 步", "根据样张反馈调整信息层级和表达重点", "判断是否进入正式制作"],
-            ["通过后", "进入 Figma 精修、打印打样和展示材料同步", "避免首期被高成本返工拖住"]
-          ]
-        };
-      }
-      if (isTravelCampaign) {
-        return {
-          key: "travel",
-          title: "节日旅行互动活动",
-          type: "节日营销 / 旅行服务 / 用户互动活动",
-          users: "旅行用户、潜在新客、会员运营、渠道合作方",
-          background: idea || "团队希望围绕节日旅行做一次互动活动，提升用户参与感、品牌温度和旅行产品转化。",
-          problem: "当前问题不是缺一个活动页，而是活动目标、参与路径、奖励机制、业务联动和数据复盘还没有先讲清楚。",
-          goal: "通过节日主题玩法提升用户参与和分享意愿，并把活动流量自然引导到机票、酒店、高铁等旅行产品。",
-          scope: ["设计活动入口、主题任务和分享玩法。", "支持旅行回忆、感谢同行人、好友互动或盲盒抽奖等玩法。", "联动机票、酒店、高铁等业务场景，提供可核销权益。", "沉淀活动数据，看参与、分享、转化和核销效果。"],
-          gaps: "活动目标、参与路径、奖励库存、业务联动、分享机制、转化指标",
-          questions: [
-            ["goal", "这次活动优先服务哪个目标？", "品牌温度、用户参与、拉新分享，还是订单转化？", "主目标：提升节日旅行场景下的用户参与和分享，同时引导部分用户进入机票、酒店、高铁业务链路。"],
-            ["scope", "用户完整参与路径是什么？", "从哪里进入、做什么互动、如何分享、最后跳到哪个业务场景？", "首期范围：活动入口、主题互动、分享海报、权益领取和业务跳转，不做复杂社交关系链。"],
-            ["fallback", "奖品发完或核销失败怎么办？", "展示替代权益、补偿券，还是进入客服处理？", "兜底方式：奖品发完展示替代权益；核销失败进入异常记录，用户可查看处理进度。"],
-            ["permission", "活动规则和预算由谁确认？", "运营、品牌、法务、业务线是否都需要审核？", "权限规则：运营配置玩法，品牌确认表达，法务审核规则，业务线确认权益库存。"]
-          ],
-          departments: ["业务方：确认活动目标、业务联动和转化路径。", "品牌：确认节日主题、文案基调和传播素材。", "研发：确认活动状态、权益发放、库存扣减和异常处理。", "设计：确认活动首页、互动流程、分享海报和结果页。", "数据：确认参与率、分享率、跳转率、券核销率和新客占比。"],
-          competition: "对比携程旅行节、飞猪会员日、同程旅行活动页和小红书旅行话题，重点借鉴节日叙事、互动分享和权益转化链路。",
-          metrics: "核心指标包括活动参与率、分享率、业务跳转率、权益领取率、核销率、新客占比和活动转化 GMV。",
-          acceptance: "用户能完成一次互动并获得明确结果；分享链路可追踪；权益发放和核销状态清晰。",
-          sqlTable: "travel_campaign_event_log",
-          sqlFields: ["campaign_id", "user_segment", "participation_seconds", "share_flag", "redeem_flag"],
-          competitors: [
-            ["携程旅行节", "强活动会场和权益组合", "借鉴旅行场景聚合与券包表达"],
-            ["飞猪会员日", "会员权益和任务激励", "强化会员身份与权益感"],
-            ["同程旅行活动页", "交通住宿业务联动", "学习机票酒店高铁的转化入口"],
-            ["小红书旅行话题", "UGC 分享和情绪表达", "借鉴旅行故事和分享氛围"]
-          ]
-        };
-      }
-      if (isData) {
-        return {
-          key: "data",
-          title: "经营数据看板优化",
-          type: "数据产品 / 指标体系 / 经营分析工具",
-          users: "业务负责人、运营、数据分析师、产品团队",
-          background: idea || "团队希望搭建经营数据看板，但当前指标分散、口径不一致，业务同事需要反复找数据同事确认结果。",
-          problem: "当前问题不是缺一张报表，而是指标口径、数据来源、更新频率和使用场景没有先对齐。",
-          goal: "让业务方可以稳定查看核心经营指标，并能追溯口径、时间范围和异常波动原因。",
-          scope: ["梳理核心指标口径和数据来源。", "提供经营概览、趋势分析和异常提醒。", "支持按时间、渠道、地区或业务线筛选。", "保留指标说明，避免不同部门理解不一致。"],
-          gaps: "指标口径、数据来源、更新频率、权限范围、异常归因方式",
-          questions: [
-            ["goal", "本次看板最想支持哪个决策？", "是日常经营复盘、活动监控，还是管理层周报？", "主目标：让业务负责人更快判断经营状态，减少临时取数和口径争议。"],
-            ["scope", "首期必须包含哪些核心指标？", "GMV、转化率、留存、客单价、渠道 ROI 是否都进入首期？", "首期范围：核心经营指标、渠道维度、时间趋势和异常提醒；不做复杂自助分析。"],
-            ["fallback", "数据异常或延迟时怎么提示？", "展示更新时间、口径说明，还是标记“待确认”？", "兜底方式：展示数据更新时间、指标口径和异常说明，延迟数据必须提示。"],
-            ["permission", "不同角色能看到哪些数据？", "管理层、运营、区域负责人是否需要不同权限？", "权限规则：按角色和业务范围控制数据可见性，敏感经营数据只给授权角色。"]
-          ],
-          departments: ["业务方：确认看板服务的关键决策和优先级。", "研发：确认数据链路、刷新频率、权限过滤和异常处理。", "设计：确认总览页、详情页、筛选器和异常提示方式。", "数据：确认指标口径、埋点字段、数据表和校验规则。"],
-          competition: "对比神策、GrowingIO、观远 BI 和飞书多维表格，ClearBrief 需要突出“从需求到指标口径再到 PRD”的前置梳理能力。",
-          metrics: "核心指标包括看板访问率、指标查询耗时、口径争议次数、异常发现时长和数据采纳率。",
-          acceptance: "用户能在 3 步内定位核心指标；每个指标都能查看口径说明、更新时间和数据来源。",
-          sqlTable: "metric_event_log",
-          sqlFields: ["metric_name", "view_user_role", "query_duration_seconds", "is_adopted", "is_exception"]
-        };
-      }
-      if (isGrowth) {
-        return {
-          key: "growth",
-          title: "会员积分活动优化",
-          type: "运营增长 / 会员体系 / 活动工具",
-          users: "老用户、会员运营、客服、数据分析师",
-          background: idea || "市场团队想优化会员积分活动，希望提高老用户复购，但当前活动规则、核销流程和效果指标还没有说清楚。",
-          problem: "当前问题不是缺活动页面，而是目标人群、激励规则、核销路径、成本边界和复盘指标没有先定下来。",
-          goal: "通过更清晰的积分任务和兑换路径，提高老用户复购和活动参与率，同时控制补贴成本。",
-          scope: ["配置积分任务和奖励规则。", "支持用户查看积分获取、消耗和有效期。", "提供活动报名、核销和客服查询入口。", "输出活动效果看板，跟踪参与率、复购率和成本。"],
-          gaps: "目标人群、奖励规则、成本上限、核销流程、复盘指标",
-          questions: [
-            ["goal", "这次活动最核心的目标是什么？", "提高复购、提升客单价，还是唤醒沉睡用户？", "主目标：提高老用户复购，并控制单用户激励成本。"],
-            ["scope", "哪些用户进入首期活动范围？", "全部会员、沉睡用户、高价值用户是否要分层？", "首期范围：面向近 90 天有购买记录的老用户，先做积分任务和兑换券。"],
-            ["fallback", "积分发放或核销失败时怎么处理？", "自动补发、客服审核，还是用户提交申诉？", "兜底方式：失败订单进入异常队列，用户可查看进度，客服可手动补发。"],
-            ["permission", "谁可以配置活动规则和补贴预算？", "运营、财务、管理员是否需要审批？", "权限规则：运营配置活动，财务确认预算，管理员发布上线。"]
-          ],
-          departments: ["业务方：确认复购目标、预算上限和用户分层。", "研发：确认积分账户、核销状态和异常补偿逻辑。", "设计：确认任务页、积分明细、兑换页和失败提示。", "数据：确认参与率、复购率、核销率和补贴 ROI。"],
-          competition: "对比淘宝会员、京东 Plus、星巴克星礼程和瑞幸优惠券体系，重点借鉴任务激励、权益分层和核销透明度。",
-          metrics: "核心指标包括活动参与率、积分领取率、核销率、复购率、补贴 ROI 和客服咨询量。",
-          acceptance: "用户能完成任务、获得积分并兑换权益；异常核销有明确状态；运营能看到活动效果。",
-          sqlTable: "member_points_activity_log",
-          sqlFields: ["activity_id", "user_segment", "points_issued", "coupon_redeemed", "repurchase_flag"]
-        };
-      }
-      if (isSupport) {
-        return {
-          key: "support",
-          title: "客服工单分流与质检优化",
-          type: "客服效率 / 工单系统 / 服务质量工具",
-          users: "客服一线、客服主管、质检、产品运营",
-          background: idea || "客服团队希望优化工单处理效率，但当前问题分类、分流规则和服务质量指标还没有统一。",
-          problem: "当前问题不是单纯增加快捷回复，而是工单分类、优先级、转人工边界和质检口径没有先统一。",
-          goal: "提高工单分流准确率和响应效率，减少重复处理，并让主管更容易发现高风险问题。",
-          scope: ["按规则标记工单类型和优先级。", "按问题类型分流到对应处理组。", "提供高风险工单提醒和人工兜底。", "沉淀质检标签和复盘看板。"],
-          gaps: "工单分类、优先级规则、转人工边界、质检标准、响应指标",
-          questions: [
-            ["goal", "最想改善哪个客服指标？", "首次响应、解决时长、满意度，还是升级率？", "主目标：降低首次响应时间，并提高高风险工单识别率。"],
-            ["scope", "首期覆盖哪些工单类型？", "售后、投诉、咨询、退款是否全部包含？", "首期范围：覆盖咨询、退款和投诉三类高频工单，不处理复杂仲裁。"],
-            ["fallback", "系统不确定时如何处理？", "转人工、标记待复核，还是进入主管队列？", "兜底方式：低置信度工单进入人工复核队列，并保留原因标签。"],
-            ["permission", "谁能调整分类规则？", "客服主管、质检、产品运营是否都能配置？", "权限规则：主管维护分流规则，质检维护标签，普通客服只能查看结果。"]
-          ],
-          departments: ["业务方：确认服务目标和优先处理的问题类型。", "研发：确认工单状态、分流规则和人工兜底队列。", "设计：确认客服处理台、风险提示和质检视图。", "数据：确认响应时长、解决率、满意度和升级率。"],
-          competition: "对比 Zendesk、Intercom、飞书客服和企业微信客服，ClearBrief 更强调项目前期把分流规则和质检口径先问清楚。",
-          metrics: "核心指标包括首次响应时长、平均解决时长、自动分流准确率、升级率和满意度。",
-          acceptance: "系统能识别高频工单类型；低置信度工单进入人工复核；主管能查看分流和质检结果。",
-          sqlTable: "support_ticket_log",
-          sqlFields: ["ticket_type", "priority", "first_response_seconds", "resolved_flag", "satisfaction_score"]
-        };
-      }
-      if (isEducation) {
-        return {
-          key: "education",
-          title: "课程学习体验优化",
-          type: "教育产品 / 学习路径 / 课程运营工具",
-          users: "学生、老师、家长、教务运营",
-          background: idea || "团队希望优化课程学习体验，但当前学习路径、作业反馈和效果评估还不够清晰。",
-          problem: "当前问题不是单纯增加课程内容，而是学习目标、用户分层、反馈机制和完课指标没有先定义。",
-          goal: "让学习者更清楚下一步该学什么，并让老师和运营能及时发现掉队用户。",
-          scope: ["梳理课程路径和阶段目标。", "支持作业提交、反馈和提醒。", "展示学习进度、薄弱点和复习建议。", "提供老师/运营查看班级学习状态的看板。"],
-          gaps: "学习目标、课程阶段、作业反馈、提醒策略、完课和学习效果指标",
-          questions: [
-            ["goal", "首期最想改善哪个学习问题？", "完课率、作业提交、学习效果，还是老师反馈效率？", "主目标：提高课程完课率和作业反馈效率，减少学生掉队。"],
-            ["scope", "首期覆盖哪些课程环节？", "课前预习、课中互动、课后作业、复习测验是否都包含？", "首期范围：学习路径、作业提交、反馈提醒和进度看板。"],
-            ["fallback", "学生未完成或成绩异常时怎么处理？", "提醒学生、通知老师，还是推送补学任务？", "兜底方式：未完成进入提醒队列，连续异常时通知老师跟进。"],
-            ["permission", "老师、家长和运营分别能看什么？", "是否需要保护学生成绩和个人信息？", "权限规则：老师看班级明细，家长看个人进度，运营看聚合数据。"]
-          ],
-          departments: ["教研：确认课程目标、阶段任务和测评标准。", "研发：确认作业、提醒、学习记录和权限逻辑。", "设计：确认学习路径、进度反馈和老师看板。", "运营：确认提醒节奏、续报节点和用户触达方式。", "数据：确认完课率、作业提交率、正确率和留存。"],
-          competition: "对比得到、猿辅导、Duolingo 和雨课堂，重点借鉴学习路径、即时反馈和进度激励。",
-          metrics: "核心指标包括完课率、作业提交率、反馈及时率、学习时长、测验正确率和次周留存。",
-          acceptance: "学生能清楚看到学习路径和下一步任务；老师能发现未完成和低分用户；运营能看到课程效果。",
-          sqlTable: "course_learning_log",
-          sqlFields: ["course_id", "student_level", "learning_minutes", "homework_submitted", "quiz_passed"],
-          competitors: [["得到", "课程路径和学习提醒", "借鉴学习计划与复习机制"], ["猿辅导", "作业反馈和班级管理", "借鉴老师工作台"], ["Duolingo", "连续学习和激励", "借鉴轻量任务激励"], ["雨课堂", "课堂互动和数据沉淀", "借鉴教学数据看板"]]
-        };
-      }
-      if (isContentCommunity) {
-        return {
-          key: "community",
-          title: "内容社区互动优化",
-          type: "内容社区 / UGC / 用户互动产品",
-          users: "内容消费者、创作者、社区运营、审核团队",
-          background: idea || "团队希望提升社区内容互动，但当前发布、推荐、评论和治理规则还不够清楚。",
-          problem: "当前问题不是多做几个内容入口，而是创作者激励、内容分发、互动路径和内容治理没有形成闭环。",
-          goal: "提升优质内容供给和互动深度，同时控制低质内容和社区风险。",
-          scope: ["优化内容发布和话题参与路径。", "支持点赞、评论、收藏、分享等基础互动。", "提供创作者数据反馈和内容激励。", "建立内容审核、举报和风险处理机制。"],
-          gaps: "内容定位、推荐机制、创作者激励、审核规则、互动指标",
-          questions: [
-            ["goal", "社区首期最想提升什么？", "发帖量、互动率、内容质量，还是创作者留存？", "主目标：提升优质内容发布和互动率，同时控制低质内容。"],
-            ["scope", "首期支持哪些互动能力？", "发布、评论、点赞、收藏、分享、话题是否都做？", "首期范围：发布、话题、评论、点赞、收藏和基础审核。"],
-            ["fallback", "低质或违规内容怎么处理？", "先审后发、用户举报，还是机器识别后人工复核？", "兜底方式：高风险内容进入人工复核，用户可举报，运营可下架。"],
-            ["permission", "创作者、普通用户、运营权限怎么区分？", "谁能置顶、删除、封禁或推荐内容？", "权限规则：用户发布互动，运营管理内容，审核处理风险。"]
-          ],
-          departments: ["运营：确认内容定位、话题节奏和创作者激励。", "研发：确认发布、互动、推荐和审核状态。", "设计：确认信息流、发布器、评论区和举报入口。", "审核：确认违规类型、处理流程和申诉机制。", "数据：确认发布率、互动率、留存和内容质量指标。"],
-          competition: "对比小红书、豆瓣、即刻和 B 站社区，重点借鉴内容分发、话题运营和创作者反馈。",
-          metrics: "核心指标包括发布率、互动率、评论率、分享率、创作者留存、举报率和内容通过率。",
-          acceptance: "用户能发布和参与互动；运营能治理低质内容；创作者能看到内容反馈。",
-          sqlTable: "community_content_event_log",
-          sqlFields: ["content_id", "author_type", "view_seconds", "share_flag", "audit_passed"],
-          competitors: [["小红书", "种草内容和话题运营", "借鉴内容标签与分享链路"], ["豆瓣", "兴趣小组和长讨论", "借鉴社区氛围和小组规则"], ["即刻", "兴趣圈层和轻互动", "借鉴圈层推荐"], ["B 站社区", "创作者激励和弹幕互动", "借鉴创作者反馈"]]
-        };
-      }
-      if (isBookingService) {
-        return {
-          key: "booking",
-          title: "预约服务流程优化",
-          type: "本地服务 / 预约履约 / 服务体验工具",
-          users: "消费者、门店/服务人员、客服、运营",
-          background: idea || "团队希望优化预约服务流程，但当前可约时间、服务资源、取消改约和到店履约规则还不清楚。",
-          problem: "当前问题不是做一个预约按钮，而是资源排班、履约状态、取消改约和异常处理没有先定义。",
-          goal: "让用户更顺畅地完成预约、到店和改约，同时提升服务资源利用率。",
-          scope: ["展示可预约时间和服务资源。", "支持预约、取消、改约和提醒。", "提供门店/服务人员确认和履约状态更新。", "沉淀爽约、取消和服务完成数据。"],
-          gaps: "服务资源、排班规则、取消改约、提醒策略、爽约处理、履约指标",
-          questions: [
-            ["goal", "这次最想改善预约链路的哪一段？", "预约转化、到店率、资源利用率，还是取消改约体验？", "主目标：提高预约成功率和到店率，同时减少人工协调。"],
-            ["scope", "首期覆盖哪些服务和门店？", "全部门店、部分城市，还是某一类高频服务？", "首期范围：高频服务预约、改约取消、提醒和门店确认。"],
-            ["fallback", "用户迟到、爽约或服务不可用怎么办？", "自动释放名额、收取费用，还是客服介入？", "兜底方式：迟到和爽约进入规则处理，服务不可用时提供改约和客服入口。"],
-            ["permission", "谁能调整排班和预约规则？", "门店、运营、服务人员是否有不同权限？", "权限规则：运营配置规则，门店维护排班，服务人员更新履约状态。"]
-          ],
-          departments: ["业务方：确认服务范围、城市和履约目标。", "门店/服务团队：确认排班、接待能力和异常处理。", "研发：确认库存、时间槽、订单状态和通知链路。", "设计：确认预约路径、提醒、改约取消和到店状态。", "数据：确认预约率、到店率、取消率和资源利用率。"],
-          competition: "对比美团预约、Keep 私教课、医院挂号和美容到店服务，重点借鉴时间槽、提醒和履约状态。",
-          metrics: "核心指标包括预约转化率、到店率、取消率、爽约率、资源利用率和平均等待时长。",
-          acceptance: "用户能完成预约和改约；门店能维护可约资源；异常状态有清晰处理规则。",
-          sqlTable: "booking_service_order_log",
-          sqlFields: ["service_id", "store_id", "waiting_minutes", "arrived_flag", "cancel_flag"],
-          competitors: [["美团预约", "时间槽和门店履约", "借鉴服务库存表达"], ["医院挂号", "科室医生和号源", "借鉴资源排班"], ["Keep 私教课", "课程预约和提醒", "借鉴到课提醒"], ["美容到店服务", "项目套餐和改约", "借鉴改约取消规则"]]
-        };
-      }
-      if (isWorkflow && !isKnowledge) {
-        return {
-          key: "workflow",
-          title: "企业流程审批优化",
-          type: "企业协同 / 审批流 / 内部效率工具",
-          users: "申请人、审批人、财务/法务/行政、流程管理员",
-          background: idea || "团队希望优化内部审批流程，但当前规则分散、节点不清楚，员工不知道该找谁审批。",
-          problem: "当前问题不是把纸面流程搬到线上，而是审批规则、节点责任、异常处理和时效指标没有统一。",
-          goal: "让员工更快提交正确申请，让审批人清楚处理责任，并减少流程卡住和反复补材料。",
-          scope: ["支持常见审批类型和表单字段。", "按金额、部门、项目类型配置审批路径。", "展示审批状态、补充材料和催办提醒。", "提供流程管理员配置和数据看板。"],
-          gaps: "审批规则、字段要求、节点负责人、超时提醒、异常退回和权限边界",
-          questions: [
-            ["goal", "首期最想优化哪类流程？", "报销、采购、合同、入职，还是权限申请？", "主目标：减少员工提交流程的困惑和审批卡点。"],
-            ["scope", "哪些流程进入首期范围？", "是否先做高频且规则明确的审批？", "首期范围：高频审批类型、表单校验、状态跟踪和催办提醒。"],
-            ["fallback", "审批超时或材料不全怎么办？", "自动提醒、退回补充，还是转管理员处理？", "兜底方式：超时自动提醒，材料不全退回补充，异常进入管理员队列。"],
-            ["permission", "谁能配置审批路径？", "部门管理员、财务、法务是否有不同配置权？", "权限规则：流程管理员配置路径，业务部门维护默认审批人。"]
-          ],
-          departments: ["业务方：确认首期流程和审批规则。", "财务/法务/行政：确认字段、材料和合规要求。", "研发：确认表单、流程引擎、通知和权限。", "设计：确认提交流程、审批状态和补材料体验。", "数据：确认审批时长、退回率和超时率。"],
-          competition: "对比飞书审批、钉钉 OA、企业微信审批和 Jira Service Management，重点借鉴流程配置、状态透明和催办机制。",
-          metrics: "核心指标包括平均审批时长、退回率、超时率、一次通过率和催办次数。",
-          acceptance: "员工能提交正确流程；审批人能处理待办；管理员能配置路径并看到效率数据。",
-          sqlTable: "workflow_approval_log",
-          sqlFields: ["workflow_type", "department_id", "approval_duration_hours", "approved_flag", "returned_flag"],
-          competitors: [["飞书审批", "轻量流程和移动端待办", "借鉴协作通知"], ["钉钉 OA", "审批模板和组织权限", "借鉴企业场景覆盖"], ["企业微信审批", "组织关系和微信触达", "借鉴移动处理"], ["Jira Service Management", "请求流转和 SLA", "借鉴服务台视角"]]
-        };
-      }
-      return {
-        key: "knowledge",
-        title: "企业内部知识库改版",
-        type: "企业知识管理 / 问答试点 / 内部协作工具",
-        users: "新员工、运营、客服、产品团队",
-        background: idea || "公司内部文档太分散，新员工和运营同事经常找不到会员政策、项目资料和流程制度。业务方希望提升信息查找效率，但还不确定应该先做文档治理、搜索优化，还是做知识库问答试点。",
-        problem: "当前关键问题不是“要不要做知识库问答”，而是先判断资料难找的根因：文档是否完整、权限是否混乱、搜索是否不好用、内容是否过期，以及问答能力是否是首期最优解。",
-        goal: "先降低员工查找内部资料的成本，再验证知识库问答是否能稳定提高答案命中率和新人上手效率。",
-        scope: ["首期先梳理制度文档、会员政策、产品资料和项目 SOP 的文档范围与负责人。", "优化搜索入口、目录标签和热门问题推荐，验证基础查找效率提升。", "在高频问题上试点带来源引用的知识库问答，并保留低置信度提示。", "按部门和文档类型配置基础访问权限，敏感内容不进入问答范围。"],
-        gaps: "问题根因、方案取舍、文档治理责任、权限规则、低置信度回答兜底流程",
-        questions: [
-          ["goal", "资料难找的主要根因是什么？", "是文档分散、搜索不好用、权限不清、内容过期，还是新人不知道入口？", "主判断：先验证文档治理和搜索入口问题，再决定知识库问答是否进入首期。"],
-          ["scope", "首期应该选择哪种解决路径？", "流程治理、搜索优化、轻量知识库，还是高频问答试点？", "首期方案：文档治理 + 搜索入口优化 + 高频问题问答试点，不一次性做全量知识库问答。"],
-          ["fallback", "系统回答没有把握时如何处理？", "提示来源、转人工、查看原文，还是提交反馈？", "兜底方式：低置信度时显示来源、查看原文入口，并允许用户提交反馈。"],
-          ["permission", "不同角色可以访问哪些文档？", "是否需要部门、角色、文档类型三层权限？", "权限规则：首期按部门和文档类型控制访问，敏感内容不进入问答范围。"]
+    const templates = {
+      package: {
+        name: '足霜产品信息展示物料迭代',
+        purpose: '展示供应商、设计、品牌之间的信息边界如何影响打样决策。',
+        sample: '我想推进足霜包装展示物料打样，担心成分文案、贴标位置和供应商打印边距还没确认。',
+        keywords: ['包装','足霜','物料','标签','打样','供应商','成分','贴标','打印'],
+        blockedTitle: '当前不可进入打样阶段',
+        reviewTitle: '可预审，但不建议进入正式打样',
+        readyTitle: '可进入打样前确认',
+        baseScore: 46,
+        roles: [
+          ['产品负责人','确认信息优先级和最终文案','待确认'],
+          ['设计师','确认版面可行性和视觉层级','待确认'],
+          ['品牌负责人','确认品牌表达和不可改动项','待确认'],
+          ['供应商','确认尺寸、边距、工艺和样张标准','待反馈'],
+          ['销售/展示负责人','确认实际展示场景','已确认']
         ],
-        departments: ["研发：来源引用、权限过滤和低置信度兜底的实现方案。", "设计：答案页、未命中页、反馈入口和来源展示的关键状态。", "数据：查找时间、重复咨询量、答案采纳率和未命中率的埋点口径。", "运营：首期文档清单、内容负责人和反馈收集方式。"],
-        competition: "对比 Notion、飞书文档、腾讯文档和 Confluence，明确 ClearBrief 的差异化是“执行前判断与方案预评审工作流”，而不是单纯文档生成。",
-        metrics: "核心指标包括平均查找时间、答案采纳率、未命中率、重复咨询量和反馈处理时长。",
-        acceptance: "用户可以在 3 步内完成提问并查看答案来源；低置信度回答必须提供查看原文和提交反馈入口。",
-        sqlTable: "knowledge_question_log",
-        sqlFields: ["answer_status", "feedback", "answer_time_seconds", "source_click", "no_match_rate"],
-        solutionOptions: [
-          {
-            name: "方案 A：文档治理",
-            tag: "低成本 / 先做",
-            summary: "梳理高频文档、负责人、更新时间和入口规则，先解决内容混乱和责任不清。",
-            value: "见效快，能验证资料难找是否主要来自内容和入口问题。",
-            cost: "主要消耗运营和管理员时间，研发投入较低。",
-            risk: "如果搜索体验和问答能力仍弱，用户感知提升有限。"
-          },
-          {
-            name: "方案 B：搜索与标签优化",
-            tag: "中成本 / 推荐",
-            summary: "统一入口、标签、热门问题和结果排序，配合文档治理形成首期 MVP。",
-            value: "能覆盖大部分查找场景，适合先验证效率提升。",
-            cost: "需要产品、设计、研发和运营一起定义分类和排序规则。",
-            risk: "依赖文档质量，标签维护不当会再次变乱。"
-          },
-          {
-            name: "方案 C：知识库问答试点",
-            tag: "高成本 / 试点",
-            summary: "在高频、低敏感问题上试点带来源引用的知识库问答，不直接做全量问答入口。",
-            value: "体验更强，适合验证问答入口是否能减少重复咨询。",
-            cost: "需要处理权限、召回、可信度、成本和人工反馈闭环。",
-            risk: "如果文档治理没做好，问答入口会放大错误和权限风险。"
-          }
+        blockers: [
+          {title:'成分说明未确认最终版本',risk:'高',role:'产品负责人',advice:'先锁定最终文案，再进入打样。'},
+          {title:'供应商打印边距规范缺失',risk:'高',role:'供应商',advice:'获取样张规范和可打印边界。'},
+          {title:'贴标位置未验证',risk:'中',role:'设计师',advice:'先做低保真贴标测试。'},
+          {title:'最小字号可读性未知',risk:'中',role:'设计师',advice:'打印 1:1 样张检查。'}
+        ]
+      },
+      campaign: {
+        name: '活动落地页上线预审',
+        purpose: '展示规则、埋点、法务审核如何影响上线决策。',
+        sample: '我要上线一个促销活动落地页，但优惠规则、埋点方案和法务审核还没有完全确认。',
+        keywords: ['活动','落地页','上线','优惠','促销','埋点','法务','合规'],
+        blockedTitle: '当前不可进入正式上线',
+        reviewTitle: '不可上线，需先关闭规则和合规风险',
+        readyTitle: '可进入上线前确认',
+        baseScore: 42,
+        roles: [
+          ['运营负责人','确认活动规则和权益口径','待确认'],
+          ['产品负责人','确认页面流程和异常状态','待确认'],
+          ['数据分析师','确认埋点和看板口径','待确认'],
+          ['法务/合规','确认条款、资质和风险提示','高风险复核']
         ],
-        recommendation: "推荐先做方案 A+B：用文档治理和搜索入口优化验证主要问题，再选择高频低风险场景试点方案 C。这样能避免一上来做全量知识库问答，降低权限和答案可信度风险。",
-        decisionSummary: {
-          recommend: "A+B 能直接验证资料难找的主要原因，投入可控，也能为后续知识库问答沉淀干净的文档和入口。",
-          notNow: "不建议首期做全量知识库问答，因为文档质量、权限边界和低置信度兜底还没被验证。",
-          entry: "当高频问题清单、来源文档、权限规则和反馈闭环都跑通后，再扩大知识库问答范围。"
-        }
-      };
-    }
-
-    function getScenario() {
-      currentScenario = inferScenario(document.getElementById("ideaInput").value);
-      return currentScenario;
-    }
-
-    function renderAnalysis(scenario) {
-      document.getElementById("analysisCards").innerHTML = `
-        <div class="card blue"><h3>问题类型</h3><p>${escapeHtml(scenario.type)}</p></div>
-        <div class="card green"><h3>受影响用户</h3><p>${escapeHtml(scenario.users)}</p></div>
-        <div class="card amber"><h3>待判断</h3><p>${escapeHtml(scenario.gaps)}</p></div>
-        <div class="card blue"><h3>当前状态</h3><p>不能执行：缺少目标和约束；可预讨论：已具备业务问题；可预审：需要确认执行门槛；具备执行条件：需要跨角色确认。</p></div>`;
-    }
-
-    function getReadinessRows(scenario) {
-      const baseRows = [
-        ["不能执行", "已避开", "业务问题、受影响角色和大致目标已出现。", "可以进入执行前判断，不需要一次性填完整材料。"],
-        ["可预讨论", "已具备", "可以先讨论问题根因和首期目标。", "先确认目标，再比较低/中/高成本方案。"],
-        ["可预审", confirmedAnswers >= 2 ? "基本具备" : "待补充", "需要补齐核心流程、规则配置和验收标准。", "未确认内容进入预审待确认项。"],
-        ["具备执行条件", confirmedAnswers >= 3 ? "带条件具备" : "暂不建议", "需要产品、设计、品牌、供应商等角色确认风险和口径。", "生成跨角色确认清单，不假装已全部确定。"]
-      ];
-      if (scenario.key === "label") {
-        baseRows[2][2] = "需要补齐标签尺寸、必填信息、打印边距、贴标位置和样张验收标准。";
-        baseRows[3][2] = "需要产品确认信息优先级，设计确认版式约束，供应商确认打印和贴标限制。";
-        baseRows[3][3] = confirmedAnswers >= 4 ? "可以进入正式 Figma 排版和打印打样，但仍需保留样张复核。" : "先关闭尺寸、边距、贴标位置和供应商样张标准，不直接打样。";
+        blockers: [
+          {title:'优惠规则未确认',risk:'高',role:'运营负责人',advice:'先锁定活动规则和异常处理。'},
+          {title:'法务审核未完成',risk:'高',role:'法务/合规',advice:'完成条款、资质和风险提示审核。'},
+          {title:'埋点方案未定义',risk:'中',role:'数据分析师',advice:'补齐关键事件和转化口径。'},
+          {title:'上线回滚口径缺失',risk:'低',role:'产品负责人',advice:'补充异常下线和回滚条件。'}
+        ]
+      },
+      knowledge: {
+        name: '知识库改版预审',
+        purpose: '展示内容责任、迁移范围和搜索规则如何影响开发排期。',
+        sample: '我想推进知识库改版，旧资料迁移范围、内容负责人和搜索标签规则还没有完全定下来。',
+        keywords: ['知识库','改版','迁移','内容','搜索','标签','文档','客服'],
+        blockedTitle: '当前不可进入开发排期',
+        reviewTitle: '可预审，不建议进入开发排期',
+        readyTitle: '可进入开发排期确认',
+        baseScore: 48,
+        roles: [
+          ['产品负责人','确认改版目标和搜索规则','待确认'],
+          ['内容负责人','确认迁移范围和内容质量','高风险复核'],
+          ['研发','确认开发边界和排期条件','待确认'],
+          ['运营','确认灰度节奏和用户通知','待确认']
+        ],
+        blockers: [
+          {title:'内容负责人不明确',risk:'高',role:'产品负责人',advice:'指定每类内容的最终负责人。'},
+          {title:'旧资料迁移范围未确认',risk:'高',role:'内容负责人',advice:'圈定必须迁移、可归档和可废弃范围。'},
+          {title:'搜索标签规则未定义',risk:'中',role:'产品负责人',advice:'定义标签层级和召回规则。'},
+          {title:'灰度和回滚标准缺失',risk:'中',role:'运营',advice:'补齐灰度范围和回滚条件。'}
+        ]
+      },
+      agent: {
+        name: 'AI Agent 需求预审',
+        purpose: '展示任务边界、人工兜底和高风险输出如何影响开发决策。',
+        sample: '我想做一个客服 AI Agent，但任务边界、人工兜底机制、高风险输出和权限日志还没确认。',
+        keywords: ['Agent','智能体','AI','模型','客服','兜底','权限','高风险','自动化'],
+        blockedTitle: '当前不可进入开发阶段',
+        reviewTitle: '不可进入开发，需先完成边界定义和风险兜底',
+        readyTitle: '可进入技术方案确认',
+        baseScore: 38,
+        roles: [
+          ['产品负责人','确认任务边界和成功标准','待确认'],
+          ['算法/工程','确认可实现性、权限和日志','待确认'],
+          ['业务负责人','确认人工兜底和业务责任','高风险复核'],
+          ['合规/审核','确认高风险输出和复核机制','高风险复核']
+        ],
+        blockers: [
+          {title:'目标任务边界不清',risk:'高',role:'产品负责人',advice:'明确 Agent 能做和不能做的任务。'},
+          {title:'人工兜底机制未定义',risk:'高',role:'业务负责人',advice:'定义失败、低置信度和争议场景接管。'},
+          {title:'高风险输出场景未确认',risk:'高',role:'合规/审核',advice:'列出必须人工复核的输出类型。'},
+          {title:'权限和日志审计规则缺失',risk:'中',role:'算法/工程',advice:'补齐工具权限、日志和回溯机制。'}
+        ]
+      },
+      general: {
+        name: '通用事项执行前预审',
+        purpose: '当输入不明显属于某个案例时，使用通用执行门槛检查。',
+        sample: '我准备推进一个跨团队协作事项，但目标、责任人和验收标准还没有完全确认。',
+        keywords: [],
+        blockedTitle: '当前不可进入正式执行',
+        reviewTitle: '可预审，但不建议直接进入执行',
+        readyTitle: '可进入执行前确认',
+        baseScore: 40,
+        roles: [
+          ['事项负责人','确认目标、优先级和最终拍板人','待确认'],
+          ['执行负责人','确认执行路径和资源约束','待确认'],
+          ['协作方','确认输入材料和交付边界','待确认'],
+          ['验收方','确认通过标准和验收口径','待确认']
+        ],
+        blockers: [
+          {title:'事项目标没有收敛成可执行结果',risk:'高',role:'事项负责人',advice:'先明确本次推进要交付什么，以及不做什么。'},
+          {title:'关键责任人和拍板人不明确',risk:'高',role:'事项负责人',advice:'确认谁负责输入、谁负责执行、谁最终确认。'},
+          {title:'验收标准缺失',risk:'中',role:'验收方',advice:'补齐通过条件，避免执行后口径变化。'},
+          {title:'风险处理动作不明确',risk:'中',role:'执行负责人',advice:'列出高风险场景和对应处理动作。'}
+        ]
       }
-      return baseRows;
-    }
-
-    function getGapGroups(scenario) {
-      if (scenario.key === "label") {
-        return [
-          ["必须先确认", "标签目标、信息优先级、必填内容、尺寸和贴标位置。"],
-          ["进入预审前确认", "打印边距、最小字号、供应商样张标准、展示材料一致性。"],
-          ["跨角色确认", "产品确认卖点和必填信息；设计确认版式；供应商确认工艺；品牌确认表达边界。"]
-        ];
-      }
-      return [
-        ["必须先确认", "目标用户、核心问题、业务目标和首期约束。"],
-        ["进入预审前确认", "流程规则、状态边界、验收标准、异常处理和数据指标。"],
-        ["跨角色确认", "研发评估实现成本；设计确认关键页面；运营确认执行责任；数据确认口径。"]
-      ];
-    }
-
-    function renderReadinessBlocks(scenario) {
-      const readiness = markdownTable(["阶段", "当前状态", "判断依据", "下一步"], getReadinessRows(scenario));
-      const gaps = markdownTable(["缺口层级", "需要确认的内容"], getGapGroups(scenario));
-      return { readiness, gaps };
-    }
-
-    function renderQuestions(scenario) {
-      document.getElementById("questionsList").innerHTML = scenario.questions.map((q, index) => `
-        <div class="question ${index === 0 ? "active" : ""} ${confirmedAnswersByKey[q[0]] ? diagnosisStatusByKey[q[0]] === "待验证" ? "verify" : diagnosisStatusByKey[q[0]] === "本期不处理" ? "deferred" : "done" : ""}">
-          <span class="pill ${confirmedAnswersByKey[q[0]] ? diagnosisStatusByKey[q[0]] === "待验证" ? "amber" : diagnosisStatusByKey[q[0]] === "本期不处理" ? "blue" : "green" : index < 3 ? "red" : "amber"}">${confirmedAnswersByKey[q[0]] ? diagnosisStatusByKey[q[0]] || "已确认" : index < 3 ? "高" : "中"}</span>
-          <div>
-            <div class="q-title">${escapeHtml(q[1])}</div>
-            <div class="q-sub">${escapeHtml(confirmedAnswersByKey[q[0]] || q[2])}</div>
-          </div>
-          <button class="btn ${index === 0 ? "primary" : ""}" data-answer="${escapeHtml(q[0])}">${confirmedAnswersByKey[q[0]] ? "调整判断" : "展开判断"}</button>
-        </div>`).join("");
-    }
-
-    function getSolutionOptions(scenario) {
-      if (scenario.solutionOptions?.length) return scenario.solutionOptions;
-      return [
-        {
-          name: "方案 A：流程优化",
-          tag: "低成本 / 先验证",
-          summary: "先调整规则、责任人、入口说明和人工处理流程，验证问题是否主要来自协作方式。",
-          value: "投入低，能快速减少沟通成本。",
-          cost: "主要依赖业务和运营执行，研发投入较低。",
-          risk: "如果问题来自系统能力，改善幅度有限。"
-        },
-        {
-          name: "方案 B：轻量工具化",
-          tag: "中成本 / 推荐",
-          summary: "把高频流程、状态、提醒和数据看板工具化，形成可跟踪的 MVP。",
-          value: "能沉淀规则和数据，适合进入首期评审。",
-          cost: "需要产品、设计、研发和数据配合。",
-          risk: "范围容易扩张，需要明确非本期需求。"
-        },
-        {
-          name: "方案 C：系统改造",
-          tag: "高成本 / 谨慎",
-          summary: "在规则稳定、数据和权限清楚后，再引入复杂自动化能力。",
-          value: "体验上限更高，适合成熟场景放大效率。",
-          cost: "研发、数据、权限和兜底成本更高。",
-          risk: "规则不清时会放大错误，容易带来信任问题。"
-        }
-      ];
-    }
-
-    function renderSolutionCompare(scenario) {
-      const options = getSolutionOptions(scenario);
-      const compare = document.getElementById("solutionCompare");
-      if (!compare) return;
-      compare.innerHTML = options.map((option, index) => `
-        <article class="solution-card ${(scenario.key === "label" ? true : index === 1) ? "recommended" : ""}">
-          <span class="pill ${index === 0 ? "green" : index === 1 ? "amber" : "blue"}">${escapeHtml(option.tag)}</span>
-          <h3>${escapeHtml(option.name)}</h3>
-          <p>${escapeHtml(option.summary)}</p>
-          <div class="solution-meta">
-            <span><strong>价值：</strong>${escapeHtml(option.value)}</span>
-            <span><strong>成本：</strong>${escapeHtml(option.cost)}</span>
-            <span><strong>风险：</strong>${escapeHtml(option.risk)}</span>
-          </div>
-        </article>
-      `).join("");
-      const recommendation = document.getElementById("solutionRecommendation");
-      if (recommendation) {
-        recommendation.textContent = scenario.recommendation || "建议先选择中低成本方案验证问题，再决定是否进入高成本系统改造。";
-      }
-      const summary = scenario.decisionSummary || {
-        recommend: "建议先用可控投入验证主要问题，避免直接进入复杂系统建设。",
-        notNow: "暂不建议一上来做高成本系统方案，因为规则、数据和风险还没有跑通。",
-        entry: "当核心流程、责任人、数据口径和风险兜底都清楚后，再扩大系统化投入。"
-      };
-      const summaryEl = document.getElementById("decisionSummary");
-      if (summaryEl) {
-        summaryEl.innerHTML = `
-          <div class="decision-summary-item"><strong>判断依据</strong><span>${escapeHtml(summary.recommend)}</span></div>
-          <div class="decision-summary-item"><strong>暂不选择</strong><span>${escapeHtml(summary.notNow)}</span></div>
-          <div class="decision-summary-item"><strong>进入条件</strong><span>${escapeHtml(summary.entry)}</span></div>
-        `;
-      }
-    }
-
-    function renderLandingPack(scenario) {
-      if (scenario.key !== "label") return "";
-      return `
-        <div class="card blue"><h3>验证范围</h3><p>先用低保真样张验证信息层级、贴标位置和可读性，不直接进入高成本打样。</p></div>
-        <div class="card green"><h3>P0 闭环</h3><p>信息优先级表 + 低保真贴标验证。正式 Figma 精修和打印打样不作为首期依赖。</p></div>
-        <div class="card amber"><h3>执行门槛</h3><p>标签尺寸、打印边距、贴标位置、必填信息和供应商样张标准全部确认后，才进入正式执行。</p></div>
-      `;
-    }
-
-    function renderInfoCards(scenario, confirmed = false) {
-      const confirmedEntries = Object.entries(confirmedAnswersByKey)
-        .map(([key, answer]) => {
-          const question = scenario.questions.find(q => q[0] === key);
-          return question ? [question[1], answer, diagnosisStatusByKey[key] || "主要判断"] : [key, answer, diagnosisStatusByKey[key] || "主要判断"];
-        });
-      const remaining = scenario.questions
-        .filter(q => !confirmedAnswersByKey[q[0]])
-        .map(q => q[1])
-        .join("；") || "核心判断已确认，可以进入执行预审。";
-      const confirmedHtml = confirmedEntries.map(([title, answer, status]) => `
-        <div class="card ${status === "待验证" ? "amber" : status === "本期不处理" ? "blue" : "green"}"><h3>${escapeHtml(status)}：${escapeHtml(title)}</h3><p>${escapeHtml(answer)}</p></div>
-      `).join("");
-      document.getElementById("infoCards").innerHTML = confirmed || confirmedEntries.length ? `
-        <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>${escapeHtml(scenario.users)}</p></div>
-        <div class="card blue"><h3>首期处理方式</h3><p>${escapeHtml(scenario.scope.slice(0, 2).join("；"))}</p></div>
-        <div class="card green"><h3>成功指标</h3><p>${escapeHtml(scenario.metrics)}</p></div>
-        <div class="card blue"><h3>阶段判断</h3><p>不能执行；可预讨论；可预审；具备执行条件。这里只做预审判断，最终仍由负责人确认。</p></div>
-        ${renderLandingPack(scenario)}
-        ${confirmedHtml}
-        <div class="card amber"><h3>仍待确认</h3><p>${escapeHtml(remaining)}</p></div>` : `
-        <div class="card green"><h3>相关角色</h3><small>来源：用户输入</small><p>${escapeHtml(scenario.users)}</p></div>
-        <div class="card amber"><h3>待确认项</h3><small>待人工确认</small><p>${escapeHtml(scenario.gaps)}</p></div>`;
-    }
-
-    function getBusinessGoals(scenario) {
-      if (scenario.key === "knowledge") {
-        return [
-          ["平均查找耗时", "从约 10 分钟降到 3 分钟以内", "上线后 2 周"],
-          ["重复咨询量", "会员政策、流程制度类重复咨询下降 30%", "上线后 1 个月"],
-          ["资料命中率", "高频问题首轮命中率达到 80%", "灰度期结束"],
-          ["反馈闭环", "未命中问题 2 个工作日内有负责人处理", "试运行期间"]
-        ];
-      }
-      if (scenario.key === "label") {
-        return [
-          ["关键信息识别率", "3 秒内能说出产品名、核心卖点和使用方式", "低保真贴标验证"],
-          ["低保真修改次数", "正式打样前控制在 2 轮以内", "预审阶段"],
-          ["打样后二次修改率", "正式打样后不出现结构性大改", "打样后"],
-          ["角色确认轮次", "产品、设计、品牌、供应商在 2 轮内关闭高优问题", "执行前"],
-          ["展示一致性", "实物包装、PPT 和展示材料信息一致", "交付前"]
-        ];
-      }
-      if (scenario.key === "receipt") {
-        return [
-          ["小票上传率", "参与用户中提交小票比例达到 18%-25%", "20 家门店灰度期"],
-          ["24 小时审核完成率", "待审核小票 24 小时内处理率达到 90%", "灰度第 2 周"],
-          ["礼券核销率", "审核通过后 7 天内核销率达到 35%-45%", "灰度期结束"],
-          ["补贴 ROI", "核销用户复购或到店消费覆盖补贴成本", "上线后 1 个月"],
-          ["异常单占比", "重复上传、发券失败、核销失败和申诉合计低于 8%", "灰度期结束"]
-        ];
-      }
-      return [
-        ["核心效率指标", "比当前流程提升 20%-30%", "上线后 2-4 周"],
-        ["关键问题关闭率", "高优先级问题关闭率达到 80%", "评审前"],
-        ["用户反馈", "核心用户能完成主流程并提交反馈", "灰度期"],
-        ["复盘机制", "上线后形成一次数据复盘和优化清单", "上线后 1 个月"]
-      ];
-    }
-
-    function getScopePriority(scenario) {
-      const items = scenario.scope || [];
-      const rows = items.map((item, index) => {
-        const priority = index < 2 ? "P0" : index === 2 ? "P1" : "P0";
-        const reason = index < 2 ? "支撑首期核心路径" : index === 2 ? "小范围验证，不影响基础上线" : "影响风险边界";
-        return [priority, item, reason];
-      });
-      rows.push(["不做", "全量覆盖所有部门、所有历史资料和复杂协作审批。", "避免首期范围失控"]);
-      return rows;
-    }
-
-    function getFunctionalRequirements(scenario) {
-      if (scenario.key === "label") {
-        return [
-          ["信息优先级", "整理产品名、核心卖点、成分说明、使用信息和品牌表达。", "每条信息标注来源：用户输入、旧物料或待人工确认。"],
-          ["尺寸约束", "确认标签尺寸、出血边距、安全区域和最小字号。", "未确认尺寸时不得进入正式打样。"],
-          ["低保真样张", "输出黑白样张并贴到实物包装上检查。", "必须记录可读性、遮挡和贴标偏移问题。"],
-          ["供应商确认", "记录打印材质、贴标工艺、样张标准和交付周期。", "高风险反馈进入预审待办清单。"],
-          ["展示同步", "整理 PPT、展示图和客户介绍物料。", "必须与实物包装的产品名、卖点和使用信息一致。"]
-        ];
-      }
-      if (scenario.key === "receipt") {
-        return [
-          ["用户上传", "用户上传小票图片，填写消费金额、门店、消费时间和联系方式。", "字段缺失时不能提交；图片过大、格式错误要有明确提示。"],
-          ["审核工作台", "运营查看待审核小票，处理通过、驳回、待补充和疑似重复。", "每次审核必须记录原因、操作人和处理时间。"],
-          ["重复上传拦截", "根据图片哈希、门店、金额、消费时间和用户信息标记疑似重复。", "高风险记录进入人工复核，不直接发券。"],
-          ["发券与库存", "审核通过后发放积分或礼券，并扣减券库存。", "库存不足、发放失败和重复发放必须进入异常队列。"],
-          ["门店核销", "店员扫码核销礼券，系统回写核销门店、时间和操作人。", "无效券、过期券和已核销券必须拦截。"],
-          ["申诉处理", "用户可对驳回或核销失败提交申诉，客服处理并回写结果。", "申诉中状态对用户可见，内部有负责人和 SLA。"]
-        ];
-      }
-      if (scenario.key === "knowledge") {
-        return [
-          ["资料入口", "用户可以从统一入口搜索制度、会员政策、产品资料和项目 SOP。", "搜索结果展示标题、来源、更新时间和负责人。"],
-          ["热门问题", "展示高频问题和常用资料入口。", "运营可调整排序，首期可先后台维护。"],
-          ["知识库问答试点", "用户可以对高频、低敏感问题发起提问。", "回答必须带来源；低置信度时不直接给确定结论。"],
-          ["反馈入口", "用户可以标记有用、无用、找不到资料。", "反馈进入运营处理清单，并记录问题类型。"],
-          ["管理员维护", "管理员维护文档范围、负责人和更新时间。", "过期资料需要提示负责人复核。"]
-        ];
-      }
-      return [
-        ["核心入口", "用户可以从统一入口进入本次流程。", "入口、空状态、异常状态完整。"],
-        ["主流程", "用户可以完成从提交问题到查看结果的核心路径。", "关键步骤不超过 3-5 步。"],
-        ["反馈处理", "用户可以提交反馈或补充信息。", "反馈有状态、负责人和处理结果。"],
-        ["后台维护", "运营或管理员可以维护基础配置。", "首期允许半自动维护，不做复杂权限后台。"]
-      ];
-    }
-
-    function getPermissionRules(scenario) {
-      if (scenario.key === "label") {
-        return [
-          ["产品", "确认核心卖点、必填信息、信息优先级和验收标准。", "不能单独修改供应商工艺限制。"],
-          ["设计", "确认版式层级、字号、边距、贴标位置和输出格式。", "正式打样前需要产品和供应商确认。"],
-          ["品牌", "确认品牌表达、视觉元素和对外展示一致性。", "不能绕过产品目标单独增加信息。"],
-          ["供应商", "确认打印尺寸、材质限制、贴标工艺和交付周期。", "反馈必须记录到预审材料。"],
-          ["负责人", "确认最终版本、成本、时间和返工处理方式。", "关键确认需要留痕。"]
-        ];
-      }
-      if (scenario.key === "receipt") {
-        return [
-          ["参与用户", "上传小票、查看审核状态、领取礼券、发起申诉。", "不能修改审核结果或核销记录。"],
-          ["运营审核员", "查看待审核凭证、处理通过/驳回/待补充、维护审核备注。", "不能修改券库存和活动预算。"],
-          ["门店店员", "扫码核销礼券，查看当前券是否可用。", "不能查看用户完整手机号和其他门店数据。"],
-          ["客服", "查看用户申诉、审核记录和核销失败原因。", "只能在授权范围内补发或转交运营复核。"],
-          ["管理员", "配置活动规则、券库存、参与门店和异常处理权限。", "关键规则变更必须留痕。"]
-        ];
-      }
-      if (scenario.key === "knowledge") {
-        return [
-          ["新员工", "可查看通用制度、入职流程、公开产品资料。", "不可查看财务、薪酬、未公开项目资料。"],
-          ["运营/客服", "可查看会员政策、客服口径、活动规则。", "不可查看跨部门敏感项目资料。"],
-          ["产品/项目成员", "可查看所参与项目资料和 SOP。", "跨项目资料按项目权限控制。"],
-          ["管理员", "可维护文档范围、标签、负责人和可见范围。", "所有敏感资料变更需要留痕。"]
-        ];
-      }
-      return [
-        ["普通用户", "只能使用与自身角色相关的功能。", "敏感数据不可见。"],
-        ["业务负责人", "可查看业务汇总和处理进度。", "不能修改系统规则。"],
-        ["运营/管理员", "可维护配置、文案和基础规则。", "关键配置需要记录变更人。"],
-        ["研发/数据", "可查看调试和埋点口径。", "不直接修改业务内容。"]
-      ];
-    }
-
-    function getAcceptanceCriteria(scenario) {
-      if (scenario.key === "label") {
-        return [
-          ["信息可读", "样张贴到实物后，产品名、核心卖点、成分说明和使用信息都能被快速识别。"],
-          ["尺寸合规", "标签尺寸、出血边距、安全区域和最小字号满足供应商打印要求。"],
-          ["贴标稳定", "贴标位置不遮挡关键区域，实物弧度不会造成明显偏移。"],
-          ["展示一致", "PPT、展示图和实物包装中的产品名、卖点和使用信息保持一致。"],
-          ["反馈闭环", "供应商、设计、品牌和产品的高风险反馈都有负责人和关闭状态。"]
-        ];
-      }
-      if (scenario.key === "receipt") {
-        return [
-          ["上传链路", "用户能提交小票并看到待审核、审核通过、审核驳回或待补充状态。"],
-          ["审核链路", "运营能按规则处理待审核记录，所有处理动作有原因、操作人和时间。"],
-          ["重复拦截", "疑似重复上传不会直接发券，系统展示命中原因并进入人工复核。"],
-          ["发券核销", "审核通过后能发券；门店扫码后能回写已核销状态并防止重复核销。"],
-          ["异常处理", "库存不足、发券失败、核销失败和申诉中状态都有处理入口和负责人。"]
-        ];
-      }
-      if (scenario.key === "knowledge") {
-        return [
-          ["查找路径", "用户 3 步内能找到目标资料或明确知道没有结果。"],
-          ["来源展示", "每条问答结果必须展示来源文档、更新时间和查看原文入口。"],
-          ["低置信度兜底", "低置信度时必须展示查看原文、提交反馈或联系负责人的入口。"],
-          ["权限控制", "未授权用户不能看到敏感资料标题、摘要或回答内容。"],
-          ["数据埋点", "搜索、点击来源、反馈、未命中、回答采纳均有事件记录。"]
-        ];
-      }
-      return [
-        ["主流程", "核心用户可以完整完成主路径，异常状态有提示。"],
-        ["范围边界", "P0 功能全部可演示，非本期范围没有入口误导。"],
-        ["数据记录", "关键行为有埋点字段，可支撑上线后复盘。"],
-        ["风险兜底", "权限、异常、人工处理和回滚方案均有负责人。"]
-      ];
-    }
-
-    function tableRows(rows) {
-      return rows.map(row => `<tr>${row.map(cell => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("");
-    }
-
-    function markdownTable(headers, rows) {
-      return [
-        `| ${headers.join(" | ")} |`,
-        `| ${headers.map(() => "---").join(" | ")} |`,
-        ...rows.map(row => `| ${row.join(" | ")} |`)
-      ].join("\n");
-    }
-
-    function renderDocument(scenario) {
-      const confirmedEntries = Object.entries(confirmedAnswersByKey)
-        .map(([key, answer]) => {
-          const question = scenario.questions.find(q => q[0] === key);
-          return question ? [question[1], answer, diagnosisStatusByKey[key] || "主要判断"] : [key, answer, diagnosisStatusByKey[key] || "主要判断"];
-        });
-      const acceptedFeedback = devFeedbackItems.filter(item => item.status === "已回写");
-      document.getElementById("docTitle").textContent = scenario.key === "label" ? "足霜产品信息展示物料预审确认单" : `${scenario.title} 预审确认单`;
-      document.getElementById("backgroundText").textContent = scenario.background;
-      const confirmedList = confirmedEntries.length
-        ? confirmedEntries.map(([title, answer, status]) => `${status}：${title} - ${answer}`)
-        : [
-            "主要判断：先做信息优先级表，明确哪些信息必须第一眼可见。",
-            "待验证：用低保真贴标样张检查可读性和实物位置。",
-            "暂不推进：正式 Figma 精修和打印打样后置。"
-          ];
-      document.getElementById("scopeList").innerHTML = confirmedList.map(item => `<li>${escapeHtml(item)}</li>`).join("");
-      document.getElementById("departmentDocList").innerHTML = scenario.departments.slice(0, 4).map(item => `<li>${escapeHtml(item)}</li>`).join("");
-      document.getElementById("riskList").innerHTML = [
-        scenario.key === "label" ? "标签尺寸、最小字号、打印边距和安全区域。" : `待确认风险：${scenario.gaps}`,
-        scenario.key === "label" ? "贴标位置、实物弧度和遮挡风险。" : "关键业务规则必须有明确负责人，不能只写成“上线前补齐”。",
-        scenario.key === "label" ? "供应商样张标准、反馈周期和最终确认人。" : "异常状态需要给用户明确提示、处理入口和内部追踪字段。",
-        ...acceptedFeedback.map(item => `${scenario.key === "label" ? "供应商反馈记录" : "研发反馈记录"}：${item.type} - ${item.text}`)
-      ].map(item => `<li>${escapeHtml(item)}</li>`).join("");
-      document.getElementById("acceptanceText").innerHTML = getAcceptanceCriteria(scenario)
-        .map(([title, detail]) => `<strong>${escapeHtml(title)}：</strong>${escapeHtml(detail)}`)
-        .join("<br>");
-    }
-
-    function renderWorkbench(scenario) {
-      const departmentList = document.querySelector(".department-list");
-      if (departmentList) {
-        departmentList.innerHTML = scenario.departments.map(item => {
-          const [role, detail] = item.split("：");
-          return `<div class="department-item"><strong>${escapeHtml(role || "协作方")}</strong><span>${escapeHtml(detail || item)}</span></div>`;
-        }).join("");
-      }
-      const competitorBody = document.querySelector("#page-export table tbody");
-      if (competitorBody) {
-        const rows = scenario.competitors || (scenario.key === "growth" ? [
-          ["淘宝会员", "积分任务、权益分层", "学习任务激励和会员分层"],
-          ["京东 Plus", "权益组合和付费会员", "明确权益价值和成本边界"],
-          ["星巴克星礼程", "等级成长和兑换心智", "借鉴等级成长路径"],
-          ["瑞幸优惠券体系", "高频券包和核销提醒", "优化核销路径和提醒"]
-        ] : scenario.key === "data" ? [
-          ["神策数据", "事件分析和漏斗分析", "借鉴指标拆解方式"],
-          ["GrowingIO", "无埋点和行为分析", "关注业务方自助分析门槛"],
-          ["观远 BI", "经营看板和权限管理", "借鉴指标看板组织方式"],
-          ["飞书多维表格", "轻量协作和数据视图", "降低团队使用成本"]
-        ] : scenario.key === "support" ? [
-          ["Zendesk", "工单流转和知识库", "借鉴工单状态和 SLA"],
-          ["Intercom", "快捷回复和用户对话", "借鉴对话式处理体验"],
-          ["飞书客服", "内部协作和工单流转", "补强团队协作场景"],
-          ["企业微信客服", "渠道触达和客户管理", "关注私域客服入口"]
-        ] : [
-          ["Notion", "文档总结、问答、改写", "更聚焦项目启动和 PRD 评审"],
-          ["飞书妙记 / 文档", "会议纪要和协作沉淀", "把会议内容转成需求缺口和行动项"],
-          ["腾讯文档", "文档协作与模板能力", "补强跨部门对齐和评审风险检查"],
-          ["Confluence", "知识库与团队协作", "提供更轻的启动流程"]
-        ]);
-        competitorBody.innerHTML = rows.map(row => `<tr><td>${escapeHtml(row[0])}</td><td>${escapeHtml(row[1])}</td><td>${escapeHtml(row[2])}</td></tr>`).join("");
-      }
-      const sql = scenario.key === "label" ? `SELECT
-  version,
-  COUNT(*) AS review_item_cnt,
-  SUM(CASE WHEN status = 'blocked' THEN 1 ELSE 0 END) AS blocking_cnt,
-  AVG(confirm_rounds) AS avg_confirm_rounds,
-  SUM(CASE WHEN rework_after_sample THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS rework_rate
-FROM ${scenario.sqlTable}
-WHERE created_at >= CURRENT_DATE - INTERVAL '30 day'
-GROUP BY version
-ORDER BY version;` : `SELECT
-  DATE(created_at) AS dt,
-  COUNT(*) AS event_cnt,
-  COUNT(DISTINCT user_id) AS user_cnt,
-  AVG(${scenario.sqlFields[2] || "duration_seconds"}) AS avg_duration,
-  SUM(CASE WHEN ${scenario.sqlFields[3] || "is_success"} THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS key_rate
-FROM ${scenario.sqlTable}
-WHERE created_at >= CURRENT_DATE - INTERVAL '14 day'
-GROUP BY DATE(created_at)
-ORDER BY dt;`;
-      const sqlPreview = document.getElementById("sqlPreview");
-      if (sqlPreview) sqlPreview.textContent = sql;
-    }
-
-    const exportSamples = {
-      "老板摘要": `项目：企业内部知识库改版
-
-目标：
-减少员工查找内部资料的时间，降低重复咨询，提高新人上手效率。
-
-为什么现在做：
-目前会员政策、流程制度和项目资料分散在不同系统里，新员工和运营同事经常需要反复询问他人，信息查找成本高。
-
-首期范围：
-接入制度文档、会员政策、产品资料和项目 SOP，支持自然语言提问和来源引用。
-
-主要风险：
-1. 权限粒度不足可能导致敏感信息误展示。
-2. 文档过期后可能产生错误答案。
-3. 低置信度回答需要兜底机制。
-
-建议：
-可以启动 MVP，但进入开发排期前需要先补齐权限规则和低置信度回答处理流程。`,
-      "研发任务清单": `研发任务清单
-
-用户故事 1：
-作为新员工，我希望输入自然语言问题后得到带来源的答案，以便快速找到制度和流程信息。
-
-验收标准：
-- 用户可在 3 步内完成提问并查看答案来源。
-- 答案必须展示来源文档标题和跳转入口。
-- 低置信度回答需要展示“查看原文 / 提交反馈”入口。
-
-用户故事 2：
-作为管理员，我希望配置文档访问范围，以避免敏感内容误展示。
-
-边界条件：
-- 首期只接入制度文档、会员政策、产品资料和项目 SOP。
-- 不接入财务、人事敏感资料。
-- 不做跨系统权限同步。`,
-      "设计 Brief": `设计 Brief
-
-核心用户：
-新员工、运营同事、客服同事、产品团队。
-
-关键路径：
-进入知识库 -> 输入问题 -> 查看答案 -> 查看来源 -> 反馈是否有帮助。
-
-关键状态：
-1. 正常命中：展示答案摘要、来源引用、相关文档。
-2. 低置信度：提示“这个答案可能不完整”，提供查看原文和提交反馈入口。
-3. 未命中：引导用户换一种问法或提交问题给管理员。
-
-设计重点：
-界面需要让用户明确知道答案来自哪里，不能让 系统回答看起来像绝对结论。`,
-      "运营材料": `运营上线材料
-
-上线前准备：
-- 整理首期接入文档清单。
-- 标记会员政策、制度文档和项目 SOP 的负责人。
-- 准备新人培训说明。
-
-试运行计划：
-第一周面向运营和客服小范围试用，收集高频问题、未命中问题和错误答案反馈。
-
-FAQ：
-Q：如果答案不准确怎么办？
-A：用户可以查看来源原文，也可以提交反馈给管理员。
-
-观察指标：
-平均查找时间、重复咨询量、答案采纳率、反馈率。`,
-      "Kickoff 议程": `Kickoff 会议议程
-
-会议目标：
-确认企业内部知识库改版的 MVP 范围、风险和分工。
-
-议题：
-1. 当前信息查找问题的根因判断。
-2. 三类方案取舍：文档治理、搜索优化、知识库问答试点。
-3. 首期 MVP 范围和非本期范围确认。
-4. 权限规则、敏感内容边界和低置信度兜底确认。
-5. 上线后指标和反馈机制确认。
-
-行动项：
-- 产品：补充 PRD 中的权限规则和验收标准。
-- 运营：整理首期文档清单。
-- 研发：评估问答和来源引用实现方案。
-- 设计：输出提问和答案页关键状态。`,
-      "管理员配置清单": `管理员配置清单
-
-文档来源：
-- 制度文档：由行政负责人维护，每月检查一次。
-- 会员政策：由运营负责人维护，政策变更后 1 个工作日内更新。
-- 产品资料：由产品团队维护，版本发布后同步更新。
-- 项目 SOP：由项目负责人维护，项目结束后归档。
-
-权限范围：
-- 首期不接入财务、人事敏感资料。
-- 管理员可配置文档是否参与问答。
-- 答案页必须展示来源文档和更新时间。
-
-反馈机制：
-- 用户可标记“有帮助 / 没帮助”。
-- 低置信度答案必须提供查看原文入口。
-- 每周汇总未命中问题和错误答案，进入内容治理清单。`
     };
 
-    function buildPrdText() {
-      const scenario = currentScenario || getScenario();
-      const scope = scenario.scope.map(item => `- ${item}`).join("\n");
-      const departments = scenario.departments.map(item => `- ${item}`).join("\n");
-      const isLabel = scenario.key === "label";
-      const acceptedFeedback = devFeedbackItems
-        .filter(item => item.status === "已回写")
-        .map(item => `- ${item.type}：${item.text}`)
-        .join("\n") || (isLabel ? "- 暂无已回写供应商反馈。" : "- 暂无已回写研发反馈。");
-      const confirmed = Object.entries(confirmedAnswersByKey)
-        .map(([key, answer]) => {
-          const question = scenario.questions.find(q => q[0] === key);
-          return question ? `- ${question[1]}：${answer}` : `- ${key}：${answer}`;
-        })
-        .join("\n") || "- 暂无人工确认判断，当前文档基于业务问题和默认场景推断整理。";
-      const competitors = (scenario.competitors || [])
-        .map(item => `| ${item[0]} | ${item[1]} | ${item[2]} |`)
-        .join("\n") || "| 竞品待补充 | 待分析 | 进入正式调研后补齐 |";
-      const sqlFields = scenario.sqlFields.map(field => `- ${field}`).join("\n");
-      const solutionRows = getSolutionOptions(scenario)
-        .map(item => `| ${item.name} | ${item.value} | ${item.cost} | ${item.risk} |`)
-        .join("\n");
-      const businessGoals = markdownTable(["指标", "目标值", "观察时间"], getBusinessGoals(scenario));
-      const scopePriority = markdownTable(["优先级", "范围", "原因"], getScopePriority(scenario));
-      const requirements = markdownTable(["模块", "需求描述", "验收要点"], getFunctionalRequirements(scenario));
-      const permissions = markdownTable(["角色", "可见/可操作范围", "限制"], getPermissionRules(scenario));
-      const acceptanceRows = markdownTable(["验收项", "标准"], getAcceptanceCriteria(scenario));
-      const readinessBlocks = renderReadinessBlocks(scenario);
-      const statusFlow = scenario.statusFlow?.length
-        ? `\n## 16. 状态流转\n${markdownTable(["状态", "触发条件", "页面/系统处理"], scenario.statusFlow)}\n`
-        : "";
-      const ruleConfig = scenario.ruleConfig?.length
-        ? `\n## 17. 规则配置\n${markdownTable(["规则项", "配置内容", "负责人/约束"], scenario.ruleConfig)}\n`
-        : "";
-      const launchGates = scenario.launchGates?.length
-        ? `\n## 18. ${isLabel ? "执行前门槛" : "排期前门槛"}\n${markdownTable(["门槛", "必须确认的内容", "负责人"], scenario.launchGates)}\n`
-        : "";
-      const exceptionQueue = scenario.exceptionQueue?.length
-        ? `\n## 19. ${isLabel ? "风险处理清单" : "异常队列"}\n${markdownTable(["异常类型", "触发条件", "处理方式"], scenario.exceptionQueue)}\n`
-        : "";
-      const eventTracking = scenario.eventTracking?.length
-        ? `\n## 20. ${isLabel ? "确认记录" : "埋点事件"}\n${markdownTable(["事件名", "触发时机", "关键字段"], scenario.eventTracking)}\n`
-        : "";
-      const rolloutPlan = scenario.rolloutPlan?.length
-        ? `\n## 21. ${isLabel ? "执行节奏" : "灰度计划"}\n${markdownTable(["阶段", "动作", "产出/判断"], scenario.rolloutPlan)}\n`
-        : "";
-      return `# ${scenario.title} ${isLabel ? "预审材料草稿" : "评审材料草稿"}
+    const order = ['package','campaign','knowledge','agent'];
+    let currentKey = 'package';
+    let activeData = null;
+    let loadingTimer = null;
+    let currentMatch = {key:'package', score:0, confidence:'案例预设', reason:'来自快速案例'};
 
-## 1. 项目背景
-${scenario.background}
+    const $ = id => document.getElementById(id);
 
-## 2. 问题定义
-${scenario.problem}
-
-## 3. 目标用户
-${scenario.users}
-
-## 4. 产品目标
-${scenario.goal}
-
-## 5. 已确认结论
-${confirmed}
-
-## 6. ${isLabel ? "执行范围" : "MVP 范围"}
-${scope}
-
-## 7. 方案对比与推荐
-| 方案 | 价值 | 成本 | 风险 |
-| --- | --- | --- | --- |
-${solutionRows}
-
-推荐结论：${scenario.recommendation || "先选择中低成本方案验证问题，再决定是否进入高成本系统改造。"}
-
-## 8. 信息成熟度判断
-${readinessBlocks.readiness}
-
-## 9. 缺口分层
-${readinessBlocks.gaps}
-
-## 10. 核心流程
-1. 用户输入业务问题、会议纪要或反馈片段。
-2. 页面梳理问题类型、${isLabel ? "相关角色、信息缺口和执行风险" : "受影响用户、可能根因和方案风险"}。
-3. 页面整理高优先级判断问题，产品经理逐条确认。
-4. 已确认判断进入结构化信息卡，并同步影响${isLabel ? "预审材料" : "评审材料"}。
-5. 产品经理整理完整材料，进入${isLabel ? "执行前预审" : "评审前阻塞项检查"}。
-
-## 11. ${isLabel ? "跨角色对齐" : "跨部门对齐"}
-${departments}
-
-## 12. 风险与兜底
-- 输出内容需要区分“已确认”和“待确认”。
-- 关键规则必须有人工确认。
-- 执行前必须确认尺寸、边距、贴标位置、样张标准和验收负责人。
-- 没有关闭阻塞项时，不建议进入正式打样或高成本制作。
-
-## 13. ${isLabel ? "供应商反馈处理" : "研发反馈处理"}
-${acceptedFeedback}
-
-## 14. 里程碑
-| 阶段 | 时间 | 产出 |
-| --- | --- | --- |
-| 执行前判断与路径取舍 | 第 1 步 | 预审材料、路径对比、验收口径 |
-| 低保真验证 | 第 2 步 | 标签样张、贴标检查、风险清单 |
-| 正式执行 | 第 3 步 | Figma 精修、打印打样、展示材料 |
-| 复盘调整 | 第 4 步 | 打样反馈、问题清单、优化建议 |
-
-## 15. 验收标准
-${acceptanceRows}
-
-## 16. ${isLabel ? "预审 Checklist" : "评审 Checklist"}
-- 问题根因和${isLabel ? "相关角色" : "受影响用户"}是否明确？
-- ${isLabel ? "执行范围是否可以在首期落地" : "MVP 范围是否可以在首期落地"}？
-- ${isLabel ? "尺寸、边距、贴标位置和验收标准" : "权限、预算、异常和人工兜底"}是否都有负责人？
-- 是否明确哪些内容不在本期范围？`;
-    }
-
-    function buildWordFriendlyPrd() {
-      const text = currentPrdText || buildPrdText();
-      return text
-        .replace(/^# (.*)$/gm, "$1\n")
-        .replace(/^## \d+\. (.*)$/gm, "\n【$1】")
-        .replace(/^### (.*)$/gm, "\n$1")
-        .replace(/^\|.*\|$/gm, line => line.replace(/^\|\s?|\s?\|$/g, "").replace(/\s?\|\s?/g, "\t"))
-        .replace(/```sql|```/g, "")
-        .replace(/\n{3,}/g, "\n\n")
-        .trim();
-    }
-
-    function downloadTextFile(filename, content, mimeType = "text/plain;charset=utf-8") {
-      const blob = new Blob([content], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function renderStepbar() {
-      stepbar.innerHTML = "";
-      pages.forEach((page, index) => {
-        const step = document.createElement("div");
-        step.className = "step " + (index < current ? "done" : index === current ? "active" : "");
-        step.innerHTML = `<div class="dot">${index + 1}</div>${labels[index]}`;
-        stepbar.appendChild(step);
-        if (index < pages.length - 1) {
-          const bar = document.createElement("div");
-          bar.className = "bar " + (index < current ? "done" : "");
-          stepbar.appendChild(bar);
-        }
-      });
-    }
-
-    function updateNextButton() {
-      const nextBtn = document.getElementById("nextTopBtn");
-      if (!nextBtn) return;
-      const floatingHelper = document.getElementById("floatingHelper");
-      const flowHelper = document.getElementById("flowHelper");
-      const flowHelperMeta = document.getElementById("flowHelperMeta");
-      const generateDocHint = document.getElementById("generateDocHint");
-      let helperTitle = "当前动作：继续";
-      let helperText = "按主按钮推进当前流程。";
-      if (current >= pages.length - 1) {
-        nextBtn.textContent = "已到最后一步";
-        nextBtn.disabled = true;
-        helperTitle = "体验已完成";
-        helperText = "可以查看不同角色的导出材料。";
-        if (floatingHelper) floatingHelper.innerHTML = `<strong>${helperTitle}</strong><span>${helperText}</span>`;
-        if (flowHelper) flowHelper.querySelector("strong").textContent = helperTitle;
-        if (flowHelper) flowHelper.querySelector("span").textContent = helperText;
-        if (flowHelperMeta) flowHelperMeta.textContent = `第 ${current + 1} / ${pages.length} 步`;
-        return;
-      }
-      nextBtn.disabled = false;
-      if (current < maxUnlocked) {
-        nextBtn.textContent = actionLabels[current + 1] || "继续";
-        helperTitle = `已完成：${labels[current]}`;
-        helperText = `继续处理“${labels[current + 1]}”。`;
-      } else if (current === 0) {
-        nextBtn.textContent = "梳理事项";
-        helperTitle = "当前动作：梳理事项";
-        helperText = "先把目标、约束和待确认项摆出来。";
-      } else if (current === 1) {
-        nextBtn.textContent = confirmedAnswers ? "整理确认单" : "设为主要判断";
-        helperTitle = confirmedAnswers ? "当前动作：整理确认单" : "当前动作：确认关键判断";
-        helperText = confirmedAnswers ? "已确认关键判断，可以整理成轻量预审确认单。" : "先处理最影响首期范围的判断，信息卡会同步更新。";
-      } else if (current === 2) {
-        nextBtn.textContent = "进入执行检查";
-        helperTitle = "当前动作：进入执行检查";
-        helperText = "确认单已整理，继续检查验证路径、风险和推进条件。";
-      } else if (current === 3) {
-        nextBtn.textContent = "发送材料";
-        helperTitle = reviewReady ? "当前动作：发送材料" : "当前动作：带风险发送";
-        helperText = reviewReady ? "可以发送负责人摘要和供应商确认单。" : "当前仍有风险，Demo 允许继续发送确认材料。";
-      } else {
-        nextBtn.textContent = "继续";
-      }
-      if (floatingHelper) floatingHelper.innerHTML = `<strong>${helperTitle}</strong><span>${helperText}</span>`;
-      if (flowHelper) {
-        const title = flowHelper.querySelector("strong");
-        const text = flowHelper.querySelector("span");
-        if (title) title.textContent = helperTitle;
-        if (text) text.textContent = helperText;
-      }
-      if (flowHelperMeta) flowHelperMeta.textContent = `第 ${current + 1} / ${pages.length} 步`;
-      if (generateDocHint) {
-        generateDocHint.textContent = confirmedAnswers
-          ? `已确认 ${confirmedAnswers} 条关键判断，可以整理预审材料。`
-          : "先确认至少一个关键判断，才能整理预审材料。";
-      }
-    }
-
-    function showToast(text) {
-      toast.textContent = text;
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 1800);
-    }
-
-    function logActivity(slot, text) {
-      document.getElementById(slot).textContent = text;
-    }
-
-    function goTo(index) {
-      if (index > maxUnlocked) return;
-      current = index;
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      document.getElementById(`page-${pages[index]}`).classList.add("active");
-      navButtons.forEach((btn, i) => btn.classList.toggle("active", i === index));
-      renderStepbar();
-      updateNextButton();
-      if (index === 3) updateReviewScore();
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }
-
-    function unlock(index) {
-      maxUnlocked = Math.max(maxUnlocked, index);
-      navButtons.forEach((btn, i) => btn.disabled = i > maxUnlocked);
-      updateNextButton();
-    }
-
-    function runCurrentPrimaryAction() {
-      if (current === 0) {
-        document.getElementById("analyzeBtn").click();
-        return;
-      }
-      if (current === 1) {
-        if (!document.getElementById("answerBox").classList.contains("active")) {
-          document.querySelector("[data-answer]")?.click();
-        }
-        commitCurrentDecision("主要判断");
-        return;
-      }
-      if (current === 2) {
-        if (!fullPrdReady) {
-          document.getElementById("fullPrdBtn").click();
-          return;
-        }
-        document.getElementById("reviewBtn").click();
-        return;
-      }
-      if (current === 3) {
-        document.getElementById("exportBtn").click();
-        return;
-      }
-      const nextBtn = document.getElementById("nextTopBtn");
-      showToast(nextBtn?.textContent || "请先完成当前步骤");
-    }
-
-    function next() {
-      if (current < maxUnlocked) goTo(current + 1);
-      else runCurrentPrimaryAction();
-    }
-
-    document.getElementById("nextTopBtn").addEventListener("click", next);
-    navButtons.forEach((btn, i) => btn.addEventListener("click", () => goTo(i)));
-    setDetailMode(false);
-    modeOptions.forEach(option => option.addEventListener("click", () => {
-      const enabled = option.dataset.detailMode === "showcase";
-      setDetailMode(enabled);
-      showToast(enabled ? "已打开展示说明" : "已切换为精简体验");
-    }));
-
-    function updateCaseCards() {
-      document.querySelectorAll(".case-card").forEach(card => {
-        card.classList.toggle("active", card.dataset.case === activeExampleKey);
-      });
-    }
-
-    function updateInputCount() {
-      const input = document.getElementById("ideaInput");
-      document.getElementById("countHint").textContent = `${input.value.length} 字 / 建议 50-300 字`;
-    }
-
-    function updateSourceChip(modeText) {
-      const sourceType = document.getElementById("sourceType")?.value || "自定义业务问题";
-      document.getElementById("scenarioChip").textContent = `${modeText} · 来源：${sourceType}`;
-    }
-
-    function fillCaseExample(exampleKey) {
-      const example = caseExamples.find(item => item.key === exampleKey) || caseExamples[0];
-      activeExampleKey = example.key;
-      confirmedAnswersByKey = {};
-      diagnosisStatusByKey = {};
-      confirmedAnswers = 0;
-      devFeedbackItems = [];
-      const input = document.getElementById("ideaInput");
-      input.value = example.text;
-      updateInputCount();
-      document.getElementById("sourceType").value = "自定义业务问题";
-      updateSourceChip(`当前案例：${example.label}`);
-      document.getElementById("intakeAlert").classList.remove("show");
-      currentScenario = getScenario();
-      renderQuestions(currentScenario);
-      renderInfoCards(currentScenario, false);
-      renderDocument(currentScenario);
-      renderWorkbench(currentScenario);
-      renderSolutionCompare(currentScenario);
-      renderDevFeedbackList();
-      updateCaseCards();
-      showToast(`已切换到${example.label}`);
-    }
-
-    function renderCaseExamples() {
-      const grid = document.getElementById("caseGrid");
-      grid.innerHTML = caseExamples.map(example => `
-        <button class="case-card ${example.key === activeExampleKey ? "active" : ""}" data-case="${example.key}" type="button">
-          <strong>${escapeHtml(example.label)}</strong>
-          <span>${escapeHtml(example.tag)}</span>
-        </button>
-      `).join("");
-      grid.addEventListener("click", event => {
-        const card = event.target.closest("[data-case]");
-        if (!card) return;
-        fillCaseExample(card.dataset.case);
-      });
-    }
-
-    function selectQuestion(answerKey) {
-      const scenario = currentScenario || getScenario();
-      const question = scenario.questions.find(q => q[0] === answerKey) || scenario.questions[0];
-      if (!question) return;
-      currentAnswerKey = question[0];
-      const answer = confirmedAnswersByKey[currentAnswerKey] || question[3] || "建议先补齐这个问题，再整理预审材料。";
-      document.querySelectorAll(".question").forEach(item => item.classList.remove("active"));
-      const activeQuestion = [...document.querySelectorAll("[data-answer]")]
-        .find(button => button.dataset.answer === currentAnswerKey)
-        ?.closest(".question");
-      activeQuestion?.classList.add("active");
-      document.querySelectorAll("[data-answer]").forEach(item => item.classList.remove("primary"));
-      activeQuestion?.querySelector("[data-answer]")?.classList.add("primary");
-      document.getElementById("answerText").textContent = answer;
-      document.getElementById("answerBox").classList.add("active");
-      updateNextButton();
-    }
-
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      current = 0;
-      maxUnlocked = 0;
-      confirmedAnswers = 0;
-      diagnosisStatusByKey = {};
-      activeExampleKey = "label";
-      fillCaseExample(activeExampleKey);
-      currentScenario = getScenario();
-      unlock(0);
-      document.getElementById("analysisEmpty").style.display = "block";
-      document.getElementById("analysisEmpty").innerHTML = "<h3>等待梳理</h3><p>当前还没有形成判断。</p>";
-      document.getElementById("analysisCards").style.display = "none";
-      document.getElementById("answerBox").classList.remove("active");
-      document.getElementById("generateDocBtn").disabled = true;
-      document.getElementById("prdPreview").textContent = "预审确认单会在页面中直接展示。";
-      document.getElementById("prdStatus").textContent = "尚未复制确认单。";
-      document.getElementById("prdStatus").classList.remove("success");
-      currentPrdText = "";
-      fullPrdReady = false;
-      document.getElementById("intakeAlert").classList.remove("show");
-      document.getElementById("reviewAlert").classList.remove("show");
-      document.getElementById("analyzeBtn").innerHTML = "梳理当前事项";
-      document.getElementById("analyzeBtn").disabled = false;
-      reviewReady = false;
-      renderInfoCards(currentScenario, false);
-      renderQuestions(currentScenario);
-      renderDocument(currentScenario);
-      renderWorkbench(currentScenario);
-      renderSolutionCompare(currentScenario);
-      goTo(0);
-      logActivity("activity1", "等待输入业务问题");
-      logActivity("activity2", "尚未形成判断");
-      logActivity("activity3", "尚未进入预审");
-      showToast("体验已重置");
-    });
-
-    document.getElementById("ideaInput").addEventListener("input", e => {
-      activeExampleKey = "";
-      confirmedAnswersByKey = {};
-      diagnosisStatusByKey = {};
-      confirmedAnswers = 0;
-      devFeedbackItems = [];
-      updateCaseCards();
-      updateInputCount();
-      document.getElementById("scenarioChip").textContent = "当前模式：自定义项目";
-      updateSourceChip("当前模式：自定义项目");
-    });
-
-    document.getElementById("sourceType").addEventListener("change", () => {
-      if (activeExampleKey) {
-        const example = caseExamples.find(item => item.key === activeExampleKey);
-        updateSourceChip(`当前案例：${example?.label || "示例案例"}`);
-      } else {
-        updateSourceChip("当前模式：自定义项目");
-      }
-    });
-
-    document.getElementById("customBtn").addEventListener("click", () => {
-      activeExampleKey = "";
-      confirmedAnswersByKey = {};
-      diagnosisStatusByKey = {};
-      confirmedAnswers = 0;
-      devFeedbackItems = [];
-      document.getElementById("ideaInput").value = "";
-      document.getElementById("ideaInput").focus();
-      document.getElementById("countHint").textContent = "0 字 / 建议 50-300 字";
-      document.getElementById("sourceType").value = "自定义业务问题";
-      updateSourceChip("当前模式：自定义项目");
-      updateCaseCards();
-      showToast("可以输入你的项目了");
-    });
-
-    document.getElementById("analyzeBtn").addEventListener("click", () => {
-      const idea = document.getElementById("ideaInput").value.trim();
-      if (idea.length < 50) {
-        document.getElementById("intakeAlert").classList.add("show");
-        showToast("输入信息不足");
-        return;
-      }
-      document.getElementById("intakeAlert").classList.remove("show");
-      confirmedAnswersByKey = {};
-      diagnosisStatusByKey = {};
-      confirmedAnswers = 0;
-      devFeedbackItems = [];
-      const btn = document.getElementById("analyzeBtn");
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span>梳理中';
-      document.getElementById("analysisEmpty").innerHTML = "<h3>正在梳理</h3><p>正在整理问题类型、相关角色和执行风险...</p>";
-      const scenario = getScenario();
-      renderAnalysis(scenario);
-      renderQuestions(scenario);
-      renderInfoCards(scenario, false);
-      renderDocument(scenario);
-      renderWorkbench(scenario);
-      renderSolutionCompare(scenario);
-      renderDevFeedbackList();
-      setTimeout(() => {
-        document.getElementById("analysisEmpty").style.display = "none";
-        document.getElementById("analysisCards").style.display = "block";
-        unlock(1);
-        logActivity("activity1", `已梳理：${scenario.type} · 来源：${document.getElementById("sourceType").value}`);
-        logActivity("activity2", `已整理 ${scenario.questions.length} 个关键判断`);
-        btn.disabled = false;
-        btn.innerHTML = "重新梳理";
-        showToast("已整理问题类型和执行风险");
-        setTimeout(() => {
-          goTo(1);
-          selectQuestion(scenario.questions[0]?.[0]);
-        }, 150);
-      }, 350);
-    });
-
-    document.getElementById("questionsList").addEventListener("click", event => {
-      const question = event.target.closest(".question");
-      if (!question) return;
-      const btn = question.querySelector("[data-answer]");
-      if (!btn) return;
-      selectQuestion(btn.dataset.answer);
-    });
-
-    function commitCurrentDecision(status) {
-      const scenario = currentScenario || getScenario();
-      const answer = document.getElementById("answerText").textContent;
-      confirmedAnswersByKey[currentAnswerKey] = answer;
-      diagnosisStatusByKey[currentAnswerKey] = status;
-      confirmedAnswers = Object.keys(confirmedAnswersByKey).length;
-      renderQuestions(scenario);
-      renderInfoCards(scenario, true);
-      renderDocument(scenario);
-      renderSolutionCompare(scenario);
-      if (currentPrdText) {
-        currentPrdText = buildPrdText();
-        document.getElementById("prdPreview").textContent = currentPrdText;
-      }
-      if (confirmedAnswers >= 1) {
-        document.getElementById("generateDocBtn").disabled = false;
-        unlock(2);
-      }
-      logActivity("activity2", `已归档 ${confirmedAnswers} 条路径判断，可整理预审材料`);
-      showToast(`已标记为：${status}`);
-      updateNextButton();
-    }
-
-    document.getElementById("answerBox").addEventListener("click", event => {
-      const action = event.target.closest("[data-diagnosis-action]")?.dataset.diagnosisAction;
-      if (!action) return;
-      const statusMap = {
-        main: "主要判断",
-        verify: "待验证",
-        defer: "本期不处理"
+    function cloneTemplate(key){
+      const t = templates[key];
+      return {
+        ...t,
+        blockers: t.blockers.map(item => ({...item, done:false}))
       };
-      commitCurrentDecision(statusMap[action] || "主要判断");
-    });
+    }
 
-    document.getElementById("generateDocBtn").addEventListener("click", () => {
-      const scenario = currentScenario || getScenario();
-      renderDocument(scenario);
-      renderWorkbench(scenario);
-      renderSolutionCompare(scenario);
-      unlock(2);
-      goTo(2);
-      fullPrdReady = false;
-      logActivity("activity2", `已整理 ${scenario.title} 预审材料草稿`);
-      currentPrdText = buildPrdText();
-      document.getElementById("prdPreview").textContent = currentPrdText;
-      document.getElementById("prdStatus").textContent = "已整理初版预审材料，已包含风险、信源、验收标准和跨角色待确认项。";
-      document.getElementById("prdStatus").classList.add("success");
-      showToast("已整理预审材料");
-    });
+    function riskClass(risk){
+      return risk === '高' ? 'risk-high' : risk === '中' ? 'risk-mid' : 'risk-low';
+    }
 
-    document.getElementById("editDocBtn").addEventListener("click", () => {
-      const editableItems = [...document.querySelectorAll(".doc-editable")];
-      const nextEditing = !editableItems.some(el => el.classList.contains("editing"));
-      editableItems.forEach(el => {
-        el.classList.toggle("editing", nextEditing);
-        el.setAttribute("contenteditable", nextEditing ? "true" : "false");
-      });
-      document.getElementById("editDocBtn").textContent = nextEditing ? "完成编辑" : "编辑草稿";
-      showToast(nextEditing ? "已开启文档编辑" : "已退出文档编辑");
-    });
+    function riskWeight(risk){
+      return risk === '高' ? 14 : risk === '中' ? 9 : 5;
+    }
 
-    document.getElementById("reviewBtn").addEventListener("click", () => {
-      unlock(3);
-      goTo(3);
-      logActivity("activity3", "已进入执行预审：检查建议路径、风险和推进条件");
-      showToast("已进入执行预审");
-    });
-
-    document.getElementById("fullPrdBtn").addEventListener("click", () => {
-      currentPrdText = buildPrdText();
-      const preview = document.getElementById("prdPreview");
-      preview.textContent = currentPrdText;
-      document.getElementById("prdStatus").textContent = "确认单已复制，可发给负责人或供应商继续确认。";
-      document.getElementById("prdStatus").classList.add("success");
-      fullPrdReady = true;
-      unlock(3);
-      navigator.clipboard?.writeText(currentPrdText).catch(() => {});
-      logActivity("activity2", "已生成轻量预审确认单");
-      showToast("已复制确认单");
-    });
-
-    document.getElementById("copyPrdBtn").addEventListener("click", async () => {
-      if (!currentPrdText) {
-        currentPrdText = buildPrdText();
-        document.getElementById("prdPreview").textContent = currentPrdText;
-      }
-      try {
-        await navigator.clipboard.writeText(currentPrdText);
-        showToast("已复制预审材料");
-      } catch {
-        showToast("当前浏览器不支持自动复制");
-      }
-    });
-
-    document.getElementById("copyWordPrdBtn").addEventListener("click", async () => {
-      if (!currentPrdText) {
-        currentPrdText = buildPrdText();
-        document.getElementById("prdPreview").textContent = currentPrdText;
-      }
-      try {
-        await navigator.clipboard.writeText(buildWordFriendlyPrd());
-        showToast("已复制 Word 友好版");
-      } catch {
-        showToast("当前浏览器不支持自动复制");
-      }
-    });
-
-    document.getElementById("downloadMarkdownBtn").addEventListener("click", () => {
-      if (!currentPrdText) {
-        currentPrdText = buildPrdText();
-        document.getElementById("prdPreview").textContent = currentPrdText;
-      }
-      const scenario = currentScenario || getScenario();
-      const filename = `${scenario.title.replace(/[\\/:*?"<>|]/g, "")}-预审材料.md`;
-      downloadTextFile(filename, currentPrdText, "text/markdown;charset=utf-8");
-      showToast("已下载 Markdown");
-    });
-
-    let manualTocLock = false;
-    document.querySelectorAll(".toc a").forEach(link => {
-      link.addEventListener("click", event => {
-        event.preventDefault();
-        const target = document.querySelector(link.getAttribute("href"));
-        if (!target) return;
-        const mainScroller = document.querySelector("main");
-        const mainScrollTop = mainScroller ? mainScroller.scrollTop : 0;
-        const windowScrollTop = window.scrollY;
-        manualTocLock = true;
-        document.querySelectorAll(".toc a").forEach(item => item.classList.remove("active"));
-        link.classList.add("active");
-        const scroller = target.closest(".doc-scroll");
-        if (scroller && getComputedStyle(scroller).overflowY !== "visible") {
-          const targetTop = target.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
-          scroller.scrollTo({
-            top: targetTop - 16,
-            behavior: "auto"
-          });
-          if (mainScroller) {
-            mainScroller.scrollTop = mainScrollTop;
-            requestAnimationFrame(() => { mainScroller.scrollTop = mainScrollTop; });
-            setTimeout(() => { mainScroller.scrollTop = mainScrollTop; }, 120);
-            setTimeout(() => { mainScroller.scrollTop = mainScrollTop; }, 360);
-          }
-          window.scrollTo(0, windowScrollTop);
-          requestAnimationFrame(() => { window.scrollTo(0, windowScrollTop); });
-          setTimeout(() => { window.scrollTo(0, windowScrollTop); }, 120);
-          setTimeout(() => { window.scrollTo(0, windowScrollTop); }, 360);
-          setTimeout(() => { manualTocLock = false; }, 420);
-        } else {
-          target.scrollIntoView?.({ behavior: "smooth", block: "start" });
-          setTimeout(() => { manualTocLock = false; }, 420);
+    function matchCase(text){
+      const normalized = (text || '').toLowerCase();
+      let best = 'package';
+      let bestScore = 0;
+      let matchedWords = [];
+      order.forEach(key => {
+        const hits = templates[key].keywords.filter(word => normalized.includes(String(word).toLowerCase()));
+        if(hits.length > bestScore){
+          bestScore = hits.length;
+          best = key;
+          matchedWords = hits;
         }
       });
-    });
-
-    const docScroller = document.querySelector(".doc-scroll");
-    if (docScroller) {
-      const docHeadings = [...docScroller.querySelectorAll("h3[id]")];
-      const tocLinks = [...document.querySelectorAll(".toc a")];
-      function setActiveToc(headingId) {
-        tocLinks.forEach(link => {
-          const active = link.getAttribute("href") === `#${headingId}`;
-          link.classList.toggle("active", active);
-          if (active) {
-            link.scrollIntoView?.({ block: "nearest" });
-          }
-        });
+      if(bestScore === 0){
+        return {key:'general', score:0, confidence:'通用预审', reason:'未识别到明确案例关键词，使用通用执行门槛检查'};
       }
-      function updateActiveToc() {
-        if (manualTocLock) return;
-        if (!docHeadings.length) return;
-        const bottomReached = docScroller.scrollTop + docScroller.clientHeight >= docScroller.scrollHeight - 8;
-        if (bottomReached) {
-          setActiveToc(docHeadings[docHeadings.length - 1].id);
-          return;
-        }
-        const scrollerTop = docScroller.getBoundingClientRect().top;
-        const readingLine = scrollerTop + 120;
-        const current = docHeadings.reduce((active, heading) => {
-          return heading.getBoundingClientRect().top <= readingLine ? heading : active;
-        }, docHeadings[0]);
-        setActiveToc(current.id);
-      }
-      docScroller.addEventListener("scroll", () => {
-        updateActiveToc();
-      }, { passive: true });
-      updateActiveToc();
+      const confidence = bestScore >= 3 ? '高匹配' : bestScore === 2 ? '中匹配' : '弱匹配';
+      return {key:best, score:bestScore, confidence, reason:'命中关键词：' + matchedWords.join('、')};
     }
 
-    function getPreflightStats() {
-      const checks = [...document.querySelectorAll(".preflight-check")];
-      const done = checks.filter(input => input.checked).length;
-      return { total: checks.length, done, missing: checks.length - done };
-    }
-
-    function getRoleStats() {
-      const roles = [...document.querySelectorAll(".role-status")].map(select => ({
-        role: select.dataset.role,
-        status: select.value
-      }));
-      const confirmed = roles.filter(item => item.status === "已确认").length;
-      const risks = roles.filter(item => item.status !== "已确认");
-      return { roles, confirmed, risks, riskCount: risks.length };
-    }
-
-    function logReviewActivity(text) {
-      if (maxUnlocked >= 3 || current >= 3) {
-        logActivity("activity3", text);
+    function calculate(data){
+      const total = data.blockers.length;
+      const done = data.blockers.filter(b => b.done).length;
+      const openHigh = data.blockers.filter(b => !b.done && b.risk === '高');
+      const openMid = data.blockers.filter(b => !b.done && b.risk === '中');
+      const added = data.blockers.filter(b => b.done).reduce((sum,b) => sum + riskWeight(b.risk), 0);
+      const score = Math.min(96, data.baseScore + added + (openHigh.length === 0 ? 8 : 0));
+      let status = '不可执行';
+      let title = data.blockedTitle;
+      let className = '';
+      if(openHigh.length === 0 && openMid.length > 0){
+        status = '可预审';
+        title = data.reviewTitle;
+        className = 'review';
       }
+      if(openHigh.length === 0 && openMid.length === 0){
+        status = '可预审';
+        title = data.readyTitle;
+        className = 'ready';
+      }
+      return {total, done, openHigh, openMid, score, status, title, className, closeRate: Math.round(done / total * 100)};
     }
 
-    function updateDecisionExplain(reason, actions) {
-      const reasonEl = document.getElementById("decisionReason");
-      const actionsEl = document.getElementById("decisionActions");
-      if (reasonEl) reasonEl.textContent = reason;
-      if (actionsEl) {
-        actionsEl.innerHTML = actions.map(action => `<span>${escapeHtml(action)}</span>`).join("");
-      }
+    function setCurrentCase(key){
+      currentKey = key;
+      activeData = cloneTemplate(key);
+      currentMatch = {key, score:0, confidence:'案例预设', reason:'来自快速案例'};
+      $('briefInput').value = activeData.sample;
+      $('caseTitle').textContent = activeData.name;
+      $('casePurpose').textContent = activeData.purpose;
+      $('matchNote').innerHTML = `<strong>已选择案例：</strong>${activeData.name}。点击开始预审后生成阻塞项和执行状态。`;
+      updateInputCount();
+      document.querySelectorAll('.case-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.case === key));
+      $('results').classList.remove('show');
+      $('topStatus').textContent = '等待预审';
     }
 
-    function updateReviewScore() {
-      const statuses = [...document.querySelectorAll(".review-status")].map(s => s.value);
-      const handled = statuses.filter(v => v === "已处理").length;
-      const remaining = statuses.length - handled;
-      const blocking = Math.max(0, 2 - Math.min(handled, 2));
-      const nonBlocking = Math.max(0, remaining - blocking);
-      const preflight = getPreflightStats();
-      const roles = getRoleStats();
-      document.getElementById("handledCount").textContent = handled;
-      document.getElementById("remainingCount").textContent = remaining;
-      document.getElementById("blockingCount").textContent = blocking;
-      document.getElementById("nonBlockingCount").textContent = nonBlocking;
-      document.getElementById("closedCount").textContent = handled;
-      document.getElementById("preflightDone").textContent = `${preflight.done}/${preflight.total}`;
-      document.getElementById("preflightMissing").textContent = preflight.missing;
-      document.getElementById("meetingMode").textContent = preflight.missing > 2 ? "先补判断" : preflight.missing > 0 ? "先预审" : "可执行";
-      document.getElementById("roleConfirmedCount").textContent = roles.confirmed;
-      document.getElementById("roleRiskCount").textContent = roles.riskCount;
-      document.getElementById("roleMeetingAdvice").textContent = roles.riskCount > 2 ? "补齐关键角色" : roles.riskCount > 0 ? "会后跟进" : "意见已对齐";
-      if (preflight.missing > 2) {
-        document.getElementById("reviewDecision").textContent = "建议先补齐材料";
-        document.getElementById("readyState").textContent = "先补预审依据";
-        document.getElementById("nextStage").textContent = "补齐判断";
-        document.getElementById("scoreHint").textContent = "预审依据不足，建议先补齐目标、判断依据和验收标准";
-        document.getElementById("reviewGate").textContent = "建议依据：先补预审依据，不建议进入正式执行";
-        updateDecisionExplain(
-          `当前执行前预审依据仍缺 ${preflight.missing} 项，直接推进很可能变成执行中反复补标准。先把目标、判断依据和验收标准补齐，能减少打样后的返工。`,
-          [
-            "补齐预审依据：优先补信息优先级、判断依据、执行边界。",
-            "先做内部预审：产品和负责人先确认是否值得投入。",
-            "再拉跨角色确认：依据完整后再邀请设计、品牌、供应商和销售展示。"
-          ]
-        );
-        document.getElementById("reviewAlert").classList.add("show");
-        logReviewActivity(`预审依据仍缺 ${preflight.missing} 项，建议先补齐`);
-        reviewReady = false;
-      } else if (remaining === 0 && roles.riskCount === 0 && preflight.missing === 0) {
-        document.getElementById("reviewDecision").textContent = "建议进入正式打样评估";
-        document.getElementById("readyState").textContent = "可进入下一阶段";
-        document.getElementById("nextStage").textContent = "正式打样";
-        document.getElementById("scoreHint").textContent = "关键验证和角色意见已关闭，可以进入正式打样评估";
-        document.getElementById("reviewGate").textContent = "建议依据：关键阻塞项已关闭";
-        updateDecisionExplain(
-          "预审依据、关键角色意见和待办都已经关闭，当前版本具备进入正式制作和打印打样的条件。",
-          [
-            "输出执行材料：冻结推荐路径、执行范围和非本期需求。",
-            "同步设计和供应商任务：把版式、尺寸、边距、贴标位置和样张标准拆成可确认项。",
-            "建立复盘口径：按确认轮次、样张修改、打样返工和展示一致性跟踪效果。"
-          ]
-        );
-        logReviewActivity("预审待办已关闭，建议进入正式打样评估");
-        document.getElementById("reviewAlert").classList.remove("show");
-        reviewReady = true;
-      } else if (blocking === 0 && roles.riskCount <= 2 && preflight.missing <= 2) {
-        document.getElementById("reviewDecision").textContent = "建议带条件推进";
-        document.getElementById("readyState").textContent = "可继续推进";
-        document.getElementById("nextStage").textContent = "样张细化";
-        document.getElementById("scoreHint").textContent = "阻塞项已处理，剩余问题可跟随样张和会后动作继续验证";
-        document.getElementById("reviewGate").textContent = "建议依据：可做低保真样张，正式打样前补齐非阻塞验证项";
-        updateDecisionExplain(
-          `阻塞项已处理，当前还剩 ${remaining} 个非阻塞验证项、${roles.riskCount} 个角色意见需要跟进。可以继续推进样张细化，但正式打样前要把这些问题收口。`,
-          [
-            "继续样张细化：把信息层级、标签尺寸、边距、贴标位置和展示材料画清楚。",
-            "跟进非阻塞验证项：明确负责人和截止时间，避免会后悬空。",
-            "打样前复核一次：确认剩余问题不会影响执行范围和验收标准。"
-          ]
-        );
-        document.getElementById("reviewAlert").classList.remove("show");
-        logReviewActivity(`仍有 ${remaining} 个非阻塞项待跟进`);
-        reviewReady = true;
-      } else {
-        document.getElementById("reviewDecision").textContent = "建议先做低成本验证";
-        document.getElementById("readyState").textContent = "待复审";
-        document.getElementById("nextStage").textContent = "低保真验证";
-        document.getElementById("scoreHint").textContent = "存在阻塞项或关键角色疑问，暂不进入正式打样";
-        document.getElementById("reviewGate").textContent = "建议依据：先确认尺寸、边距和样张标准，暂不进入正式打样";
-        updateDecisionExplain(
-          `当前仍有 ${blocking} 个阻塞项和 ${roles.riskCount} 个角色疑问，直接执行会把尺寸、贴标、样张和展示一致性风险带进打样阶段。`,
-          [
-            "关闭高优先级阻塞项：标签尺寸、必填信息、打印边距和贴标位置必须先有方案。",
-            "拉齐关键角色意见：产品、设计、品牌和供应商需要给出投入和可行性判断。",
-            "保留低保真验证：先验证信息层级、可读性和贴标位置。"
-          ]
-        );
-        document.getElementById("reviewAlert").classList.add("show");
-        logReviewActivity(`仍有 ${blocking} 个阻塞项、${roles.riskCount} 个角色疑问需要处理`);
-        reviewReady = false;
-      }
+    function updateInputCount(){
+      const len = $('briefInput').value.trim().length;
+      $('inputCount').textContent = len + ' 字';
     }
 
-    function renderDevFeedbackList() {
-      const list = document.getElementById("devFeedbackList");
-      if (!list) return;
-      if (!devFeedbackItems.length) {
-        list.innerHTML = `
-          <div class="feedback-item">
-            <div class="feedback-item-head"><strong>暂无供应商反馈</strong><span class="pill">待输入</span></div>
-            <p>可以把会议、群聊或文档评论里的供应商意见整理到这里，再判断是否回写进预审材料。</p>
-          </div>
-        `;
-        return;
-      }
-      list.innerHTML = devFeedbackItems.map(item => `
-        <div class="feedback-item">
-          <div class="feedback-item-head">
-            <strong>${escapeHtml(item.type)}</strong>
-            <span class="pill ${item.status === "已回写" ? "green" : item.status === "本期不处理" ? "amber" : "blue"}">${escapeHtml(item.status)}</span>
-          </div>
-          <p>${escapeHtml(item.text)}</p>
-          <div class="actions">
-            <button class="btn primary" data-dev-action="accept" data-dev-id="${item.id}">回写进材料</button>
-            <button class="btn" data-dev-action="hold" data-dev-id="${item.id}">本期不处理</button>
+    function renderCaseButtons(){
+      $('caseButtons').innerHTML = order.map(key => {
+        const item = templates[key];
+        return `<button class="case-btn ${key === currentKey ? 'active' : ''}" data-case="${key}">${item.name}<span>${item.purpose}</span></button>`;
+      }).join('');
+      document.querySelectorAll('.case-btn').forEach(btn => {
+        btn.addEventListener('click', () => setCurrentCase(btn.dataset.case));
+      });
+    }
+
+    function renderResults(){
+      const data = activeData;
+      const state = calculate(data);
+      $('results').classList.add('show');
+      $('matchedCase').textContent = data.name;
+      $('matchedReason').textContent = currentMatch.reason;
+      $('confidencePill').textContent = currentMatch.confidence;
+      $('scoreRing').style.setProperty('--score', state.score + '%');
+      $('scoreText').textContent = state.score + '%';
+      $('statusText').textContent = state.status;
+      $('topStatus').textContent = state.status + ' · ' + state.score + '%';
+      $('highCount').textContent = state.openHigh.length;
+      $('closeRate').textContent = state.closeRate + '%';
+      $('roleCount').textContent = data.roles.length;
+
+      const whyCard = $('whyCard');
+      whyCard.className = 'status-card ' + state.className;
+      $('whyTitle').textContent = state.title;
+      $('statusReason').textContent = state.openHigh.length > 0
+        ? '判断依据：仍有高风险阻塞项未关闭，所以不建议进入正式执行。'
+        : '判断依据：高风险阻塞项已关闭，但最终是否执行仍需责任角色人工确认。';
+      const reasons = data.blockers.filter(b => !b.done).slice(0,3);
+      $('whyList').innerHTML = reasons.length
+        ? reasons.map(b => `<li>${b.title}</li>`).join('')
+        : '<li>高风险阻塞项已关闭，仍需责任角色进行最终人工确认。</li>';
+
+      $('blockerList').innerHTML = data.blockers.map((b, index) => `
+        <div class="blocker ${b.done ? 'done' : ''}">
+          <button class="check" data-index="${index}" aria-label="标记阻塞项">${b.done ? '✓' : ''}</button>
+          <div>
+            <div class="blocker-title">${b.title}</div>
+            <p class="muted">${b.advice}</p>
+            <div class="blocker-meta">
+              <span class="tag ${riskClass(b.risk)}">${b.risk}风险</span>
+              <span class="tag">责任角色：${b.role}</span>
+              <span class="tag">${b.done ? '已完成' : '待处理'}</span>
+            </div>
           </div>
         </div>
-      `).join("");
+      `).join('');
+      document.querySelectorAll('.check').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = Number(btn.dataset.index);
+          activeData.blockers[idx].done = !activeData.blockers[idx].done;
+          renderResults();
+        });
+      });
+
+      const roleDone = Math.max(20, Math.round(state.closeRate * .65));
+      $('roleProgress').style.width = roleDone + '%';
+      $('roleList').innerHTML = data.roles.map(role => `
+        <div class="role">
+          <div class="avatar">${role[0].slice(0,1)}</div>
+          <div><strong>${role[0]}</strong><small>${role[1]} · ${role[2]}</small></div>
+        </div>
+      `).join('');
+
+      const open = data.blockers.filter(b => !b.done);
+      const next = open.length ? open.map(b => b.advice) : ['责任角色进行最终确认', '同步预审结论到后续执行材料', '进入下一阶段前保留确认记录'];
+      $('judgement').textContent = `${data.name}：${state.title}。`;
+      $('nextList').innerHTML = next.map(item => `<li>${item}</li>`).join('');
+      $('summaryText').textContent = [
+        `预审事项：${data.name}`,
+        `当前状态：${state.status}，成熟度 ${state.score}%`,
+        `未关闭高风险：${state.openHigh.length} 项`,
+        `主要阻塞项：${open.slice(0,3).map(b => b.title).join('；') || '暂无高/中风险阻塞项'}`,
+        `下一步：${next[0]}`
+      ].join('\n');
+
+      document.querySelectorAll('.nav-step').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.nav-step[data-step="analysis"]').classList.add('active');
+      document.querySelectorAll('.flow-card').forEach((card, index) => card.classList.toggle('active', index === 1));
     }
 
-    function syncFeedbackToPrd() {
-      const scenario = currentScenario || getScenario();
-      renderDocument(scenario);
-      if (currentPrdText) {
-        currentPrdText = buildPrdText();
-        document.getElementById("prdPreview").textContent = currentPrdText;
-      }
-    }
-
-    document.querySelectorAll(".review-status").forEach(select => {
-      select.addEventListener("change", updateReviewScore);
-    });
-    document.querySelectorAll(".preflight-check").forEach(input => {
-      input.addEventListener("change", updateReviewScore);
-    });
-    document.querySelectorAll(".role-status").forEach(select => {
-      select.addEventListener("change", updateReviewScore);
-    });
-    updateReviewScore();
-    renderDevFeedbackList();
-
-    document.getElementById("addDevFeedbackBtn").addEventListener("click", () => {
-      const type = document.getElementById("devFeedbackType").value;
-      const input = document.getElementById("devFeedbackInput");
-      const text = input.value.trim();
-      if (!text) {
-        showToast("请先填写要记录的反馈");
+    function startReview(){
+      const input = $('briefInput').value.trim();
+      if(!input){
+        $('matchNote').innerHTML = '<strong>还不能开始：</strong>请先输入准备推进的事项，至少写清楚要做什么。';
+        $('briefInput').focus();
         return;
       }
-      devFeedbackItems.unshift({
-        id: Date.now().toString(),
-        type,
-        text,
-        status: "待确认"
+      const match = matchCase(input);
+      const key = match.key;
+      currentMatch = match;
+      currentKey = key;
+      activeData = cloneTemplate(key);
+      activeData.sample = input || templates[key].sample;
+      $('caseTitle').textContent = activeData.name;
+      $('casePurpose').textContent = activeData.purpose;
+      $('matchNote').innerHTML = `<strong>匹配结果：</strong>${activeData.name}。${match.reason}`;
+      document.querySelectorAll('.case-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.case === key));
+      $('loadingBox').classList.add('active');
+      $('startBtn').disabled = true;
+      $('results').classList.remove('show');
+      const lines = ['识别事项类型...', '匹配预审模板...', '生成高风险阻塞项...', '计算执行成熟度...'];
+      let i = 0;
+      $('loadingText').textContent = lines[0];
+      clearInterval(loadingTimer);
+      loadingTimer = setInterval(() => {
+        i = (i + 1) % lines.length;
+        $('loadingText').textContent = lines[i];
+      }, 320);
+      setTimeout(() => {
+        clearInterval(loadingTimer);
+        $('loadingBox').classList.remove('active');
+        $('startBtn').disabled = false;
+        renderResults();
+        document.getElementById('whyCard').scrollIntoView({behavior:'smooth',block:'start'});
+      }, 1400);
+    }
+
+    function fallbackCopy(text){
+      const area = document.createElement('textarea');
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+      $('copyBtn').textContent = '已复制';
+    }
+
+    function copySummary(){
+      const text = $('summaryText').textContent;
+      if(navigator.clipboard){
+        navigator.clipboard.writeText(text)
+          .then(() => $('copyBtn').textContent = '已复制')
+          .catch(() => fallbackCopy(text));
+      }else{
+        fallbackCopy(text);
+      }
+      setTimeout(() => $('copyBtn').textContent = '复制预审摘要', 1200);
+    }
+
+    function init(){
+      renderCaseButtons();
+      setCurrentCase('package');
+      $('startBtn').addEventListener('click', startReview);
+      $('briefInput').addEventListener('input', updateInputCount);
+      $('briefInput').addEventListener('keydown', event => {
+        if((event.ctrlKey || event.metaKey) && event.key === 'Enter'){
+          startReview();
+        }
       });
-      input.value = "";
-      renderDevFeedbackList();
-      logActivity("activity3", "已记录供应商反馈，等待产品判断是否回写预审材料");
-      showToast("已记录反馈");
-    });
-
-    document.getElementById("devFeedbackList").addEventListener("click", event => {
-      const btn = event.target.closest("[data-dev-action]");
-      if (!btn) return;
-      const item = devFeedbackItems.find(feedback => feedback.id === btn.dataset.devId);
-      if (!item) return;
-      item.status = btn.dataset.devAction === "accept" ? "已回写" : "本期不处理";
-      renderDevFeedbackList();
-      syncFeedbackToPrd();
-        logActivity("activity3", item.status === "已回写" ? "已记录供应商反馈" : "已记录本期不处理的供应商反馈");
-      showToast(item.status === "已回写" ? "已回写进预审材料" : "已标记本期不处理");
-    });
-
-    document.getElementById("autoFixBtn").addEventListener("click", () => {
-      const nextTodo = [...document.querySelectorAll(".review-status")].find(select => select.value !== "已处理");
-      const nextCheck = [...document.querySelectorAll(".preflight-check")].find(input => !input.checked);
-      const nextRole = [...document.querySelectorAll(".role-status")].find(select => select.value !== "已确认");
-      if (nextTodo) nextTodo.value = "已处理";
-      if (nextCheck) nextCheck.checked = true;
-      if (nextRole) nextRole.value = "已确认";
-      updateReviewScore();
-      logActivity("activity3", "已模拟采纳 1 条关键反馈，仍需逐项确认负责人和截止时间");
-      showToast("已采纳一条关键反馈");
-    });
-
-    document.getElementById("exportBtn").addEventListener("click", () => {
-      if (!reviewReady) {
-        document.getElementById("reviewAlert").classList.add("show");
-        showToast("仍有关键问题未处理");
-      }
-      unlock(4);
-      goTo(4);
-    });
-
-    function buildExportText(type) {
-      const scenario = currentScenario || getScenario();
-      if (type === "预审会议纪要" || type === "评审会议纪要") {
-        const statuses = [...document.querySelectorAll(".review-status")].map(s => s.value);
-        const handled = statuses.filter(v => v === "已处理").length;
-        const remaining = statuses.length - handled;
-        const blocking = Math.max(0, 2 - Math.min(handled, 2));
-        const nonBlocking = Math.max(0, remaining - blocking);
-        const preflight = getPreflightStats();
-        const roles = getRoleStats();
-        const decision = preflight.missing > 2 ? "建议会前补齐" : remaining === 0 && roles.riskCount === 0 && preflight.missing === 0 ? "建议进入正式打样评估" : "建议带条件推进";
-        const nextStage = document.getElementById("nextStage").textContent;
-        const roleText = roles.roles.map(item => `- ${item.role}：${item.status}`).join("\n");
-        const feedback = devFeedbackItems.length
-          ? devFeedbackItems.map(item => `- ${item.type}（${item.status}）：${item.text}`).join("\n")
-          : "- 暂无供应商反馈记录。";
-        return `执行前预审会议纪要
-
-项目：${scenario.title}
-
-预审结论：
-${decision}
-
-当前判断：
-- 预审材料：${preflight.done}/${preflight.total} 已准备，${preflight.missing} 项待补齐
-- 角色意见：${roles.confirmed} 个已确认，${roles.riskCount} 个仍需跟进
-- 阻塞项：${blocking} 个
-- 已处理：${handled} 个
-- 下一阶段：${nextStage}
-
-预审关注点：
-1. 问题价值：是否解决真实业务问题，目标用户和场景是否清楚。
-2. 路径取舍：建议路径、不选理由和进入条件是否讲清楚。
-3. 执行严谨性：尺寸、边距、贴标位置和样张标准是否有边界条件。
-4. 优先级清晰度：执行范围是否足够收敛，哪些内容可以后置。
-5. 返工风险可控性：供应商依赖、验收口径和展示一致性是否提前暴露。
-
-待办与责任人：
-- 产品 + 品牌：补齐信息优先级、必填信息和表达边界。
-- 设计 + 供应商：确认标签尺寸、打印边距、贴标位置和样张标准。
-- 产品 + 设计：把验收指标收敛到可读性、打样返工和展示一致性。
-
-角色意见状态：
-${roleText}
-
-供应商反馈记录：
-${feedback}
-
-会议后动作：
-${preflight.missing > 2
-  ? "- 先补齐预审材料，再组织跨角色确认。\n- 产品经理先做内部预审，避免执行中现场补标准。"
-  : blocking > 0 || roles.riskCount > 0
-    ? "- 先关闭阻塞项和关键角色疑问，再进入正式打样评估。\n- 非阻塞问题可随样张验证继续补充。"
-    : "- 可继续推进样张细化和正式打样。\n- 非阻塞问题在打样前确认负责人和完成时间。"}
-`;
-      }
-      if (type === "负责人摘要" || type === "老板摘要") {
-        return `负责人预审摘要
-
-项目：${scenario.title}
-
-建议状态：
-先做低保真贴标验证，暂不进入正式 Figma 精修和打印打样。
-
-为什么：
-${scenario.problem}
-
-当前处理路径：
-- 先做信息优先级表，确认产品名、核心卖点、成分说明和使用信息的优先级。
-- 再做低保真贴标验证，检查可读性、贴标位置和展示距离。
-- 等尺寸、边距和样张标准稳定后，再进入正式制作。
-
-关键风险：
-${scenario.gaps}
-
-需要负责人确认：
-是否同意先用低成本样张验证，而不是直接进入正式打样。`;
-      }
-      if (type === "供应商确认单" || type === "研发任务清单") {
-        return `供应商确认单
-
-项目：${scenario.title}
-
-确认目标：
-在正式打样前确认尺寸、材质、边距、贴标位置和样张标准，避免执行后返工。
-
-本次确认范围：
-${scenario.scope.map(item => `- ${item}`).join("\n")}
-
-验收标准：
-- ${scenario.acceptance}
-- 高风险反馈需要有明确负责人和关闭状态。
-- 样张修改原因需要能被记录和复盘。`;
-      }
-      if (type === "设计 Brief") {
-        return `设计 Brief
-
-项目：${scenario.title}
-
-核心用户：
-${scenario.users}
-
-关键输出：
-- 信息优先级表
-- 低保真标签样张
-- Figma 正式制作稿
-- 展示材料同步版本
-
-设计重点：
-把信息层级、来源、贴标限制和下一步动作讲清楚，避免团队把未确认内容直接带进打样。`;
-      }
-      return exportSamples[type] || "暂无预览内容。";
+      $('resetBtn').addEventListener('click', () => setCurrentCase(currentKey));
+      $('copyBtn').addEventListener('click', copySummary);
+      document.querySelectorAll('.nav-step').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.step === 'input' ? 'input' : btn.dataset.step === 'analysis' ? 'analysis' : btn.dataset.step === 'blockers' ? 'blockers' : 'result';
+          const el = document.getElementById(target);
+          if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+          document.querySelectorAll('.nav-step').forEach(item => item.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
     }
 
-    function openExportModal(type) {
-      currentExportText = buildExportText(type);
-      originalExportText = currentExportText;
-      modalTitle.textContent = type;
-      modalContent.value = currentExportText;
-      exportModal.classList.add("show");
-      setTimeout(() => modalContent.focus(), 60);
-    }
-
-    function closeExportModal() {
-      exportModal.classList.remove("show");
-    }
-
-    document.querySelectorAll("[data-export]").forEach(btn => {
-      btn.addEventListener("click", () => openExportModal(btn.dataset.export));
-    });
-    document.getElementById("closeModal").addEventListener("click", closeExportModal);
-    document.getElementById("closeModalBottom").addEventListener("click", closeExportModal);
-    exportModal.addEventListener("click", e => {
-      if (e.target === exportModal) closeExportModal();
-    });
-    modalContent.addEventListener("input", () => {
-      currentExportText = modalContent.value;
-    });
-    document.getElementById("restoreExportBtn").addEventListener("click", () => {
-      modalContent.value = originalExportText;
-      currentExportText = originalExportText;
-      showToast("已恢复整理初稿");
-    });
-    document.getElementById("copyExportBtn").addEventListener("click", async () => {
-      try {
-        currentExportText = modalContent.value;
-        await navigator.clipboard.writeText(currentExportText);
-        showToast("已复制导出内容");
-      } catch {
-        showToast("当前浏览器不支持自动复制");
-      }
-    });
-
-    unlock(0);
-    renderCaseExamples();
-    currentScenario = getScenario();
-    renderQuestions(currentScenario);
-    renderInfoCards(currentScenario, false);
-    renderDocument(currentScenario);
-    renderWorkbench(currentScenario);
-    renderSolutionCompare(currentScenario);
-    renderStepbar();
+    init();
   </script>
 </body>
 </html>

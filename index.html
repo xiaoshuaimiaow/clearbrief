@@ -3,645 +3,198 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ClearBrief 清晰启动 - 执行前预审工具</title>
+  <title>ClearBrief 清晰启动</title>
   <style>
-    :root {
-      --bg: #f4f7fc;
-      --panel: #ffffff;
-      --ink: #121722;
-      --muted: #667085;
-      --line: #d9e0ea;
-      --soft: #f8fafc;
-      --blue: #2563eb;
-      --blue-soft: #e8f0ff;
-      --green: #0f766e;
-      --green-soft: #ecfdf3;
-      --amber: #b45309;
-      --amber-soft: #fff7ed;
-      --red: #b42318;
-      --red-soft: #fff1f1;
-      --purple: #5f3dc4;
-      --purple-soft: #f2edff;
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --ink:#111827;
+      --muted:#667085;
+      --line:#d9e2ef;
+      --blue:#2563eb;
+      --blue-soft:#eaf1ff;
+      --amber:#b45309;
+      --amber-soft:#fff7ed;
+      --green:#047857;
+      --green-soft:#ecfdf5;
+      --shadow:0 18px 50px rgba(15,23,42,.08);
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: Arial, "Microsoft YaHei", sans-serif;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft YaHei",Arial,sans-serif;line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    .topbar{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.86);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+    .nav{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{font-weight:900;letter-spacing:.2px}
+    .nav-links{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#475467;font-size:14px}
+    .nav-links a{padding:8px 10px;border-radius:8px}
+    .nav-links a:hover{background:var(--blue-soft);color:var(--blue)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 18px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:800;color:var(--ink)}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 12px 24px rgba(37,99,235,.18)}
+    .wrap{max-width:1180px;margin:0 auto;padding:38px 24px 68px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center;margin-bottom:20px}
+    .hero-copy{padding:18px 0}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#475467;font-size:13px;font-weight:800}
+    h1{font-size:48px;line-height:1.06;margin:16px 0 8px;letter-spacing:0}
+    .subtitle{font-size:20px;font-weight:900;margin:0 0 10px}
+    .lead{font-size:16px;color:var(--muted);max-width:640px;margin:0 0 18px}
+    .hero-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .demo-tip{font-size:13px;color:var(--muted)}
+    .preview{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    .preview-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;background:var(--amber-soft);color:var(--amber);font-weight:900;font-size:12px}
+    .mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .mini-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfdff;transition:.18s ease}
+    .mini-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(15,23,42,.06)}
+    .mini-card span{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
+    .mini-card strong{font-size:26px}
+    .ring-row{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:16px;background:#fbfdff;margin-top:12px}
+    .ring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--blue) 0 68%,#e8eef7 68% 100%);position:relative}
+    .ring:after{content:"";position:absolute;inset:10px;background:#fff;border-radius:50%}
+    .ring b{position:relative;z-index:1;font-size:22px}
+    section{margin-top:16px}
+    .section-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 10px 28px rgba(15,23,42,.045)}
+    .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:18px}
+    h2{font-size:24px;line-height:1.2;margin:0 0 6px}
+    .section-head p,.section-card p{color:var(--muted);margin:0}
+    .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .quick-card{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fbfdff;min-height:116px;transition:.18s ease}
+    .quick-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(15,23,42,.07)}
+    .quick-card b{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;margin-bottom:14px}
+    .quick-card strong{display:block;margin-bottom:6px}
+    .quick-card span{color:var(--muted);font-size:14px}
+    .insight{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .quote{background:linear-gradient(180deg,#f8fbff,#eef5ff);border:1px solid #bfd2ff;border-radius:14px;padding:18px}
+    .quote strong{font-size:24px;line-height:1.35;display:block;margin-bottom:10px}
+    .problem-list{display:grid;gap:10px}
+    .problem-list div{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fff}
+    .method{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+    .step{position:relative;border:1px solid var(--line);border-radius:13px;background:#fbfdff;padding:13px;min-height:104px}
+    .step b{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);margin-bottom:12px}
+    .step strong{display:block;margin-bottom:6px}
+    .step span{color:var(--muted);font-size:13px}
+    .scenes{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    .pill{border:1px solid var(--line);border-radius:999px;padding:7px 10px;background:#fff;color:#475467;font-weight:800;font-size:13px}
+    @media(max-width:980px){
+      .hero,.insight{grid-template-columns:1fr}
+      .quick-grid{grid-template-columns:repeat(2,1fr)}
+      .method{grid-template-columns:repeat(3,1fr)}
+      h1{font-size:44px}
     }
-    :focus-visible {
-      outline: 3px solid rgba(37, 99, 235, .38);
-      outline-offset: 3px;
-    }
-    a { color: inherit; }
-    .skip-link {
-      position: absolute;
-      left: 24px;
-      top: -48px;
-      z-index: 50;
-      background: var(--ink);
-      color: #fff;
-      border-radius: 8px;
-      padding: 10px 14px;
-      text-decoration: none;
-      font-weight: 700;
-    }
-    .skip-link:focus { top: 16px; }
-    .wrap {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 28px 24px 72px;
-    }
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      margin: 0 -24px 24px;
-      padding: 14px 24px;
-      background: rgba(244, 247, 252, .92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(217, 224, 234, .76);
-    }
-    .brand {
-      font-weight: 800;
-      letter-spacing: 0;
-    }
-    .nav {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .nav a { text-decoration: none; }
-    .hero {
-      min-height: 520px;
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 36px;
-      align-items: center;
-    }
-    .eyebrow {
-      display: inline-flex;
-      height: 30px;
-      align-items: center;
-      border-radius: 999px;
-      background: var(--blue-soft);
-      color: var(--blue);
-      padding: 0 14px;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 18px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 52px;
-      letter-spacing: 0;
-      line-height: 1.08;
-    }
-    .lead {
-      margin: 22px 0 0;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.65;
-    }
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 26px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      border-radius: 8px;
-      padding: 0 18px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-    }
-    .btn.primary {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: white;
-    }
-    .hero-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 24px;
-      box-shadow: 0 18px 46px rgba(18, 23, 34, .08);
-    }
-    .screen {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      overflow: hidden;
-      background: var(--soft);
-    }
-    .screen-top {
-      height: 42px;
-      background: var(--panel);
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 14px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: #cbd5e1; }
-    .screen-body { padding: 18px; }
-    .mock-row {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-    .mock-row strong { display: block; margin-bottom: 6px; font-size: 14px; }
-    .mock-row span { color: var(--muted); font-size: 12px; line-height: 1.45; }
-    .status-ladder {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .status-step {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      padding: 10px;
-      min-height: 78px;
-    }
-    .status-step strong {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 6px;
-    }
-    .status-step span {
-      display: block;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.4;
-    }
-    .status-step.active {
-      border-color: #fed7aa;
-      background: var(--amber-soft);
-    }
-    .proof-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-top: 22px;
-    }
-    .proof-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 10px 24px rgba(18, 23, 34, .04);
-    }
-    .proof-card strong {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 6px;
-    }
-    .proof-card span {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .judgement-board {
-      display: grid;
-      grid-template-columns: 1.05fr 1fr 1fr;
-      gap: 14px;
-      margin-top: 22px;
-    }
-    .judgement-card {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--soft);
-      padding: 18px;
-    }
-    .judgement-card strong {
-      display: block;
-      margin: 0 0 8px;
-      font-size: 15px;
-    }
-    .judgement-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-    section {
-      margin-top: 42px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 34px;
-      box-shadow: 0 12px 32px rgba(18, 23, 34, .05);
-    }
-    section h2 {
-      margin: 0 0 18px;
-      font-size: 28px;
-    }
-    .section-sub {
-      color: var(--muted);
-      line-height: 1.6;
-      max-width: 880px;
-      margin: -4px 0 24px;
-    }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-    .card {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 20px;
-      background: var(--soft);
-    }
-    .card h3 { margin: 0 0 10px; font-size: 17px; }
-    .card p, .card li {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.58;
-    }
-    .card p { margin: 0; }
-    .card ul { margin: 0; padding-left: 18px; }
-    .tag {
-      display: inline-flex;
-      min-height: 26px;
-      align-items: center;
-      border-radius: 999px;
-      padding: 0 10px;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-    .tag.blue { background: var(--blue-soft); color: var(--blue); }
-    .tag.green { background: var(--green-soft); color: var(--green); }
-    .tag.amber { background: var(--amber-soft); color: var(--amber); }
-    .tag.purple { background: var(--purple-soft); color: var(--purple); }
-    .tag.red { background: var(--red-soft); color: var(--red); }
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-    }
-    .flow-step {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 18px;
-      background: var(--soft);
-      min-height: 150px;
-    }
-    .num {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--blue);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .flow-step h3 { font-size: 15px; margin: 0 0 8px; }
-    .flow-step p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-    .timeline {
-      display: grid;
-      gap: 14px;
-    }
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 150px 1fr;
-      gap: 18px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--soft);
-    }
-    .timeline-item strong { font-size: 15px; }
-    .timeline-item p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.58;
-      font-size: 14px;
-    }
-    .metric {
-      background: var(--blue-soft);
-      border-color: #bad0ff;
-    }
-    .metric strong {
-      display: block;
-      color: var(--blue);
-      font-size: 28px;
-      margin-bottom: 6px;
-    }
-    .preview-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      align-items: stretch;
-    }
-    .preview-panel {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--soft);
-      overflow: hidden;
-    }
-    .preview-head {
-      height: 44px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 16px;
-      background: var(--panel);
-      border-bottom: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .preview-body { padding: 18px; }
-    .preview-line {
-      display: grid;
-      grid-template-columns: 96px 1fr;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--line);
-      font-size: 13px;
-    }
-    .preview-line:last-child { border-bottom: 0; }
-    .preview-line strong { color: var(--ink); }
-    .preview-line span { color: var(--muted); line-height: 1.45; }
-    .quote {
-      background: var(--ink);
-      color: white;
-      border-radius: 14px;
-      padding: 30px;
-      line-height: 1.7;
-      font-size: 18px;
-    }
-    .quote span {
-      display: block;
-      color: #cbd5e1;
-      font-size: 14px;
-      margin-top: 16px;
-    }
-    @media (max-width: 980px) {
-      .hero, .grid-2, .grid-3, .flow, .preview-grid, .timeline-item, .proof-strip, .judgement-board, .status-ladder { grid-template-columns: 1fr; }
-      h1 { font-size: 40px; }
-      .nav { display: none; }
-      section { padding: 24px; }
+    @media(max-width:640px){
+      .wrap{padding:34px 14px 62px}
+      .nav{padding:12px 14px}
+      .nav-links a:not(.btn){display:none}
+      h1{font-size:38px}
+      .quick-grid,.mini-grid,.method{grid-template-columns:1fr}
+      .section-card{padding:20px}
     }
   </style>
 </head>
 <body>
-  <a class="skip-link" href="#main">跳到主要内容</a>
-  <main class="wrap" id="main">
-    <div class="topbar">
-      <div class="brand">ClearBrief 清晰启动</div>
-      <nav class="nav">
-        <a href="#overview">速览</a>
-        <a href="#problem">问题</a>
-        <a href="#solution">方案</a>
-        <a href="#process">取舍</a>
-        <a href="#demo">Demo</a>
-        <a href="#review">检查</a>
-        <a href="#method">适用场景</a>
-        <a href="#reflection">边界</a>
-      </nav>
-    </div>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="index.html">ClearBrief 清晰启动</a>
+      <div class="nav-links">
+        <a href="#quick">30秒看懂</a>
+        <a href="#insight">产品洞察</a>
+        <a href="#method">检查框架</a>
+        <a href="prd.html">产品文档</a>
+        <a class="btn primary" href="demo.html">开始体验</a>
+      </div>
+    </nav>
+  </header>
 
-    <header class="hero">
-      <div>
-        <div class="eyebrow">执行前预审工具</div>
-        <h1>先确认清楚，再进入设计、研发或打样</h1>
-        <p class="lead">ClearBrief 帮团队在正式投入执行前，把目标、约束、角色责任、风险和验收标准先对齐。它不替负责人拍板，只把“现在能不能推进、还缺什么、谁来确认”讲清楚。</p>
-        <div class="card" style="margin:18px 0 0; padding:18px 20px">
-          <span class="tag blue">30 秒看懂</span>
-          <h3>它不是 PRD 模板</h3>
-          <p>ClearBrief 关注的是开工前的判断：能不能进入执行、先确认什么、哪些角色必须参与、哪些风险会导致返工。确认后的内容会整理成预审确认单和角色待办。</p>
-        </div>
-        <div class="actions">
-          <a class="btn primary" href="demo.html">体验预审流程</a>
-          <a class="btn" href="prd.html">查看产品说明</a>
-          <a class="btn" href="PRD.md">查看 PRD</a>
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">执行前信息确认与风险预审工具</span>
+        <h1>ClearBrief 清晰启动</h1>
+        <p class="subtitle">先判断这件事是否已经准备好执行。</p>
+        <p class="lead">在正式设计、开发、打样、上线前，用一句话输入准备推进的事项，快速识别信息缺口、阻塞项、关键角色和下一步动作。</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="demo.html">开始体验</a>
+          <a class="btn" href="#quick">查看怎么用</a>
+          <span class="demo-tip">建议：选择案例或输入一句话，点击开始预审。</span>
         </div>
       </div>
-      <div class="hero-card">
-        <div class="screen">
-          <div class="screen-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>预审工作台预览</span></div>
-          <div class="screen-body">
-            <div class="mock-row"><strong>执行前判断</strong><span>判断是目标不清、约束缺失、角色未对齐，还是验收标准不足。</span></div>
-            <div class="mock-row"><strong>信息取舍</strong><span>对比不同执行路径的成本、返工风险、依赖和验证难度。</span></div>
-            <div class="mock-row"><strong>推进结论</strong><span>根据阻塞项、角色意见和材料成熟度判断是否进入正式执行。</span></div>
-            <div class="status-ladder" aria-label="评审推进状态">
-              <div class="status-step"><strong>不能评审</strong><span>目标、用户或根因缺失</span></div>
-              <div class="status-step active"><strong>可预讨论</strong><span>可以先讨论方向和取舍</span></div>
-              <div class="status-step"><strong>可评审</strong><span>方案、边界和风险清楚</span></div>
-              <div class="status-step"><strong>可进入执行</strong><span>标准和负责人基本明确</span></div>
-            </div>
+      <aside class="preview" aria-label="状态总览预览">
+        <div class="preview-head">
+          <strong>当前预审状态</strong>
+          <span class="badge">不可直接执行</span>
+        </div>
+        <div class="mini-grid">
+          <div class="mini-card"><span>执行成熟度</span><strong>68%</strong></div>
+          <div class="mini-card"><span>高风险阻塞项</span><strong>2</strong></div>
+          <div class="mini-card"><span>待确认角色</span><strong>3</strong></div>
+          <div class="mini-card"><span>下一步</span><strong style="font-size:18px">确认边距</strong></div>
+        </div>
+        <div class="ring-row">
+          <div class="ring"><b>68%</b></div>
+          <div>
+            <strong>可预审，但不可进入正式打样</strong>
+            <p style="margin-top:6px;color:var(--muted)">供应商打印边距、成分文案、贴标位置仍未关闭。</p>
           </div>
         </div>
-      </div>
-    </header>
-
-    <section id="overview">
-      <h2>产品概览</h2>
-      <p class="section-sub">ClearBrief 把执行前最容易漏掉的确认动作放到一条流程里：先描述事项，再确认信息缺口和执行门槛，最后整理成可以发给负责人、设计和供应商的确认材料。</p>
-      <div class="proof-strip">
-        <div class="proof-card"><strong>1 条主流程</strong><span>描述事项 -> 执行前判断 -> 确认单 -> 执行检查 -> 发送材料。</span></div>
-        <div class="proof-card"><strong>1 个主案例</strong><span>以足霜产品信息展示物料为例，补齐信息优先级、尺寸约束、角色责任和验收标准。</span></div>
-        <div class="proof-card"><strong>2 类输出</strong><span>负责人摘要和供应商确认单，优先服务真实推进动作。</span></div>
-        <div class="proof-card"><strong>5 类角色</strong><span>产品、设计、品牌、供应商、销售共同参与执行前确认。</span></div>
-      </div>
-      <div class="judgement-board">
-        <div class="judgement-card"><span class="tag blue">执行前对齐</span><strong>先确认门槛，再投入成本</strong><p>把目标、约束、角色责任和验收标准前置，避免执行中不断补信息。</p></div>
-        <div class="judgement-card"><span class="tag amber">人工确认</span><strong>不替负责人做最终决定</strong><p>工具只负责把备选路径和确认材料摆清楚，最终是否推进仍由负责人确认。</p></div>
-        <div class="judgement-card"><span class="tag green">低成本验证</span><strong>先验证，再精修和打样</strong><p>以低保真样张验证可读性、贴标位置和展示距离，减少正式打样后的返工。</p></div>
-      </div>
+      </aside>
     </section>
 
-    <section id="problem">
-      <h2>一、问题场景：执行前没对齐，执行中反复改</h2>
-      <p class="section-sub">在产品信息展示物料迭代里，难点不只是版式怎么做，而是小尺寸包装和展示材料要同时承载产品卖点、成分说明、使用信息、品牌表达和贴标位置。不同角色对信息优先级和验收标准不同步，就会在打样后反复修改。</p>
-      <div class="quote" style="margin:18px 0 20px">
-        典型场景：足霜标签需要在有限空间内放下产品名、成分说明、使用信息、品牌表达和贴标位置。正式排版和打样前，如果没有先确认信息优先级、尺寸约束、打印边距和样张标准，后续很容易进入反复改稿。
-        <span>ClearBrief 的作用，就是把这些执行前必须确认的问题提前摆出来。</span>
-      </div>
-      <div class="grid-3">
-        <div class="card"><span class="tag red">痛点 1</span><h3>信息优先级不清</h3><p>产品卖点、成分说明、使用方法和品牌表达都重要，但小包装空间有限，必须先决定哪些信息放在第一眼。</p></div>
-        <div class="card"><span class="tag amber">痛点 2</span><h3>执行约束后置暴露</h3><p>尺寸、边距、贴标位置和打印限制如果到打样后才发现问题，就会带来反复改稿和物料返工。</p></div>
-        <div class="card"><span class="tag purple">痛点 3</span><h3>角色标准不一致</h3><p>产品关注用户理解，设计关注表达效果，供应商关注工艺，销售关注展示材料。如果没有预审清单，确认会变成来回追问。</p></div>
-      </div>
-    </section>
-
-    <section id="before-after">
-      <h2>二、为什么需要预审：执行前后对比</h2>
-      <p class="section-sub">我没有把 ClearBrief 做成“直接给答案”的工具，而是让它帮助用户把执行前必须确认的内容提前暴露出来。</p>
-      <div class="grid-2">
-        <div class="card"><span class="tag red">没有预审时</span><h3>直接进入排版和打样</h3><p>容易在打印后才发现文字过小、边距不足、贴标位置偏移、展示材料和实物包装信息不一致，后续只能反复改稿。</p></div>
-        <div class="card"><span class="tag green">使用 ClearBrief 后</span><h3>先确认信息和执行门槛</h3><p>先确认信息优先级、尺寸约束、打印边距、贴标位置和样张验收标准，再进入 Figma 精修和正式打样。</p></div>
-      </div>
-    </section>
-
-    <section id="solution">
-      <h2>三、产品方案：先预审，再执行</h2>
-      <p class="section-sub">ClearBrief 不一上来生成长文档，而是先帮用户拆目标、约束、角色和风险，再把被确认的路径整理成可执行材料。</p>
-      <div class="flow">
-        <div class="flow-step"><div class="num">1</div><h3>描述事项</h3><p>录入要推进的物料、业务目标、已知约束和预期产出。</p></div>
-        <div class="flow-step"><div class="num">2</div><h3>识别缺口</h3><p>判断信息优先级、尺寸约束、角色责任和验收标准是否缺失。</p></div>
-        <div class="flow-step"><div class="num">3</div><h3>对比路径</h3><p>比较先排版、先打样、先做低成本贴标验证等路径的风险和依赖。</p></div>
-        <div class="flow-step"><div class="num">4</div><h3>确认门槛</h3><p>明确进入 Figma 排版、打印打样或展示材料制作前必须确认什么。</p></div>
-        <div class="flow-step"><div class="num">5</div><h3>推进判断</h3><p>判断当前事项是不能执行、可预讨论、可预审，还是可进入正式执行。</p></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>四、适合什么场景</h2>
-      <div class="timeline">
-        <div class="timeline-item"><strong>物料制作前</strong><p>标签、展示图、包装样张、客户介绍材料需要先确认信息优先级、尺寸约束和验收标准。</p></div>
-        <div class="timeline-item"><strong>需求进入排期前</strong><p>业务已经提出要做，但目标、范围、负责人、风险和验收标准还没有讲清楚。</p></div>
-        <div class="timeline-item"><strong>跨角色协作前</strong><p>产品、设计、供应商、品牌、销售等角色关注点不同，需要先用一份确认单拉齐口径。</p></div>
-        <div class="timeline-item"><strong>不适合的场景</strong><p>已经进入明确执行、只需要排期跟踪或多人项目管理时，应该使用项目管理工具，而不是再做预审。</p></div>
-      </div>
-    </section>
-
-    <section id="process">
-      <h2>五、产品取舍</h2>
-      <p class="section-sub">ClearBrief 首期只处理执行前最关键的确认动作，不做复杂项目管理、真实权限系统和全量协同平台。</p>
-      <div class="grid-3">
-        <div class="card"><span class="tag blue">不做长文档优先</span><h3>先判断能不能做</h3><p>先确认目标、约束、角色和验收标准是否足够支撑执行，再整理材料。</p></div>
-        <div class="card"><span class="tag amber">不做大而全</span><h3>只保留首期闭环</h3><p>首期保留描述事项、执行前判断、确认单、执行检查和发送材料五步。</p></div>
-        <div class="card"><span class="tag green">不替人拍板</span><h3>保留人工确认</h3><p>预审结果只作为讨论依据，负责人仍然需要确认是否进入下一阶段。</p></div>
-      </div>
-    </section>
-
-    <section id="demo">
-      <h2>六、可点击 Demo：聚焦执行前预审</h2>
-      <p class="section-sub">Demo 默认使用“足霜产品信息展示物料迭代”案例，并把这个案例打穿到信息优先级、尺寸约束、贴标验证、打印打样、角色责任和验收标准。其他案例保留为能力迁移的补充，不抢主线。</p>
-      <div class="preview-grid">
-        <div class="preview-panel">
-          <div class="preview-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>体验路径</span></div>
-          <div class="preview-body">
-            <div class="preview-line"><strong>输入</strong><span>选择案例或输入 50 字以上的业务问题。</span></div>
-            <div class="preview-line"><strong>判断</strong><span>梳理信息缺口、执行约束和待确认角色。</span></div>
-            <div class="preview-line"><strong>取舍</strong><span>确认高优先级判断，右侧信息卡实时更新。</span></div>
-            <div class="preview-line"><strong>材料</strong><span>整理可讨论的预审材料草稿，并保留执行清单。</span></div>
-            <div class="preview-line"><strong>预审</strong><span>处理阻塞项、角色意见和打样反馈，判断能否进入执行。</span></div>
-          </div>
-        </div>
-        <div class="grid-2">
-        <div class="card"><span class="tag blue">真实案例</span><h3>从信息展示物料切入</h3><p>围绕足霜小尺寸包装、信息优先级、打印边距、贴标位置和展示一致性这些真实约束展开。</p></div>
-        <div class="card"><span class="tag green">实时联动</span><h3>判断会改变推进状态</h3><p>确认信息取舍、处理预审待办、回写供应商反馈后，当前事项会从不能执行逐步推进到可预审或可进入执行。</p></div>
-          <div class="card"><span class="tag amber">可编辑导出</span><h3>不把初稿当定稿</h3><p>负责人摘要和供应商确认单都可以继续修改，再发给对应角色确认。</p></div>
-          <div class="card"><span class="tag purple">边界清楚</span><h3>首期不做协同平台</h3><p>设计 Brief 和会议纪要作为后续扩展，首期只保留最能推进事项的两类材料。</p></div>
+    <section id="quick" class="section-card">
+      <div class="section-head">
+        <div>
+          <h2>30秒看懂 ClearBrief</h2>
+          <p>第一次打开项目时，按这条路线就能看懂产品价值。</p>
         </div>
       </div>
-      <div class="actions">
-        <a class="btn primary" href="demo.html">打开 Demo</a>
+      <div class="quick-grid">
+        <div class="quick-card"><b>1</b><strong>先看洞察</strong><span>理解为什么返工常常发生在执行前。</span></div>
+        <div class="quick-card"><b>2</b><strong>再看框架</strong><span>目标、约束、责任人、验收标准、风险和执行决策。</span></div>
+        <div class="quick-card"><b>3</b><strong>进入案例</strong><span>用包装、活动页、知识库、AI Agent 验证方法论。</span></div>
+        <div class="quick-card"><b>4</b><strong>查看结论</strong><span>看系统如何判断不可执行、可预审和下一步补齐什么。</span></div>
       </div>
     </section>
 
-    <section id="label-case">
-      <h2>七、主案例打穿：足霜产品信息展示物料迭代</h2>
-      <p class="section-sub">为了避免项目停留在理想化流程，我把主案例压到正式制作和打印打样前需要确认的粒度：先确认信息优先级和尺寸约束，再做低成本贴标验证，最后进入 Figma 精修和供应商打样。</p>
-      <div class="grid-3">
-        <div class="card"><span class="tag blue">P0 路径</span><h3>信息优先级 + 低保真贴标验证</h3><p>先把产品名、成分、用法、品牌表达和贴标位置排出优先级，再用低成本样张验证可读性和实物位置。</p></div>
-        <div class="card"><span class="tag amber">执行门槛</span><h3>先关掉五类风险</h3><p>物料尺寸、必填信息、打印边距、贴标位置、供应商样张标准确认后，才进入正式制作和打样。</p></div>
-        <div class="card"><span class="tag green">验证标准</span><h3>用实物检查代替空想</h3><p>重点看首屏信息是否清楚、成分与用法是否可读、贴标是否居中、展示材料是否和实物一致。</p></div>
+    <section id="insight" class="section-card">
+      <div class="section-head">
+        <div>
+          <h2>产品洞察</h2>
+          <p>很多团队管理执行过程，却没有管理开始执行的条件。</p>
+        </div>
       </div>
-      <div class="timeline" style="margin-top:18px">
-        <div class="timeline-item"><strong>第 1 步：信息预审</strong><p>确认产品卖点、必填成分、使用信息、品牌表达和包装尺寸约束，形成信息优先级表。</p></div>
-        <div class="timeline-item"><strong>第 2 步：低成本验证</strong><p>用黑白样张或低保真贴标检查可读性、边距、贴标位置和展示距离，避免直接进入高成本打样。</p></div>
-        <div class="timeline-item"><strong>第 3 步：正式执行</strong><p>进入 Figma 精修、打印打样和展示材料整理，并根据样张反馈调整文案层级和版面重点。</p></div>
-      </div>
-    </section>
-
-    <section id="review">
-      <h2>八、重点模块：执行前预审工作台</h2>
-      <p class="section-sub">我后续把评审模块从“简单打分”改成更接近真实工作的推进判断：材料是否齐、关键角色是否确认、阻塞项是否关闭、供应商反馈是否回写，以及当前到底能不能进入下一阶段。</p>
-      <div class="grid-3">
-        <div class="card"><span class="tag blue">执行前预检</span><h3>避免打样后才补标准</h3><p>检查目标、信息优先级、尺寸约束、角色责任、验收标准和外部依赖。</p></div>
-        <div class="card"><span class="tag amber">角色意见</span><h3>体现跨角色协作</h3><p>产品、设计、品牌、供应商和销售展示同学都能记录确认状态和待跟进问题。</p></div>
-        <div class="card"><span class="tag green">执行沉淀</span><h3>形成可复制确认清单</h3><p>导出预审结论、阻塞项、角色意见、供应商反馈和下一步动作。</p></div>
+      <div class="insight">
+        <div class="quote">
+          <strong>大多数返工不是执行错误，而是执行前就不该开始。</strong>
+          <p>ClearBrief 的价值不是替团队做决定，而是在进入下一阶段之前，把信息缺口、责任边界和高风险阻塞项先暴露出来。</p>
+        </div>
+        <div class="problem-list">
+          <div><strong>信息缺失</strong><p>文案版本、尺寸边界、验收口径没有确认。</p></div>
+          <div><strong>责任不清</strong><p>谁确认、谁执行、谁最终拍板不明确。</p></div>
+          <div><strong>风险暴露太晚</strong><p>打样、上线或开发后才发现前置条件没满足。</p></div>
+        </div>
       </div>
     </section>
 
-    <section>
-      <h2>九、指标设计与验证方式</h2>
-      <div class="grid-3">
-        <div class="card metric"><strong>效率</strong><p>预审材料准备时长、信息补齐耗时、跨角色确认轮次。</p></div>
-        <div class="card metric"><strong>质量</strong><p>执行前发现的问题数、验收标准覆盖率、打样后二次修改比例。</p></div>
-        <div class="card metric"><strong>协作</strong><p>角色意见关闭率、供应商阻塞问题数量、执行后返工次数。</p></div>
+    <section id="method" class="section-card">
+      <div class="section-head">
+        <div>
+          <h2>执行前检查框架</h2>
+          <p>ClearBrief 不是只服务包装场景，而是一套可迁移的执行前预审框架。</p>
+        </div>
       </div>
-      <div class="timeline" style="margin-top:18px">
-        <div class="timeline-item"><strong>轻量验证计划</strong><p>让用户输入一个真实推进事项，观察是否能理解流程、是否能补齐约束、是否知道下一步该确认什么。</p></div>
-        <div class="timeline-item"><strong>观察点</strong><p>用户是否卡在问题描述、信息缺口是否有帮助、确认单是否能直接用于沟通、执行检查是否能解释“为什么暂时不能进入正式执行”。</p></div>
+      <div class="method">
+        <div class="step"><b>1</b><strong>目标是否明确</strong><span>这件事要达成什么结果。</span></div>
+        <div class="step"><b>2</b><strong>约束是否明确</strong><span>时间、成本、尺寸、技术或工艺边界。</span></div>
+        <div class="step"><b>3</b><strong>责任人是否明确</strong><span>谁确认、谁执行、谁拍板。</span></div>
+        <div class="step"><b>4</b><strong>验收标准是否明确</strong><span>什么算完成，什么算通过。</span></div>
+        <div class="step"><b>5</b><strong>风险是否关闭</strong><span>高风险项是否已有处理动作。</span></div>
+        <div class="step"><b>6</b><strong>是否允许执行</strong><span>进入下一阶段，或先补齐信息。</span></div>
       </div>
-    </section>
-
-    <section>
-      <h2>十、产品化边界</h2>
-      <p class="section-sub">当前版本是前端可点击原型，用来跑通从事项描述到确认材料的主流程。接入真实业务时，需要继续补齐权限、日志、敏感信息处理和人工复核机制。</p>
-      <div class="flow">
-        <div class="flow-step"><div class="num">1</div><h3>前端输入</h3><p>收集业务问题、会议纪要、物料要求或反馈片段。</p></div>
-        <div class="flow-step"><div class="num">2</div><h3>后端接口</h3><p>负责鉴权、限流、调用成本控制和日志记录。</p></div>
-        <div class="flow-step"><div class="num">3</div><h3>结构化整理</h3><p>整理信息缺口、路径对比、结构化信息卡、预审材料草稿和阻塞项建议。</p></div>
-        <div class="flow-step"><div class="num">4</div><h3>人工确认</h3><p>用户编辑、采纳或标记本期不处理，避免预审建议被直接当成结论。</p></div>
-        <div class="flow-step"><div class="num">5</div><h3>材料沉淀</h3><p>按需要整理预审材料、执行清单、会议纪要和角色待办。</p></div>
-      </div>
-    </section>
-
-    <section id="method">
-      <h2>十一、可迁移的预审场景</h2>
-      <p class="section-sub">ClearBrief 从物料预审切入，但预审方法可以迁移到活动需求、内部工具、数据看板和供应商协作材料。不同场景的门槛不同，但都需要先确认目标、约束、责任、风险和验收标准。</p>
-      <div class="grid-3">
-        <div class="card"><span class="tag blue">方法 1</span><h3>把“马上做”变成“先确认门槛”</h3><p>不是否定执行，而是在执行前先确认哪些信息缺失会导致返工，哪些问题可以边做边补。</p></div>
-        <div class="card"><span class="tag amber">方法 2</span><h3>把角色意见变成可关闭待办</h3><p>产品、设计、供应商、销售的关注点不同，预审材料要把问题、负责人、截止点和验收方式写清楚。</p></div>
-        <div class="card"><span class="tag green">方法 3</span><h3>把判断依据写清楚</h3><p>每条建议标注来自用户输入、已有物料还是待人工确认，避免把预审结果直接当成最终结论。</p></div>
-      </div>
-      <div class="timeline" style="margin-top:18px">
-        <div class="timeline-item"><strong>从包装物料开始，但不止于包装物料</strong><p>同样的预审方法可以迁移到活动需求、内部工具、数据看板和供应商协作材料，只是每个场景的门槛和角色不同。</p></div>
-        <div class="timeline-item"><strong>用结果而不是功能数量衡量价值</strong><p>重点看预审材料准备时长、阻塞项提前暴露数、执行后二次大改率和跨角色确认轮次，而不是只看生成了多少内容。</p></div>
-      </div>
-
-    </section>
-
-    <section id="reflection">
-      <h2>十二、下一步</h2>
-      <div class="grid-2">
-        <div class="card"><h3>近期优化</h3><ul><li>优化输入结构，让用户更容易补齐目标、约束和角色。</li><li>强化判断依据和推进状态说明。</li><li>补充阻塞项解释，让负责人更快判断是否推进。</li></ul></div>
-        <div class="card"><h3>后续扩展</h3><ul><li>增加不选路径解释和风险复核提醒。</li><li>拆分结构化模板，适配更多执行前场景。</li><li>接入真实后端服务、权限和敏感信息治理。</li></ul></div>
-      </div>
-      <div class="quote" style="margin-top:20px">
-        ClearBrief 的价值不是替产品经理写一份更长的文档，而是在执行前把目标、约束、角色责任、风险和验收标准讲清楚。它更像一个轻量预审台：先识别缺口，再比较路径，最后判断这个事项现在能不能进入正式执行。
-        <span>它适合放在正式执行前，用来减少无效沟通和后期返工。</span>
+      <div class="scenes">
+        <span class="pill">包装物料制作</span>
+        <span class="pill">活动落地页上线</span>
+        <span class="pill">知识库改版</span>
+        <span class="pill">AI Agent 需求评审</span>
+        <span class="pill">供应商交付</span>
       </div>
     </section>
   </main>
